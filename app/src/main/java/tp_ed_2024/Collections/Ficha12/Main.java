@@ -33,11 +33,15 @@ public class Main {
         // Encontrar o menor caminho entre dois vértices
         System.out.println("Encontrar o menor caminho entre A e E:");
         UnorderedArrayList<Integer> locationsToAvoid = new UnorderedArrayList<>();
+        locationsToAvoid.addToRear(network.getIndex("C"));
+     
+
+
         Iterator<Integer> pathIterator = network.findShortestPath(
                 network.getIndex("A"),
                 network.getIndex("E"),
-                locationsToAvoid,
-                network
+                locationsToAvoid
+            
         );
 
         // Imprimir o caminho encontrado

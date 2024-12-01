@@ -1,9 +1,5 @@
 package tp_ed_2024.Collections.Ficha5;
 
-
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 import tp_ed_2024.Collections.Interfaces.*;
 
 public class DoubleLinkedOrderedList<T extends Comparable<T>> extends AbstractDoubleList<T>
