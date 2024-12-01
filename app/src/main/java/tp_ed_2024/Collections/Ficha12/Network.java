@@ -1,267 +1,269 @@
 package tp_ed_2024.Collections.Ficha12;
 
-import java.util.*;
 
-import tp_ed_2024.Collections.Ficha3.LinkedStack;
-import tp_ed_2024.Collections.Interfaces.*;
+import java.util.Iterator;
 import tp_ed_2024.Collections.Ficha5.UnorderedArrayList;
-import tp_ed_2024.Collections.Ficha4.LinkedQueue;
+import tp_ed_2024.Collections.Interfaces.NetworkADT;
 
 
-public class Network<T> implements GraphADT<T> {
-    private Map<T, Integer> vertexIndexMap;  // Mapeia vértices para índices da matriz
-    private T[] vertices;  // Array de vértices
-    private int[][] adjacencyMatrix;  // Matriz de adjacências (pesos das arestas)
-    private int numVertices;
+public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
 
-    // Construtor
-    public Network(int maxVertices) {
-        vertexIndexMap = new HashMap<>();
-        vertices = (T[]) new Object[maxVertices];
-        adjacencyMatrix = new int[maxVertices][maxVertices];
-        numVertices = 0;
+    /**
+     * Matrix to store the weights of the edges.
+     */
+    private double[][] weightMatrix;
+
+    /**
+     * Indicates whether the network is bidirectional.
+     */
+    private boolean isBidirectional;
+
+    /**
+     * Default constructor that initializes the network with a default capacity.
+     */
+    public Network() {
+        super();
+        weightMatrix = new double[DEFAULT_CAPACITY][DEFAULT_CAPACITY];
+        initializeWeightMatrix();
     }
 
-    // Método para adicionar um vértice
-    @Override
-    public void addVertex(T vertex) {
-        if (!vertexIndexMap.containsKey(vertex)) {
-            vertices[numVertices] = vertex;
-            vertexIndexMap.put(vertex, numVertices);
-            numVertices++;
-        }
+    /**
+     * Constructor that initializes the network as either bidirectional or unidirectional.
+     *
+     * @param isBidirectional true if the network is bidirectional, false otherwise
+     */
+    public Network(boolean isBidirectional) {
+        super();
+        this.isBidirectional = isBidirectional;
+        weightMatrix = new double[DEFAULT_CAPACITY][DEFAULT_CAPACITY];
+        initializeWeightMatrix();
     }
 
-    // Método para remover um vértice
-    @Override
-    public void removeVertex(T vertex) {
-        Integer index = vertexIndexMap.remove(vertex);
-        if (index != null) {
-            // Remover vértice da matriz
-            for (int i = 0; i < numVertices; i++) {
-                adjacencyMatrix[index][i] = 0;  // Remove arestas
-                adjacencyMatrix[i][index] = 0;  // Remove arestas
-            }
-            // Ajusta o array de vértices
-            System.arraycopy(vertices, index + 1, vertices, index, numVertices - index - 1);
-            numVertices--;
-        }
-    }
-
-    // Método para adicionar uma aresta (com peso)
-    @Override
-    public void addEdge(T vertex1, T vertex2) {
-        addEdge(vertex1, vertex2, 1);  // Aresta com peso 1 por padrão
-    }
-
-    // Método para adicionar uma aresta com peso
-    public void addEdge(T vertex1, T vertex2, int weight) {
-        Integer index1 = vertexIndexMap.get(vertex1);
-        Integer index2 = vertexIndexMap.get(vertex2);
-
-        if (index1 != null && index2 != null) {
-            adjacencyMatrix[index1][index2] = weight;
-            adjacencyMatrix[index2][index1] = weight;  // Para grafos não direcionados
-        }
-    }
-
-    // Método para remover uma aresta
-    @Override
-    public void removeEdge(T vertex1, T vertex2) {
-        Integer index1 = vertexIndexMap.get(vertex1);
-        Integer index2 = vertexIndexMap.get(vertex2);
-
-        if (index1 != null && index2 != null) {
-            adjacencyMatrix[index1][index2] = 0;  // Remove a aresta
-            adjacencyMatrix[index2][index1] = 0;  // Remove a aresta (não direcionado)
-        }
-    }
-
-    // Método para realizar travessia em largura (BFS)
-    @Override
-    public Iterator<T> iteratorBFS(T startVertex) {
-        Integer startIndex = vertexIndexMap.get(startVertex);
-        if (startIndex == null) {
-            throw new NoSuchElementException("Vértice não encontrado");
-        }
-
-        Set<T> visited = new HashSet<>();
-        Queue<T> queue = new LinkedList<>();
-        List<T> result = new ArrayList<>();
-
-        visited.add(startVertex);
-        queue.offer(startVertex);
-
-        while (!queue.isEmpty()) {
-            T currentVertex = queue.poll();
-            result.add(currentVertex);
-
-            Integer currentIndex = vertexIndexMap.get(currentVertex);
-            for (int i = 0; i < numVertices; i++) {
-                if (adjacencyMatrix[currentIndex][i] > 0 && !visited.contains(vertices[i])) {
-                    visited.add(vertices[i]);
-                    queue.offer(vertices[i]);
+    /**
+     * Initializes the weight matrix with default values.
+     * The weight for an edge from a vertex to itself is set to 0, and to Double.POSITIVE_INFINITY for all other edges.
+     */
+    private void initializeWeightMatrix() {
+        for (int i = 0; i < DEFAULT_CAPACITY; i++) {
+            for (int j = 0; j < DEFAULT_CAPACITY; j++) {
+                if (i == j) {
+                    weightMatrix[i][j] = 0;
+                } else {
+                    weightMatrix[i][j] = Double.POSITIVE_INFINITY;
                 }
             }
         }
-
-        return result.iterator();
     }
 
-    // Método para realizar travessia em profundidade (DFS)
+    /**
+     * Expands the capacity of the network when necessary.
+     */
     @Override
-    public Iterator<T> iteratorDFS(T startVertex) {
-        Integer startIndex = vertexIndexMap.get(startVertex);
-        if (startIndex == null) {
-            throw new NoSuchElementException("Vértice não encontrado");
-        }
+    protected void expandCapacity() {
+        super.expandCapacity();
 
-        Set<T> visited = new HashSet<>();
-        Stack<T> stack = new Stack<>();
-        List<T> result = new ArrayList<>();
-
-        visited.add(startVertex);
-        stack.push(startVertex);
-
-        while (!stack.isEmpty()) {
-            T currentVertex = stack.pop();
-            result.add(currentVertex);
-
-            Integer currentIndex = vertexIndexMap.get(currentVertex);
-            for (int i = 0; i < numVertices; i++) {
-                if (adjacencyMatrix[currentIndex][i] > 0 && !visited.contains(vertices[i])) {
-                    visited.add(vertices[i]);
-                    stack.push(vertices[i]);
-                }
-            }
-        }
-
-        return result.iterator();
-    }
-
-    // Método para verificar se o grafo está vazio
-    @Override
-    public boolean isEmpty() {
-        return numVertices == 0;
-    }
-
-    // Método para obter o número de vértices
-    @Override
-    public int size() {
-        return numVertices;
-    }
-
-    // Método para gerar uma representação em string do grafo
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
+        double[][] largerWeightMatrix = new double[vertices.length][vertices.length];
         for (int i = 0; i < numVertices; i++) {
-            sb.append(vertices[i]).append(": ");
-            for (int j = 0; j < numVertices; j++) {
-                if (adjacencyMatrix[i][j] > 0) {
-                    sb.append(vertices[j]).append("(").append(adjacencyMatrix[i][j]).append(") ");
-                }
+            System.arraycopy(weightMatrix[i], 0, largerWeightMatrix[i], 0, numVertices);
+        }
+        weightMatrix = largerWeightMatrix;
+
+        for (int i = numVertices; i < weightMatrix.length; i++) {
+            for (int j = numVertices; j < weightMatrix.length; j++) {
+                weightMatrix[i][j] = Double.POSITIVE_INFINITY;
             }
-            sb.append("\n");
         }
-        return sb.toString();
     }
 
-    // Método para verificar se o grafo está conectado (opcional)
+    /**
+     * Checks whether the network contains a specific vertex.
+     *
+     * @param vertex the vertex to check for
+     * @return true if the vertex is present in the network, false otherwise
+     */
+    public boolean containsVertex(T vertex) {
+        for (int i = 0; i < numVertices; i++) {
+            if (vertex.equals(vertices[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Retrieves the vertex at a given index.
+     *
+     * @param index the index of the vertex
+     * @return the vertex at the specified index
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
+    public T getVertex(int index) {
+        if (indexIsValid(index)) {
+            return vertices[index];
+        } else {
+            throw new IndexOutOfBoundsException("Indice fora dos limites: " + index);
+        }
+    }
+
+    /**
+     * Retrieves the weight of the edge between two vertices.
+     *
+     * @param vertex1 the first vertex
+     * @param vertex2 the second vertex
+     * @return the weight of the edge
+     * @throws IllegalArgumentException if either vertex is not found
+     */
+    public double getWeight(T vertex1, T vertex2) {
+        int index1 = getIndex(vertex1);
+        int index2 = getIndex(vertex2);
+
+        if (indexIsValid(index1) && indexIsValid(index2)) {
+            return weightMatrix[index1][index2];
+        } else {
+            throw new IllegalArgumentException("Vértice não encontrado");
+        }
+    }
+
+    /**
+     * Adds an edge between two vertices with a specified weight.
+     *
+     * @param vertex1 the first vertex
+     * @param vertex2 the second vertex
+     * @param weight  the weight of the edge
+     */
     @Override
-    public boolean isConnected() {
-        if (numVertices == 0) {
-            return true; // Um grafo vazio é tecnicamente conectado
-        }
+    public void addEdge(T vertex1, T vertex2, double weight) {
+        int index1 = getIndex(vertex1);
+        int index2 = getIndex(vertex2);
 
-        Set<T> visited = new HashSet<>();
-        Iterator<T> bfsIterator = iteratorBFS(vertices[0]);
-        while (bfsIterator.hasNext()) {
-            visited.add(bfsIterator.next());
-        }
+        if (indexIsValid(index1) && indexIsValid(index2)) {
+            adjMatrix[index1][index2] = true;
+            weightMatrix[index1][index2] = weight;
 
-        return visited.size() == numVertices;
+            if (isBidirectional) {
+                adjMatrix[index2][index1] = true;
+                weightMatrix[index2][index1] = weight;
+            }
+        }
     }
 
-
-// Algoritmo de Dijkstra para encontrar o caminho mais curto
-    public LinkedStack<T> shortestPath(T startVertex, T targetVertex) {
-        LinkedStack<T> pathStack = new LinkedStack<>();
-        UnorderedArrayList<Integer> distQueue = new UnorderedArrayList<>();
-
-        Integer startIndex = vertexIndexMap.get(startVertex);
-        Integer targetIndex = vertexIndexMap.get(targetVertex);
-
-        if (startIndex == null || targetIndex == null) {
-            throw new NoSuchElementException("Vértice não encontrado");
-        }
-
-        int[] dist = new int[numVertices];
-        int[] prev = new int[numVertices];
+    /**
+     * Finds the shortest path from a start vertex to an end vertex, avoiding certain locations.
+     *
+     * @param startVertex       the index of the start vertex
+     * @param endVertex         the index of the end vertex
+     * @param locationsToAvoid  a list of locations to avoid
+     * @param network           the network in which to find the path
+     * @return an iterator over the indices of the vertices in the shortest path
+     */
+    public Iterator<Integer> findShortestPath(int startVertex, int endVertex, UnorderedArrayList<Integer> locationsToAvoid, Network network) {
+        int numVertices = network.size();
+        double[] distances = new double[numVertices];
         boolean[] visited = new boolean[numVertices];
+        int[] previous = new int[numVertices];
 
-        // Inicialização
         for (int i = 0; i < numVertices; i++) {
-            dist[i] = Integer.MAX_VALUE;
-            prev[i] = -1;
+            distances[i] = Double.MAX_VALUE;
             visited[i] = false;
+            previous[i] = -1;
         }
 
-        dist[startIndex] = 0;
+        distances[startVertex] = 0;
 
-        distQueue.addToRear(startIndex); // Adiciona o vértice de início na fila
+        for (int i = 0; i < numVertices; i++) {
+            int closestVertex = -1;
+            double shortestDistance = Double.MAX_VALUE;
 
-        while (!distQueue.isEmpty()) {
-            // Encontra o vértice com a menor distância
-            int currentIndex = getMinDistanceVertex(dist, visited);
-            if (currentIndex == -1) break; // Não há mais vértices para processar
+            for (int j = 0; j < numVertices; j++) {
+                if (!visited[j] && distances[j] < shortestDistance) {
+                    closestVertex = j;
+                    shortestDistance = distances[j];
+                }
+            }
 
-            visited[currentIndex] = true;
+            if (closestVertex == -1) {
+                break;
+            }
+            visited[closestVertex] = true;
 
-            // Relaxação das arestas adjacentes
-            for (int i = 0; i < numVertices; i++) {
-                if (adjacencyMatrix[currentIndex][i] > 0 && !visited[i]) {
-                    int newDist = dist[currentIndex] + adjacencyMatrix[currentIndex][i];
-                    if (newDist < dist[i]) {
-                        dist[i] = newDist;
-                        prev[i] = currentIndex;
-                        distQueue.addToRear(i); // Adiciona o vértice à fila
+            for (int j = 0; j < numVertices; j++) {
+                if (!visited[j] && network.edgeExists(closestVertex, j) && (locationsToAvoid == null || !locationsToAvoid.contains(j))) {
+                    double edgeDistance = network.getWeight(closestVertex, j);
+                    if (distances[closestVertex] + edgeDistance < distances[j]) {
+                        distances[j] = distances[closestVertex] + edgeDistance;
+                        previous[j] = closestVertex;
                     }
                 }
             }
         }
 
-        // Reconstrução do caminho usando a pilha personalizada
-        LinkedStack<T> path = new LinkedStack<>();
-        for (int at = targetIndex; at != -1; at = prev[at]) {
-            path.push(vertices[at]);
-        }
-
-        if (path.isEmpty()) {
-            return new LinkedStack<>(); // Se não houver caminho, retorna pilha vazia
-        }
-
-        return path; // Retorna o caminho de volta (com a ordem correta)
-    }
-
-    private int getMinDistanceVertex(int[] dist, boolean[] visited) {
-        int minDist = Integer.MAX_VALUE;
-        int minIndex = -1;
-
-        for (int i = 0; i < numVertices; i++) {
-            if (!visited[i] && dist[i] < minDist) {
-                minDist = dist[i];
-                minIndex = i;
+        UnorderedArrayList<Integer> path = new UnorderedArrayList<>();
+        if (previous[endVertex] != -1 || startVertex == endVertex) { // Certifica que existe um caminho válido
+            for (int vertex = endVertex; vertex != -1; vertex = previous[vertex]) {
+                path.addToFront(vertex); // Adiciona o vértice atual no início da lista
+                if (vertex == startVertex) break; // Para quando atingir o vértice inicial
             }
         }
-
-        return minIndex;
+        
+        return path.iterator();
     }
 
-
+    /**
+     * Calculates the weight of the shortest path between two vertices.
+     *
+     * @param startVertex the starting vertex
+     * @param targetVertex the target vertex
+     * @return the weight of the shortest path
+     */
     @Override
-    public Iterator iteratorShortestPath(T startVertex, T targetVertex) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iteratorShortestPath'");
+    public double shortestPathWeight(T startVertex, T targetVertex) {
+        int startIndex = getIndex(startVertex);
+        int targetIndex = getIndex(targetVertex);
+        if (!indexIsValid(startIndex) || !indexIsValid(targetIndex)) {
+            return Double.POSITIVE_INFINITY;
+        }
+        double[] distances = new double[numVertices];
+        boolean[] visited = new boolean[numVertices];
+
+        for (int i = 0; i < numVertices; i++) {
+            distances[i] = Double.POSITIVE_INFINITY;
+            visited[i] = false;
+        }
+
+        distances[startIndex] = 0;
+
+        for (int i = 0; i < numVertices - 1; i++) {
+            int u = minDistance(distances, visited);
+            visited[u] = true;
+
+            for (int v = 0; v < numVertices; v++) {
+
+                if (!visited[v] && adjMatrix[u][v] && distances[u] != Double.POSITIVE_INFINITY
+                        && distances[u] + weightMatrix[u][v] < distances[v]) {
+                    distances[v] = distances[u] + weightMatrix[u][v];
+                }
+            }
+        }
+        return distances[targetIndex];
+    }
+
+    /**
+     * Finds the vertex with the minimum distance that has not been visited.
+     *
+     * @param distances an array of distances to each vertex
+     * @param visited   an array indicating whether each vertex has been visited
+     * @return the index of the vertex with the minimum distance
+     */
+    private int minDistance(double[] distances, boolean[] visited) {
+        double min = Double.POSITIVE_INFINITY;
+        int minIndex = -1;
+
+        for (int v = 0; v < numVertices; v++) {
+            if (!visited[v] && distances[v] <= min) {
+                min = distances[v];
+                minIndex = v;
+            }
+        }
+        return minIndex;
     }
 }

@@ -1,6 +1,9 @@
 package tp_ed_2024.Collections.Ficha9;
 
 import java.util.Iterator;
+
+import tp_ed_2024.Collections.Exceptions.EmptyCollectionException;
+import tp_ed_2024.Collections.Exceptions.UnsupportedOperationException;
 import tp_ed_2024.Collections.Ficha4.LinkedQueue;
 import tp_ed_2024.Collections.Ficha5.UnorderedArrayList;
 import tp_ed_2024.Collections.Interfaces.*;
@@ -21,7 +24,7 @@ public class LinkedBinaryTree<T> implements BinaryTreeADT<T> {
     }
 
     @Override
-    public T getRoot() {
+    public T getRootElement()  throws EmptyCollectionException {
         return (T) root;
 
     }
@@ -161,6 +164,12 @@ public class LinkedBinaryTree<T> implements BinaryTreeADT<T> {
             }
         }
 
+    }
+
+    @Override
+    public BinaryTreeNode<T> getRootNode() throws EmptyCollectionException, UnsupportedOperationException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRootNode'");
     }
 
 }

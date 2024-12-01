@@ -236,6 +236,31 @@ public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
         return numVertices;
     }
 
+    public boolean edgeExists(T vertex1, T vertex2) {
+        int index1 = getIndex(vertex1);
+        int index2 = getIndex(vertex2);
+
+        if (indexIsValid(index1) && indexIsValid(index2)) {
+            return adjMatrix[index1][index2];
+        } else {
+            return false;
+        }
+    }
+    protected void expandCapacity(){
+        T[] largerVertices = (T[]) (new Object[vertices.length * 2]);
+        boolean[][] newAdjMatrix = new boolean[vertices.length * 2][vertices.length * 2];
+    
+        for(int i = 0; i< numVertices;i++){
+            for(int j = 0; j< numVertices; j++){
+                newAdjMatrix[i][j] = adjMatrix[i][j];
+            }
+            largerVertices[i] = vertices[i];
+        }
+    
+        vertices = largerVertices;
+        adjMatrix = newAdjMatrix;
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder("Adjacency Matrix:\n");
 
@@ -250,7 +275,7 @@ public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
         return sb.toString();
     }
 
-    private int getIndex(T vertex) {
+    protected int getIndex(T vertex) {
         for (int i = 0; i < numVertices; i++) {
             if (vertices[i].equals(vertex)) {
                 return i;
@@ -259,23 +284,10 @@ public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
         return -1;
     }
 
-    private boolean indexIsValid(int index) {
+    protected boolean indexIsValid(int index) {
         return index >= 0 && index < numVertices;
     }
 
-private void expandCapacity(){
-    T[] largerVertices = (T[]) (new Object[vertices.length * 2]);
-    boolean[][] newAdjMatrix = new boolean[vertices.length * 2][vertices.length * 2];
 
-    for(int i = 0; i< numVertices;i++){
-        for(int j = 0; j< numVertices; j++){
-            newAdjMatrix[i][j] = adjMatrix[i][j];
-        }
-        largerVertices[i] = vertices[i];
-    }
-
-    vertices = largerVertices;
-    adjMatrix = newAdjMatrix;
-}
 
 }
