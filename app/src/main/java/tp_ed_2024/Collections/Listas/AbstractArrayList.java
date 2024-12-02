@@ -8,11 +8,16 @@ public abstract class AbstractArrayList<T> implements ListADT<T>, Iterable<T>{
 
     protected int rear;
     protected T[] list;
-    protected static int default_size = 2;
+    protected final static int default_size = 100;
 
 
     public AbstractArrayList() {
-        list = (T[]) new Comparable[default_size];
+        this.list = (T[]) (new Object[default_size]);
+        this.rear = 0;
+    }
+
+    public AbstractArrayList(int initialCapacity) {
+        this.list = (T[]) (new Object[initialCapacity]);
         this.rear = 0;
     }
 

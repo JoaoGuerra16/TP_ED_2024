@@ -1,5 +1,6 @@
 package tp_ed_2024.Utilidades;
 
+import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Collections.Listas.listaLigada;
 import tp_ed_2024.Modelos.Items.*;
 import tp_ed_2024.Modelos.Personagens.*;
@@ -18,7 +19,7 @@ public class Main {
 
         // Carregar o grafo a partir do JSON
         loader.loadFromJson(jsonPath);
-        listaLigada<Inimigo> inimigos = loader.getInimigos();
+        UnorderedArrayList<Inimigo> inimigos = loader.getInimigos();
         if (inimigos != null) {
             System.out.println("Inimigos carregados: " + inimigos.toString());
         } else {

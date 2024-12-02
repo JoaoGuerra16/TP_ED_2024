@@ -6,6 +6,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import tp_ed_2024.Collections.Graphs.GraphMatrix;
+import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Collections.Listas.listaLigada;
 import tp_ed_2024.Enums.TipoAlvoEnum;
 import tp_ed_2024.Enums.TipoItemEnum;
@@ -19,14 +20,14 @@ import java.io.IOException;
 public class JsonLoader {
 
     private GraphMatrix<String> grafo;
-    private listaLigada<Inimigo> inimigos; // Não tenho certeza desta estrutura temos de ver
+    private UnorderedArrayList<Inimigo> inimigos; // Não tenho certeza desta estrutura temos de ver
     private listaLigada<Item> items; // Não tenho certeza desta estrutura temos de ver
     private listaLigada<Alvo> alvos; // Não tenho certeza desta estrutura temos de ver
     private listaLigada<String> entradasSaidas;
 
     public JsonLoader() {
         this.grafo = new GraphMatrix<>();
-        this.inimigos = new listaLigada<>();
+        this.inimigos = new UnorderedArrayList<>();
         this.items = new listaLigada<>();
         this.alvos = new listaLigada<>();
         this.entradasSaidas = new listaLigada<>();
@@ -64,11 +65,11 @@ public class JsonLoader {
                 JSONObject inimigoJson = (JSONObject) inimigoObj;
                 String nome = (String) inimigoJson.get("nome");
                 int poder = ((Long) inimigoJson.get("poder")).intValue();
-                int vida = ((Long) inimigoJson.get("poder")).intValue();
+                int vida = poder;
                 String divisao = (String) inimigoJson.get("divisao");
 
                 Inimigo inimigo = new Inimigo(nome, vida, poder, divisao);
-                inimigos.add(inimigo);
+                inimigos.addToFront(inimigo);
             }
 
             // Carregar as entradas e saídas
@@ -137,7 +138,7 @@ public class JsonLoader {
     }
 
     // Retorna a lista de inimigos
-    public listaLigada<Inimigo> getInimigos() {
+    public UnorderedArrayList<Inimigo> getInimigos() {
         return inimigos;
     }
 
