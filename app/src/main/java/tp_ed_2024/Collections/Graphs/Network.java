@@ -1,13 +1,10 @@
 package tp_ed_2024.Collections.Graphs;
 
-
-
 import java.util.Iterator;
 
 import tp_ed_2024.Collections.Interfaces.NetworkADT;
 import tp_ed_2024.Collections.Listas.AbstractArrayList;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
-
 
 public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
 
@@ -31,7 +28,8 @@ public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
     }
 
     /**
-     * Constructor that initializes the network as either bidirectional or unidirectional.
+     * Constructor that initializes the network as either bidirectional or
+     * unidirectional.
      *
      * @param isBidirectional true if the network is bidirectional, false otherwise
      */
@@ -44,7 +42,8 @@ public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
 
     /**
      * Initializes the weight matrix with default values.
-     * The weight for an edge from a vertex to itself is set to 0, and to Double.POSITIVE_INFINITY for all other edges.
+     * The weight for an edge from a vertex to itself is set to 0, and to
+     * Double.POSITIVE_INFINITY for all other edges.
      */
     private void initializeWeightMatrix() {
         for (int i = 0; i < DEFAULT_CAPACITY; i++) {
@@ -151,12 +150,13 @@ public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
     }
 
     /**
-     * Finds the shortest path from a start vertex to an end vertex, avoiding certain locations.
+     * Finds the shortest path from a start vertex to an end vertex, avoiding
+     * certain locations.
      *
-     * @param startVertex       the index of the start vertex
-     * @param endVertex         the index of the end vertex
-     * @param locationsToAvoid  a list of locations to avoid
-     * @param network           the network in which to find the path
+     * @param startVertex      the index of the start vertex
+     * @param endVertex        the index of the end vertex
+     * @param locationsToAvoid a list of locations to avoid
+     * @param network          the network in which to find the path
      * @return an iterator over the indices of the vertices in the shortest path
      */
     public Iterator<Integer> findShortestPath(int startVertex, int endVertex, Iterable<Integer> locationsToAvoid) {
@@ -164,33 +164,34 @@ public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
         double[] distances = new double[numVertices];
         boolean[] visited = new boolean[numVertices];
         int[] previous = new int[numVertices];
-    
+
         for (int i = 0; i < numVertices; i++) {
             distances[i] = Double.MAX_VALUE;
             visited[i] = false;
             previous[i] = -1;
         }
-    
+
         distances[startVertex] = 0;
-    
+
         for (int i = 0; i < numVertices; i++) {
             int closestVertex = -1;
             double shortestDistance = Double.MAX_VALUE;
-    
+
             for (int j = 0; j < numVertices; j++) {
                 if (!visited[j] && distances[j] < shortestDistance) {
                     closestVertex = j;
                     shortestDistance = distances[j];
                 }
             }
-    
+
             if (closestVertex == -1) {
                 break;
             }
             visited[closestVertex] = true;
-    
+
             for (int j = 0; j < numVertices; j++) {
-                if (!visited[j] && adjMatrix[closestVertex][j] && (locationsToAvoid == null || !((AbstractArrayList<Integer>) locationsToAvoid).contains(j))) {
+                if (!visited[j] && adjMatrix[closestVertex][j]
+                        && (locationsToAvoid == null || !((AbstractArrayList<Integer>) locationsToAvoid).contains(j))) {
                     double edgeDistance = weightMatrix[closestVertex][j];
                     if (distances[closestVertex] + edgeDistance < distances[j]) {
                         distances[j] = distances[closestVertex] + edgeDistance;
@@ -199,23 +200,23 @@ public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
                 }
             }
         }
-    
+
         UnorderedArrayList<Integer> path = new UnorderedArrayList<>();
         if (previous[endVertex] != -1 || startVertex == endVertex) { // Ensure there is a valid path
             for (int vertex = endVertex; vertex != -1; vertex = previous[vertex]) {
                 path.addToFront(vertex); // Add the current vertex to the front of the list
-                if (vertex == startVertex) break; // Stop when reaching the start vertex
+                if (vertex == startVertex)
+                    break; // Stop when reaching the start vertex
             }
         }
-    
+
         return path.iterator();
     }
 
-    
     /**
      * Calculates the weight of the shortest path between two vertices.
      *
-     * @param startVertex the starting vertex
+     * @param startVertex  the starting vertex
      * @param targetVertex the target vertex
      * @return the weight of the shortest path
      */
@@ -270,4 +271,5 @@ public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
         }
         return minIndex;
     }
+
 }

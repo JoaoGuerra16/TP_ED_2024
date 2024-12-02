@@ -44,21 +44,6 @@ public class JsonLoader {
             String codMissao = (String) json.get("cod-missao");
             int versao = ((Long) json.get("versao")).intValue();
 
-            // Carregar os vértices (edificio)
-            JSONArray edificio = (JSONArray) json.get("edificio");
-            for (Object divisao : edificio) {
-                network.addVertex((String) divisao); // Chama o método da classe GraphMatrix
-            }
-
-            // Carregar as arestas (ligações)
-            JSONArray ligacoes = (JSONArray) json.get("ligacoes");
-            for (Object ligacao : ligacoes) {
-                JSONArray conexao = (JSONArray) ligacao;
-                String origem = (String) conexao.get(0);
-                String destino = (String) conexao.get(1);
-                network.addEdge(origem, destino); // Chama o método da classe GraphMatrix
-            }
-
             // Carregar os inimigos (inimigos)
             JSONArray inimigosArray = (JSONArray) json.get("inimigos");
             for (Object inimigoObj : inimigosArray) {
@@ -70,6 +55,42 @@ public class JsonLoader {
 
                 Inimigo inimigo = new Inimigo(nome, vida, poder, divisao);
                 inimigos.addToRear(inimigo);
+            }
+
+            // Carregar os vértices (edificio)
+            JSONArray edificio = (JSONArray) json.get("edificio");
+            for (Object divisao : edificio) {
+                network.addVertex((String) divisao);
+            }
+
+            // Carregar as ligações e calcular os pesos
+            System.out.println("Pesos carregados:");
+            JSONArray ligacoes = (JSONArray) json.get("ligacoes");
+            for (Object ligacao : ligacoes) {
+                JSONArray conexao = (JSONArray) ligacao;
+                String origem = (String) conexao.get(0);
+                String destino = (String) conexao.get(1);
+
+                // Inicialize o peso como 0
+                double peso = 0;
+
+                // Verifique se há inimigos na divisão de origem e acumule seus poderes
+                for (Inimigo inimigo : inimigos) {
+                    // Verificar se o inimigo está na divisão de origem
+                    if (inimigo.getDivisaoAtual().equals(origem)) {
+                        peso += inimigo.getPoder(); // Peso igual ao poder total dos inimigos na origem
+                    }
+                    // Verificar se o inimigo está na divisão de destino
+                    if (inimigo.getDivisaoAtual().equals(destino)) {
+                        peso += inimigo.getPoder(); // Peso igual ao poder total dos inimigos na divisão de destino
+                    }
+                }
+
+                // Adicione a aresta com peso ao grafo (de origem para destino)
+                network.addEdge(origem, destino, peso);
+
+                // Adicionar a aresta no sentido contrário (bidirecional), com o mesmo peso
+                network.addEdge(destino, origem, peso);
             }
 
             // Carregar as entradas e saídas
