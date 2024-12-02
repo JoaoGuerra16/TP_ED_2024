@@ -1,4 +1,4 @@
-package tp_ed_2024.Personagens.Personagens_Interfaces;
+package tp_ed_2024.Modelos.Personagens.Personagens_Interfaces;
 
 import tp_ed_2024.Enums.TipoAlvoEnum;
 

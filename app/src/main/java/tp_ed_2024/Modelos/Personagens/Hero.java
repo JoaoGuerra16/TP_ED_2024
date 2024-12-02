@@ -1,9 +1,9 @@
-package tp_ed_2024.Personagens;
+package tp_ed_2024.Modelos.Personagens;
 
 import tp_ed_2024.Collections.Stacks.ArrayStack;
-import tp_ed_2024.Items.*;
-import tp_ed_2024.Personagens.Personagens_Interfaces.PersonagemImp;
-import tp_ed_2024.Personagens.Personagens_Interfaces.PersonagemPrincipalImp;
+import tp_ed_2024.Modelos.Items.*;
+import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemImp;
+import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemPrincipalImp;
 
 public class Hero implements PersonagemPrincipalImp {
 

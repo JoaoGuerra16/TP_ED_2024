@@ -1,8 +1,8 @@
 package tp_ed_2024.Utilidades;
 
-import tp_ed_2024.Personagens.*;
 import tp_ed_2024.Collections.Listas.listaLigada;
-import tp_ed_2024.Items.*;
+import tp_ed_2024.Modelos.Items.*;
+import tp_ed_2024.Modelos.Personagens.*;
 
 public class Main {
     public static void main(String[] args) {

@@ -9,9 +9,9 @@ import tp_ed_2024.Collections.Graphs.GraphMatrix;
 import tp_ed_2024.Collections.Listas.listaLigada;
 import tp_ed_2024.Enums.TipoAlvoEnum;
 import tp_ed_2024.Enums.TipoItemEnum;
-import tp_ed_2024.Personagens.Alvo;
-import tp_ed_2024.Personagens.Inimigo;
-import tp_ed_2024.Items.*;
+import tp_ed_2024.Modelos.Items.*;
+import tp_ed_2024.Modelos.Personagens.Alvo;
+import tp_ed_2024.Modelos.Personagens.Inimigo;
 
 import java.io.FileReader;
 import java.io.IOException;

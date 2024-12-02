@@ -1,7 +1,7 @@
-package tp_ed_2024.Personagens;
+package tp_ed_2024.Modelos.Personagens;
 
 import tp_ed_2024.Enums.TipoAlvoEnum;
-import tp_ed_2024.Personagens.Personagens_Interfaces.AlvoImp;
+import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.AlvoImp;
 
 public class Alvo implements AlvoImp {
 

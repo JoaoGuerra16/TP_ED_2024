@@ -1,4 +1,4 @@
-package tp_ed_2024.Items;
+package tp_ed_2024.Modelos.Items;
 
 import tp_ed_2024.Enums.TipoItemEnum;
 

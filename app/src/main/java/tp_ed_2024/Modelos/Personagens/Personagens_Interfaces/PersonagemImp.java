@@ -1,4 +1,4 @@
-package tp_ed_2024.Personagens.Personagens_Interfaces;
+package tp_ed_2024.Modelos.Personagens.Personagens_Interfaces;
 
 public interface PersonagemImp {
     String getNome(); // Obtém o nome do personagem

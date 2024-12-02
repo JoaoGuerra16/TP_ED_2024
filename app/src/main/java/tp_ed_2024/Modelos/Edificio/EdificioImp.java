@@ -1,4 +1,4 @@
-package tp_ed_2024.Edificio;
+package tp_ed_2024.Modelos.Edificio;
 
 public interface EdificioImp {
     void adicionarVertice(String nomeDivisao);               // Adiciona uma divisão (vértice) ao grafo

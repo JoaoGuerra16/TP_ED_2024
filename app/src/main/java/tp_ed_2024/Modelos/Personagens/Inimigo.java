@@ -1,6 +1,6 @@
-package tp_ed_2024.Personagens;
+package tp_ed_2024.Modelos.Personagens;
 
-import tp_ed_2024.Personagens.Personagens_Interfaces.PersonagemImp;
+import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemImp;
 
 public class Inimigo implements PersonagemImp {
 
