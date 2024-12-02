@@ -45,6 +45,7 @@ public class Main {
             System.out.println("Entras/saidas carregadas: " + entradasSaidas.toString());
         } else {
             System.out.println("Nenhuma entrada/saida foi carregado.");
+            //
         }
     }
 }
