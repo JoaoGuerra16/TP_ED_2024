@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import tp_ed_2024.Collections.Graphs.GraphMatrix;
+import tp_ed_2024.Collections.Graphs.Network;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Collections.Listas.listaLigada;
 import tp_ed_2024.Enums.TipoAlvoEnum;
@@ -19,18 +19,18 @@ import java.io.IOException;
 
 public class JsonLoader {
 
-    private GraphMatrix<String> grafo;
+    private Network<String> network;
     private UnorderedArrayList<Inimigo> inimigos; // Não tenho certeza desta estrutura temos de ver
-    private listaLigada<Item> items; // Não tenho certeza desta estrutura temos de ver
-    private listaLigada<Alvo> alvos; // Não tenho certeza desta estrutura temos de ver
-    private listaLigada<String> entradasSaidas;
+    private UnorderedArrayList<Item> items; // Não tenho certeza desta estrutura temos de ver
+    private UnorderedArrayList<Alvo> alvos; // Não tenho certeza desta estrutura temos de ver
+    private UnorderedArrayList<String> entradasSaidas;
 
     public JsonLoader() {
-        this.grafo = new GraphMatrix<>();
+        this.network = new Network<>();
         this.inimigos = new UnorderedArrayList<>();
-        this.items = new listaLigada<>();
-        this.alvos = new listaLigada<>();
-        this.entradasSaidas = new listaLigada<>();
+        this.items = new UnorderedArrayList<>();
+        this.alvos = new UnorderedArrayList<>();
+        this.entradasSaidas = new UnorderedArrayList<>();
     }
 
     // Método para carregar o JSON e criar o grafo
@@ -47,7 +47,7 @@ public class JsonLoader {
             // Carregar os vértices (edificio)
             JSONArray edificio = (JSONArray) json.get("edificio");
             for (Object divisao : edificio) {
-                grafo.addVertex((String) divisao); // Chama o método da classe GraphMatrix
+                network.addVertex((String) divisao); // Chama o método da classe GraphMatrix
             }
 
             // Carregar as arestas (ligações)
@@ -56,7 +56,7 @@ public class JsonLoader {
                 JSONArray conexao = (JSONArray) ligacao;
                 String origem = (String) conexao.get(0);
                 String destino = (String) conexao.get(1);
-                grafo.addEdge(origem, destino); // Chama o método da classe GraphMatrix
+                network.addEdge(origem, destino); // Chama o método da classe GraphMatrix
             }
 
             // Carregar os inimigos (inimigos)
@@ -69,7 +69,7 @@ public class JsonLoader {
                 String divisao = (String) inimigoJson.get("divisao");
 
                 Inimigo inimigo = new Inimigo(nome, vida, poder, divisao);
-                inimigos.addToFront(inimigo);
+                inimigos.addToRear(inimigo);
             }
 
             // Carregar as entradas e saídas
@@ -77,7 +77,7 @@ public class JsonLoader {
             if (entradasSaidasArray != null) {
                 for (Object entradaSaidaObj : entradasSaidasArray) {
                     String entradaSaida = (String) entradaSaidaObj;
-                    entradasSaidas.add(entradaSaida);
+                    entradasSaidas.addToRear(entradaSaida);
                 }
             }
 
@@ -97,7 +97,7 @@ public class JsonLoader {
                 }
 
                 Alvo alvo = new Alvo(divisao, tipoAlvo);
-                alvos.add(alvo);
+                alvos.addToRear(alvo);
             }
 
             // Carregar os items
@@ -113,19 +113,19 @@ public class JsonLoader {
                     Long pontosRecuperadosLong = (Long) itemJson.get("pontos-recuperados");
                     int pontosRecuperados = (pontosRecuperadosLong != null) ? pontosRecuperadosLong.intValue() : 0;
                     Item kit = new Item(TipoItemEnum.KIT, divisao, pontosRecuperados);
-                    items.add(kit);
+                    items.addToFront(kit);
                 } else if ("colete".equals(tipo)) {
                     // Verifica se o campo "pontos-extra" existe e não é nulo
                     Long pontosExtraLong = (Long) itemJson.get("pontos-extra");
                     int pontosExtra = (pontosExtraLong != null) ? pontosExtraLong.intValue() : 0;
                     Item colete = new Item(TipoItemEnum.COLETE, divisao, pontosExtra);
-                    items.add(colete);
+                    items.addToRear(colete);
                 }
             }
 
             // Exibir as informações carregadas
             System.out.println("Grafo carregado do JSON:");
-            System.out.println(grafo.toString());
+            System.out.println(network.toString());
 
         } catch (IOException | ParseException e) {
             System.err.println("Erro ao carregar o JSON: " + e.getMessage());
@@ -133,8 +133,8 @@ public class JsonLoader {
     }
 
     // Retorna o grafo
-    public GraphMatrix<String> getGrafo() {
-        return grafo;
+    public Network<String> getGrafo() {
+        return network;
     }
 
     // Retorna a lista de inimigos
@@ -142,15 +142,15 @@ public class JsonLoader {
         return inimigos;
     }
 
-    public listaLigada<Item> getItems() {
+    public UnorderedArrayList<Item> getItems() {
         return items;
     }
 
-    public listaLigada<Alvo> getAlvos() {
+    public UnorderedArrayList<Alvo> getAlvos() {
         return alvos;
     }
 
-    public listaLigada<String> getEntradasSaidas() {
+    public UnorderedArrayList<String> getEntradasSaidas() {
         return entradasSaidas;
     }
 }

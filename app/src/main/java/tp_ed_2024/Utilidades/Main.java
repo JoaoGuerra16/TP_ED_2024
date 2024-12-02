@@ -26,21 +26,21 @@ public class Main {
             System.out.println("Nenhum inimigo foi carregado.");
         }
 
-        listaLigada<Item> items = loader.getItems();
+        UnorderedArrayList<Item> items = loader.getItems();
         if (items != null) {
             System.out.println("Items carregados: " + items.toString());
         } else {
             System.out.println("Nenhum item foi carregado.");
         }
 
-        listaLigada<Alvo> alvos = loader.getAlvos();
+        UnorderedArrayList<Alvo> alvos = loader.getAlvos();
         if (items != null) {
             System.out.println("Alvos carregados: " + alvos.toString());
         } else {
             System.out.println("Nenhum alvo foi carregado.");
         }
 
-        listaLigada<String> entradasSaidas = loader.getEntradasSaidas();
+        UnorderedArrayList<String> entradasSaidas = loader.getEntradasSaidas();
         if (entradasSaidas != null) {
             System.out.println("Entras/saidas carregadas: " + entradasSaidas.toString());
         } else {
