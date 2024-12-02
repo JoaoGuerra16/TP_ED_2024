@@ -4,7 +4,7 @@ import java.util.Iterator;
 import tp_ed_2024.Collections.Exceptions.ElementNotFoundException;
 import tp_ed_2024.Collections.Exceptions.EmptyCollectionException;
 import tp_ed_2024.Collections.Exceptions.UnsupportedOperationException;
-import tp_ed_2024.Collections.Ficha9.BinaryTreeNode;
+import tp_ed_2024.Collections.Trees.BinaryTreeNode;
 public interface BinaryTreeADT<T> {
 
     /**

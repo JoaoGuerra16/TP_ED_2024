@@ -1,19 +1,19 @@
 package tp_ed_2024.Personagens;
 
-import tp_ed_2024.Collections.Ficha3.ArrayStack;
+import tp_ed_2024.Collections.Stacks.ArrayStack;
 import tp_ed_2024.Items.*;
-import tp_ed_2024.Personagens.Personagens_Interfaces.PersonagemADT;
-import tp_ed_2024.Personagens.Personagens_Interfaces.PersonagemPrincipalADT;
+import tp_ed_2024.Personagens.Personagens_Interfaces.PersonagemImp;
+import tp_ed_2024.Personagens.Personagens_Interfaces.PersonagemPrincipalImp;
 
-public class Hero implements PersonagemPrincipalADT {
+public class Hero implements PersonagemPrincipalImp {
 
     private String nome = "Tó Cruz";
     private int vida;
     private int poder;
-    private ArrayStack<ItemADT> mochila;
+    private ArrayStack<ItemImp> mochila;
     private String divisaoAtual;
 
-    public Hero(int vida, int poder, ArrayStack<ItemADT> mochila, String divisaoAtual) {
+    public Hero(int vida, int poder, ArrayStack<ItemImp> mochila, String divisaoAtual) {
         this.vida = vida;
         this.poder = poder;
         this.mochila = mochila;
@@ -46,7 +46,7 @@ public class Hero implements PersonagemPrincipalADT {
     }
 
     @Override
-    public void atacar(PersonagemADT inimigo) {
+    public void atacar(PersonagemImp inimigo) {
         int dano = this.poder;
         int vidaAntes = inimigo.getVida();
         int vidaDepois = Math.max(vidaAntes - dano, 0);
@@ -78,7 +78,7 @@ public class Hero implements PersonagemPrincipalADT {
     }
 
     @Override
-    public void aumentarVida(ItemADT item, int pontos) {
+    public void aumentarVida(ItemImp item, int pontos) {
         if (!mochila.isEmpty()) {
             mochila.pop();
             int pontosCura = item.getPontos();

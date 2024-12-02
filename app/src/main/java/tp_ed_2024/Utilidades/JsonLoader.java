@@ -5,8 +5,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import tp_ed_2024.Collections.Ficha12.GraphMatrix;
-import tp_ed_2024.Collections.Ficha2.ListaLigada;
+import tp_ed_2024.Collections.Graphs.GraphMatrix;
+import tp_ed_2024.Collections.Listas.ListaLigada;
 import tp_ed_2024.Enums.TipoAlvoEnum;
 import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Personagens.Alvo;

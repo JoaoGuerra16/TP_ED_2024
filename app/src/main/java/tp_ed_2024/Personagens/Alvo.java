@@ -1,9 +1,9 @@
 package tp_ed_2024.Personagens;
 
 import tp_ed_2024.Enums.TipoAlvoEnum;
-import tp_ed_2024.Personagens.Personagens_Interfaces.AlvoADT;
+import tp_ed_2024.Personagens.Personagens_Interfaces.AlvoImp;
 
-public class Alvo implements AlvoADT {
+public class Alvo implements AlvoImp {
 
     private String divisao;
     private TipoAlvoEnum tipoAlvo;

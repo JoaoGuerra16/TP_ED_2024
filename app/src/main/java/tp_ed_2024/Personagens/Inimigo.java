@@ -1,8 +1,8 @@
 package tp_ed_2024.Personagens;
 
-import tp_ed_2024.Personagens.Personagens_Interfaces.PersonagemADT;
+import tp_ed_2024.Personagens.Personagens_Interfaces.PersonagemImp;
 
-public class Inimigo implements PersonagemADT {
+public class Inimigo implements PersonagemImp {
 
     private String nome;
     private int vida;
@@ -42,7 +42,7 @@ public class Inimigo implements PersonagemADT {
     }
 
     @Override
-    public void atacar(PersonagemADT inimigo) {
+    public void atacar(PersonagemImp inimigo) {
 
         if (inimigo instanceof Hero) {
             int dano = this.poder;

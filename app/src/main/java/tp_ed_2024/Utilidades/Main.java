@@ -1,7 +1,7 @@
 package tp_ed_2024.Utilidades;
 
-import tp_ed_2024.Collections.Ficha2.ListaLigada;
 import tp_ed_2024.Personagens.*;
+import tp_ed_2024.Collections.Listas.ListaLigada;
 import tp_ed_2024.Items.*;
 
 public class Main {
