@@ -6,7 +6,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import tp_ed_2024.Collections.Graphs.GraphMatrix;
-import tp_ed_2024.Collections.Listas.ListaLigada;
+import tp_ed_2024.Collections.Listas.listaLigada;
 import tp_ed_2024.Enums.TipoAlvoEnum;
 import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Personagens.Alvo;
@@ -19,17 +19,17 @@ import java.io.IOException;
 public class JsonLoader {
 
     private GraphMatrix<String> grafo;
-    private ListaLigada<Inimigo> inimigos; // Não tenho certeza desta estrutura temos de ver
-    private ListaLigada<Item> items; // Não tenho certeza desta estrutura temos de ver
-    private ListaLigada<Alvo> alvos; // Não tenho certeza desta estrutura temos de ver
-    private ListaLigada<String> entradasSaidas;
+    private listaLigada<Inimigo> inimigos; // Não tenho certeza desta estrutura temos de ver
+    private listaLigada<Item> items; // Não tenho certeza desta estrutura temos de ver
+    private listaLigada<Alvo> alvos; // Não tenho certeza desta estrutura temos de ver
+    private listaLigada<String> entradasSaidas;
 
     public JsonLoader() {
         this.grafo = new GraphMatrix<>();
-        this.inimigos = new ListaLigada<>();
-        this.items = new ListaLigada<>();
-        this.alvos = new ListaLigada<>();
-        this.entradasSaidas = new ListaLigada<>();
+        this.inimigos = new listaLigada<>();
+        this.items = new listaLigada<>();
+        this.alvos = new listaLigada<>();
+        this.entradasSaidas = new listaLigada<>();
     }
 
     // Método para carregar o JSON e criar o grafo
@@ -137,19 +137,19 @@ public class JsonLoader {
     }
 
     // Retorna a lista de inimigos
-    public ListaLigada<Inimigo> getInimigos() {
+    public listaLigada<Inimigo> getInimigos() {
         return inimigos;
     }
 
-    public ListaLigada<Item> getItems() {
+    public listaLigada<Item> getItems() {
         return items;
     }
 
-    public ListaLigada<Alvo> getAlvos() {
+    public listaLigada<Alvo> getAlvos() {
         return alvos;
     }
 
-    public ListaLigada<String> getEntradasSaidas() {
+    public listaLigada<String> getEntradasSaidas() {
         return entradasSaidas;
     }
 }
