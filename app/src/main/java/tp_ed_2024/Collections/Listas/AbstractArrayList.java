@@ -158,7 +158,7 @@ public abstract class AbstractArrayList<T> implements ListADT<T>, Iterable<T>{
         }
 
         public void remove() {
-            throw new UnsupportedOperationException(); // Este exemplo não suporta a remoção via iterador
+            throw new UnsupportedOperationException(); 
         }
 
     }

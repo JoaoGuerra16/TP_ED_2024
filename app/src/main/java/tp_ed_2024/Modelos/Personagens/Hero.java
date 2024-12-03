@@ -62,7 +62,7 @@ public class Hero implements PersonagemPrincipalImp {
     }
 
     @Override
-    public void moverPara(String novaDivisao) {
+    public void setDivisao(String novaDivisao) {
         divisaoAtual = novaDivisao;
     }
 

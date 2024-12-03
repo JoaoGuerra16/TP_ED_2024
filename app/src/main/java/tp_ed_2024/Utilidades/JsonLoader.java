@@ -7,7 +7,6 @@ import org.json.simple.parser.ParseException;
 
 import tp_ed_2024.Collections.Graphs.Network;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
-import tp_ed_2024.Collections.Listas.listaLigada;
 import tp_ed_2024.Enums.TipoAlvoEnum;
 import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Modelos.Items.*;

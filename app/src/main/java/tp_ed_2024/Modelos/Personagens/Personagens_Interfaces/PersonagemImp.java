@@ -15,5 +15,5 @@ public interface PersonagemImp {
 
     String getDivisaoAtual(); // Obtém a divisão em que o personagem se encontra
 
-    void moverPara(String novaDivisao); // Move o personagem para outra divisão
+    void setDivisao(String novaDivisao); // Move o personagem para outra divisão
 }

@@ -60,9 +60,10 @@ public class Inimigo implements PersonagemImp {
         return divisaoAtual;
     }
 
+
     @Override
-    public void moverPara(String novaDivisao) {
-        divisaoAtual = novaDivisao;
+    public void setDivisao(String novaDivisao) {
+       this.divisaoAtual = novaDivisao;
     }
 
     @Override
