@@ -156,7 +156,6 @@ public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
      * @param startVertex      the index of the start vertex
      * @param endVertex        the index of the end vertex
      * @param locationsToAvoid a list of locations to avoid
-     * @param network          the network in which to find the path
      * @return an iterator over the indices of the vertices in the shortest path
      */
     public Iterator<Integer> findShortestPath(int startVertex, int endVertex, Iterable<Integer> locationsToAvoid) {
@@ -271,5 +270,32 @@ public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
         }
         return minIndex;
     }
+
+    // Método para obter os vizinhos de um vértice
+    public UnorderedArrayList<T> getNeighbors(T vertex) {
+        UnorderedArrayList<T> neighbors = new UnorderedArrayList<>();
+
+        // Obter o índice do vértice
+        int index = getIndex(vertex);
+        if (index == -1) {
+            throw new IllegalArgumentException("Vértice não encontrado.");
+        }
+
+        // Itera sobre a matriz de adjacências
+        for (int i = 0; i < numVertices; i++) {
+            if (adjMatrix[index][i]) {  // Se houver uma aresta entre os vértices
+                neighbors.addToRear(vertices[i]); // Adiciona o vértice vizinho à lista
+            }
+            // Garantir que a adjacência é bidirecional
+            if (adjMatrix[i][index]) {
+                neighbors.addToRear(vertices[i]);
+            }
+        }
+
+        return neighbors;
+    }
+
+
+
 
 }

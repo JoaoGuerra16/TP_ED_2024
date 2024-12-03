@@ -71,4 +71,12 @@ public class UnorderedArrayList<T> extends AbstractArrayList<T> implements Unord
 
     }
 
+    public T get(int index) {
+        if (index >= 0 && index < rear) {
+            return list[index];
+        } else {
+            throw new IndexOutOfBoundsException("Índice fora dos limites.");
+        }
+    }
+
 }
