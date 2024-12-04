@@ -1,10 +1,13 @@
 package tp_ed_2024.Collections.Graphs;
 
 import java.util.Iterator;
+import java.util.Random;
 
 import tp_ed_2024.Collections.Interfaces.NetworkADT;
 import tp_ed_2024.Collections.Listas.AbstractArrayList;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
+import tp_ed_2024.Modelos.Edificio.Divisao;
+import tp_ed_2024.Modelos.Personagens.Inimigo;
 
 public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
 
@@ -271,30 +274,63 @@ public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
         return minIndex;
     }
 
-    // Método para obter os vizinhos de um vértice
-    public UnorderedArrayList<T> getNeighbors(T vertex) {
-        UnorderedArrayList<T> neighbors = new UnorderedArrayList<>();
-
-        // Obter o índice do vértice
-        int index = getIndex(vertex);
-        if (index == -1) {
-            throw new IllegalArgumentException("Vértice não encontrado.");
+    @Override
+    public void addVertex(T vertex) {
+        if (vertex instanceof String) {
+            super.addVertex((T) new Divisao((String) vertex)); // Cria um objeto Divisao
+        } else {
+            super.addVertex(vertex); // Permite outros tipos genéricos
         }
-
-        // Itera sobre a matriz de adjacências
-        for (int i = 0; i < numVertices; i++) {
-            if (adjMatrix[index][i]) {  // Se houver uma aresta entre os vértices
-                neighbors.addToRear(vertices[i]); // Adiciona o vértice vizinho à lista
-            }
-            // Garantir que a adjacência é bidirecional
-            if (adjMatrix[i][index]) {
-                neighbors.addToRear(vertices[i]);
-            }
-        }
-
-        return neighbors;
     }
 
+    public void adicionarInimigo(String divisaoNome, Inimigo inimigo) {
+        for (int i = 0; i < numVertices; i++) {
+            Divisao divisao = (Divisao) vertices[i];
+            if (divisao.getNome().equals(divisaoNome)) {
+                divisao.adicionarInimigo(inimigo);
+                break;
+            }
+        }
+    }
+    public UnorderedArrayList<Inimigo> getInimigos(String divisaoNome) {
+        for (int i = 0; i < numVertices; i++) {
+            Divisao divisao = (Divisao) vertices[i];
+            if (divisao.getNome().equals(divisaoNome)) {
+                return divisao.getInimigos();
+            }
+        }
+        return new UnorderedArrayList<>();
+    }
+    // Método para obter os vizinhos de um vértice
+    public UnorderedArrayList<Divisao> getVizinhos(Divisao divisao) {
+        int index = getIndex((T) divisao);
+        UnorderedArrayList<Divisao> vizinhos = new UnorderedArrayList<>();
+
+        for (int i = 0; i < numVertices; i++) {
+            if (adjMatrix[index][i]) {
+            }
+        }
+
+        return vizinhos;
+    }
+
+
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Grafo:\n");
+        for (int i = 0; i < numVertices; i++) {
+            Divisao divisao = (Divisao) vertices[i];
+            sb.append(divisao.getNome()).append(": [");
+            for (int j = 0; j < numVertices; j++) {
+                if (adjMatrix[i][j]) {
+                    sb.append(vertices[j]).append(", ");
+                }
+            }
+            sb.append("] Inimigos: ").append(divisao.getInimigos().size()).append("\n");
+        }
+        return sb.toString();
+    }
 
 
 

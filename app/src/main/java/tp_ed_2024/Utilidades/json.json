@@ -14,7 +14,9 @@
   "inimigos": [
     {"nome": "Jose", "poder": 5, "divisao": "Heliporto"},
     {"nome": "Antonio", "poder": 10, "divisao": "Escada 6"},
+    {"nome": "Joao", "poder": 10, "divisao": "Armazém"},
     {"nome": "Pedro", "poder": 10, "divisao": "Escada 4"}
+
 
 
   ],

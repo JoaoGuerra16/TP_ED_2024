@@ -1,8 +1,19 @@
 package tp_ed_2024.Modelos.Edificio;
 
+
+import tp_ed_2024.Modelos.Personagens.Inimigo;
+
 public interface EdificioImp {
-    void adicionarVertice(String nomeDivisao);               // Adiciona uma divisão (vértice) ao grafo
-    void adicionarAresta(String origem, String destino);      // Cria uma conexão entre duas divisões
-    boolean existeCaminho(String origem, String destino);     // Verifica se existe um caminho entre divisões
-            // Retorna o mapa de conexões entre as divisões
+
+    // Adiciona uma divisão ao edifício
+    void adicionarDivisao(Divisao divisao);
+
+    // Adiciona um inimigo a uma divisão específica
+    void adicionarInimigoNaDivisao(String nomeDivisao, Inimigo inimigo);
+
+    // Obtém uma divisão por nome
+    Divisao obterDivisaoPorNome(String nome);
+
+    // Exibe todas as divisões
+    void exibirDivisoes();
 }

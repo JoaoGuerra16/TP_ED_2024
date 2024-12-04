@@ -8,7 +8,7 @@ public class ArrayOrderedList<T> extends AbstractArrayList<T> implements Ordered
     public void add(T element) {
 
         if (rear == list.length) {
-            ExpandCapacity();
+            expandCapacity();
 
         }
 

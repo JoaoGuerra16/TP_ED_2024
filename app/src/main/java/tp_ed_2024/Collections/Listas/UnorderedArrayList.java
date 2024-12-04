@@ -1,82 +1,111 @@
 package tp_ed_2024.Collections.Listas;
 
 import java.util.NoSuchElementException;
+
+import tp_ed_2024.Collections.Exceptions.ElementNotFoundException;
 import tp_ed_2024.Collections.Interfaces.*;
 
-//Herda os metodos de abstractArrayList e implementa a interface UnorderedListADT para fornecer as implementações corretas 
+
+
+/**
+ * The ArrayUnorderedList class represents an unordered list implemented using an array.
+ * It extends ArrayList and implements the UnorderedListADT interface, providing methods
+ * to add elements to the front, rear, or after a specific target element in the list.
+ *
+ * @param <T> the type of elements held in this list
+ */
 public class UnorderedArrayList<T> extends AbstractArrayList<T> implements UnorderedListADT<T> {
 
-    public UnorderedArrayList() {
-        super();
-    }
-
-    public UnorderedArrayList(int default_size) {
-        super(default_size);
-    }
-
+    /**
+     * Adds a new element to the front of the list.
+     *
+     * @param element the element to be added to the front of the list
+     */
     @Override
     public void addToFront(T element) {
-
         if (rear == list.length) {
-            ExpandCapacity();
-
+            expandCapacity();
         }
-        // Se a lista tiver mais que elemento
-        if (rear > 0) {
-            for (int i = rear; i > 0; i--) {
-                list[i] = list[i - 1];
-            }
+
+        for (int i = rear; i > 0; i--) {
+            list[i] = list[i - 1];
         }
 
         list[0] = element;
         rear++;
+        modCount++;
     }
 
+    /**
+     * Adds a new element to the rear of the list.
+     *
+     * @param element the element to be added to the rear of the list
+     */
     @Override
     public void addToRear(T element) {
-
         if (rear == list.length) {
-            ExpandCapacity();
+            expandCapacity();
         }
+
         list[rear] = element;
         rear++;
+        modCount++;
     }
 
+    /**
+     * Adds a new element after a specific target element in the list.
+     * If the target element is not found, an ElementNotFoundException is thrown.
+     *
+     * @param element the element to be added
+     * @param target  the target element after which the new element should be added
+     * @throws ElementNotFoundException if the target element is not found in the list
+     */
     @Override
-    public void addAfter(T element, T target) {
+    public void addAfter(T element, T target) throws ElementNotFoundException {
+        int targetIndex = -1;
 
-        if (rear == list.length) {
-            ExpandCapacity();
-        }
-
-        int index = -1;
-        // Loop para encontrar o index da array
         for (int i = 0; i < rear; i++) {
-            if (list[i].equals(target)) {
-                index = i;
+            if (target.equals(list[i])) {
+                targetIndex = i;
                 break;
             }
         }
 
-        if (index == -1) {
-            throw new NoSuchElementException("Target element not found.");
+        if (targetIndex == -1) {
+            throw new ElementNotFoundException("ArrayList");
         }
-        // Mover a lista para a direita
-        for (int i = rear; i > index; i--) {
+
+        if (rear == list.length) {
+            expandCapacity();
+        }
+
+        for (int i = rear; i > targetIndex + 1; i--) {
             list[i] = list[i - 1];
         }
 
-        list[index + 1] = element;
+        list[targetIndex + 1] = element;
         rear++;
-
+        modCount++;
     }
 
-    public T get(int index) {
+    /**
+     * Retrieves the element at a specific index in the list.
+     *
+     * @param index the index of the element to retrieve
+     * @return the element at the specified index
+     * @throws IndexOutOfBoundsException if the index is out of bounds
+     */
+    public T getIndex(int index) {
         if (index >= 0 && index < rear) {
             return list[index];
         } else {
-            throw new IndexOutOfBoundsException("Índice fora dos limites.");
+            throw new IndexOutOfBoundsException("Indice fora dos limites: " + index);
         }
     }
-
 }
+
+
+
+
+
+
