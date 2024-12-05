@@ -1,6 +1,8 @@
 package tp_ed_2024.Utilidades;
 
+import tp_ed_2024.Enums.TipoAlvoEnum;
 import tp_ed_2024.Modelos.Edificio.Edificio;
+import tp_ed_2024.Modelos.Personagens.Alvo;
 import tp_ed_2024.Modelos.Personagens.Inimigo;
 
 public class Main {
@@ -8,6 +10,7 @@ public class Main {
         // Caminho para o arquivo JSON
         String jsonPath = "app\\src\\main\\java\\tp_ed_2024\\Utilidades\\json.json";
 
+        Alvo alvo = new Alvo(TipoAlvoEnum.PORTEIRO);
         // Carregar o edifício e os dados do JSON
         JsonLoader loader = new JsonLoader();
         loader.loadFromJson(jsonPath);
@@ -19,6 +22,7 @@ public class Main {
         System.out.println("Estado inicial do grafo:");
         edificio.exibirDivisoes();
 
+        System.out.println(alvo);
         // Exibir os inimigos presentes nas divisões
         System.out.println("\nInimigos presentes nas divisões:");
         for (int i = 0; i < edificio.getNetwork().size(); i++) {
@@ -29,7 +33,6 @@ public class Main {
 
         System.out.println("\nLigações:");
         edificio.exibirLigacoes();
-
 
     }
 }

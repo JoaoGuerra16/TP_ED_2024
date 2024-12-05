@@ -1,12 +1,13 @@
 package tp_ed_2024.Modelos.Personagens.Personagens_Interfaces;
 
 import tp_ed_2024.Enums.TipoAlvoEnum;
+import tp_ed_2024.Modelos.Edificio.Divisao;
 
 public interface AlvoImp {
 
-    String getDivisao(); // Retorna o index que se encontra
+    Divisao getDivisao(); // Retorna o index que se encontra
 
-    void setDivisao(String divisao); // Setar o index do alvo
+    void setDivisao(Divisao divisao); // Setar o index do alvo
 
     TipoAlvoEnum getTipoAlvo();
 

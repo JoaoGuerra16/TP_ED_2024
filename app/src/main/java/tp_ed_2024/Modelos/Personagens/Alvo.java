@@ -1,25 +1,25 @@
 package tp_ed_2024.Modelos.Personagens;
 
 import tp_ed_2024.Enums.TipoAlvoEnum;
+import tp_ed_2024.Modelos.Edificio.Divisao;
 import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.AlvoImp;
 
 public class Alvo implements AlvoImp {
 
-    private String divisao;
+    private Divisao divisao;
     private TipoAlvoEnum tipoAlvo;
 
-    public Alvo(String divisao, TipoAlvoEnum tipoAlvo) {
-        this.divisao = divisao; // Ver a situacao das divisoes, nao deviamos relaciona-las com numeros?
+    public Alvo(TipoAlvoEnum tipoAlvo) {
         this.tipoAlvo = tipoAlvo;
     }
 
     @Override
-    public String getDivisao() {
+    public Divisao getDivisao() {
         return divisao;
     }
 
     @Override
-    public void setDivisao(String divisao) {
+    public void setDivisao(Divisao divisao) {
         this.divisao = divisao;
     }
 
@@ -36,7 +36,6 @@ public class Alvo implements AlvoImp {
     @Override
     public String toString() {
         return "Alvo{" +
-                "divisao='" + divisao + '\'' +
                 "tipo='" + tipoAlvo +
                 '}';
     }

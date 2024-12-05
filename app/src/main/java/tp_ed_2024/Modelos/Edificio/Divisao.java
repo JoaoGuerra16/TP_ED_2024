@@ -2,6 +2,7 @@ package tp_ed_2024.Modelos.Edificio;
 
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Items.Item;
+import tp_ed_2024.Modelos.Personagens.Alvo;
 import tp_ed_2024.Modelos.Personagens.Inimigo;
 
 public class Divisao {
@@ -10,7 +11,7 @@ public class Divisao {
     private UnorderedArrayList<Inimigo> inimigos;
     private UnorderedArrayList<Item> itens;
     private boolean isEntradaSaida;
-
+    private Alvo alvo;
 
     public Divisao(String nome) {
         this.nome = nome;
@@ -27,7 +28,13 @@ public class Divisao {
         isEntradaSaida = entradaSaida;
     }
 
+    public Alvo getAlvo() {
+        return alvo;
+    }
 
+    public void setAlvo(Alvo alvo) {
+        this.alvo = alvo;
+    }
 
     public String getNome() {
         return nome;
@@ -62,6 +69,7 @@ public class Divisao {
 
     @Override
     public String toString() {
-        return nome + " (Inimigos: " + getNumeroDeInimigos() + ")" + "(Entrada/Saída)" + isEntradaSaida + "Itens:" +itens;
+        return nome + " (Inimigos: " + getNumeroDeInimigos() + ", Entrada/Saída: " + isEntradaSaida + ", Alvo: "
+                + (alvo != null ? alvo : "Nenhum") + ")";
     }
 }

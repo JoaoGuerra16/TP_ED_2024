@@ -1,9 +1,9 @@
 package tp_ed_2024.Modelos.Edificio;
 
-
 import tp_ed_2024.Collections.Graphs.Network;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Items.Item;
+import tp_ed_2024.Modelos.Personagens.Alvo;
 import tp_ed_2024.Modelos.Personagens.Inimigo;
 
 public class Edificio implements EdificioImp {
@@ -44,7 +44,7 @@ public class Edificio implements EdificioImp {
         network.addEdge(divisaoDestino, divisaoOrigem, peso);
     }
 
-    public void adicionarItensNaDivisao(String nomeDivisao, Item item){
+    public void adicionarItensNaDivisao(String nomeDivisao, Item item) {
         Divisao divisao = obterDivisaoPorNome(nomeDivisao);
         if (divisao != null) {
             item.setDivisao(divisao);
@@ -54,13 +54,23 @@ public class Edificio implements EdificioImp {
         }
     }
 
-
     @Override
     public void adicionarInimigoNaDivisao(String nomeDivisao, Inimigo inimigo) {
         Divisao divisao = obterDivisaoPorNome(nomeDivisao);
         if (divisao != null) {
             inimigo.setDivisaoAtual(divisao);
             divisao.adicionarInimigo(inimigo);
+        } else {
+            System.out.println("Divisão " + nomeDivisao + " não encontrada.");
+        }
+    }
+
+    @Override
+    public void adicionarAlvoNaDivisao(String nomeDivisao, Alvo alvo) {
+        Divisao divisao = obterDivisaoPorNome(nomeDivisao);
+        if (divisao != null) {
+            alvo.setDivisao(divisao);
+            divisao.setAlvo(alvo);
         } else {
             System.out.println("Divisão " + nomeDivisao + " não encontrada.");
         }
@@ -98,7 +108,6 @@ public class Edificio implements EdificioImp {
             }
         }
     }
-
 
     public Network<Divisao> getNetwork() {
         return network;

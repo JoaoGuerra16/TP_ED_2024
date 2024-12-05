@@ -1,6 +1,7 @@
 package tp_ed_2024.Modelos.Edificio;
 
 
+import tp_ed_2024.Modelos.Personagens.Alvo;
 import tp_ed_2024.Modelos.Personagens.Inimigo;
 
 public interface EdificioImp {
@@ -18,4 +19,6 @@ public interface EdificioImp {
     void exibirDivisoes();
 
     void adicionarLigacao(String origem, String destino);
+
+     void adicionarAlvoNaDivisao(String nomeDivisao, Alvo alvo);
 }

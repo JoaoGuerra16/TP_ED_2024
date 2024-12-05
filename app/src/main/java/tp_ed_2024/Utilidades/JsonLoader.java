@@ -4,10 +4,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import tp_ed_2024.Enums.TipoAlvoEnum;
 import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Modelos.Edificio.Divisao;
 import tp_ed_2024.Modelos.Edificio.Edificio;
 import tp_ed_2024.Modelos.Items.Item;
+import tp_ed_2024.Modelos.Personagens.Alvo;
 import tp_ed_2024.Modelos.Personagens.Inimigo;
 
 import java.io.FileReader;
@@ -48,15 +51,14 @@ public class JsonLoader {
                 System.out.println("Inimigo " + nome + " adicionado na divisão " + divisaoNome);
             }
 
-            // Carregar ligaçõe
+            // Carregar ligações
             JSONArray ligacoes = (JSONArray) json.get("ligacoes");
             for (Object ligacao : ligacoes) {
                 JSONArray conexao = (JSONArray) ligacao;
                 String origem = (String) conexao.get(0);
                 String destino = (String) conexao.get(1);
-                    edificio.adicionarLigacao(origem, destino); // Adicionar ligação com peso 1.0
+                edificio.adicionarLigacao(origem, destino); // Adicionar ligação com peso 1.0
             }
-
 
             // Carregar entradas e saídas
             JSONArray entradasSaidasArray = (JSONArray) json.get("entradas-saidas");
@@ -94,16 +96,36 @@ public class JsonLoader {
                 }
             }
 
+            // Carregar Alvo
+            JSONObject alvoJson = (JSONObject) json.get("alvo");
+            if (alvoJson != null) {
+                String divisao = (String) alvoJson.get("divisao");
+                String tipoAlvoString = (String) alvoJson.get("tipo");
 
+                // Verificar se o tipo é um valor válido da enumeração
+                TipoAlvoEnum tipoAlvo;
+                try {
+                    tipoAlvo = TipoAlvoEnum.valueOf(tipoAlvoString.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    // Caso o tipo não seja válido, define como "DESCONHECIDO"
+                    tipoAlvo = TipoAlvoEnum.DESCONHECIDO;
+                }
 
+                Alvo alvo = new Alvo(tipoAlvo);
+                edificio.adicionarAlvoNaDivisao(divisao, alvo);
+                System.out.println("Alvo adicionado na divisão " + divisao);
 
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            }
+        }
+
+        catch (IOException | ParseException e) {
+            System.err.println("Erro ao carregar o JSON: " + e.getMessage());
+
+        }
+        {
+
         }
     }
-
-
-
 
     public Edificio getEdificio() {
         return edificio;

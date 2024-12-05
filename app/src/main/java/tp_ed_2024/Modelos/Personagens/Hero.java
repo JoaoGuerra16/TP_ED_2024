@@ -1,6 +1,7 @@
 package tp_ed_2024.Modelos.Personagens;
 
 import tp_ed_2024.Collections.Stacks.ArrayStack;
+import tp_ed_2024.Modelos.Edificio.Divisao;
 import tp_ed_2024.Modelos.Items.*;
 import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemImp;
 import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemPrincipalImp;
@@ -11,9 +12,10 @@ public class Hero implements PersonagemPrincipalImp {
     private int vida;
     private int poder;
     private ArrayStack<ItemImp> mochila;
-    private String divisaoAtual;
+    private Divisao divisaoAtual;
+    private Alvo alvo;
 
-    public Hero(int vida, int poder, ArrayStack<ItemImp> mochila, String divisaoAtual) {
+    public Hero(int vida, int poder, ArrayStack<ItemImp> mochila, Divisao divisaoAtual) {
         this.vida = vida;
         this.poder = poder;
         this.mochila = mochila;
@@ -57,13 +59,13 @@ public class Hero implements PersonagemPrincipalImp {
     }
 
     @Override
-    public String getDivisaoAtual() {
+    public Divisao getDivisaoAtual() {
         return divisaoAtual;
     }
 
     @Override
-    public void setDivisao(String novaDivisao) {
-        divisaoAtual = novaDivisao;
+    public void setDivisao(Divisao novaDivisao) {
+        this.divisaoAtual = novaDivisao;
     }
 
     @Override
@@ -89,6 +91,16 @@ public class Hero implements PersonagemPrincipalImp {
             System.out.println(nome
                     + " não tem kits de recuperação na mochila! Não precisas deles de qualquer maneira, vai-te a eles!!!");
         }
+    }
+
+    public Alvo getAlvo() {
+        return alvo;
+    }
+
+    public void pegarAlvo(Alvo alvo) {
+        this.alvo = alvo;
+        alvo.setDivisao(this.divisaoAtual); // O alvo é colocado na divisão atual do herói
+        System.out.println(nome + " pegou o alvo: " + alvo);
     }
 
 }

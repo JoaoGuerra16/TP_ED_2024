@@ -17,10 +17,8 @@
     {"nome": "Joao", "poder": 10, "divisao": "Armazém"},
     {"nome": "Pedro", "poder": 10, "divisao": "Escada 4"}
 
-
-
   ],
-  "entradas-saidas": ["Escada 5", "Heliporto", "Escada 6"],
+  "entradas-saidas": ["Escada 5", "Heliporto", "Escada 6", "Armazém"],
   "alvo": {"divisao": "Laboratório", "tipo": "quimico"},
   "itens": [
     {"divisao": "Camaratas", "pontos-recuperados": 20, "tipo": "kit de vida"},
