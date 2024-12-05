@@ -4,18 +4,20 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import tp_ed_2024.Collections.Graphs.Network;
+import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Modelos.Edificio.Divisao;
+import tp_ed_2024.Modelos.Edificio.Edificio;
+import tp_ed_2024.Modelos.Items.Item;
 import tp_ed_2024.Modelos.Personagens.Inimigo;
 
 import java.io.FileReader;
 import java.io.IOException;
 
 public class JsonLoader {
-    private Network<Divisao> network;
+    private Edificio edificio;
 
     public JsonLoader() {
-        this.network = new Network<>();
+        this.edificio = new Edificio();
     }
 
     public void loadFromJson(String jsonPath) {
@@ -23,11 +25,12 @@ public class JsonLoader {
 
         try (FileReader reader = new FileReader(jsonPath)) {
             JSONObject json = (JSONObject) parser.parse(reader);
+
             // Carregar divisões
-            JSONArray edificio = (JSONArray) json.get("edificio");
-            for (Object divisaoNome : edificio) {
+            JSONArray edificioArray = (JSONArray) json.get("edificio");
+            for (Object divisaoNome : edificioArray) {
                 Divisao divisao = new Divisao((String) divisaoNome);
-                network.addVertex(divisao);
+                edificio.adicionarDivisao(divisao);
                 System.out.println("Divisão carregada: " + divisao.getNome());
             }
 
@@ -39,48 +42,70 @@ public class JsonLoader {
                 int poder = ((Long) inimigoJson.get("poder")).intValue();
                 String divisaoNome = (String) inimigoJson.get("divisao");
 
-                // Encontrar a divisão e adicionar o inimigo
-                Divisao divisao = encontrarDivisaoPorNome(divisaoNome);
-                if (divisao != null) {
-                    Inimigo inimigo = new Inimigo(nome, poder, poder, divisao);
-                    divisao.adicionarInimigo(inimigo);  // Adiciona o inimigo na divisão
-                    System.out.println("Inimigo " + inimigo.getNome() + " adicionado na divisão " + divisao.getNome());
-                }
+                // Criar e adicionar o inimigo na divisão
+                Inimigo inimigo = new Inimigo(nome, poder, poder, null);
+                edificio.adicionarInimigoNaDivisao(divisaoNome, inimigo);
+                System.out.println("Inimigo " + nome + " adicionado na divisão " + divisaoNome);
             }
 
-
-
-            // Carregar ligações entre divisões
+            // Carregar ligaçõe
             JSONArray ligacoes = (JSONArray) json.get("ligacoes");
             for (Object ligacao : ligacoes) {
                 JSONArray conexao = (JSONArray) ligacao;
                 String origem = (String) conexao.get(0);
                 String destino = (String) conexao.get(1);
+                    edificio.adicionarLigacao(origem, destino); // Adicionar ligação com peso 1.0
+            }
 
-                Divisao divisaoOrigem = encontrarDivisaoPorNome(origem);
-                Divisao divisaoDestino = encontrarDivisaoPorNome(destino);
 
-                if (divisaoOrigem != null && divisaoDestino != null) {
-                    network.addEdge(divisaoOrigem, divisaoDestino, 1.0);
+            // Carregar entradas e saídas
+            JSONArray entradasSaidasArray = (JSONArray) json.get("entradas-saidas");
+            if (entradasSaidasArray != null) {
+                for (Object entradaSaidaObj : entradasSaidasArray) {
+                    String entradaSaida = (String) entradaSaidaObj;
+                    Divisao divisao = edificio.obterDivisaoPorNome(entradaSaida);
+                    if (divisao != null) {
+                        divisao.setEntradaSaida(true);
+                        System.out.println("Divisão marcada como entrada/saída: " + divisao.getNome());
+                    }
                 }
             }
+            // Carregar itens
+            JSONArray itensArray = (JSONArray) json.get("itens");
+            for (Object itemObj : itensArray) {
+                JSONObject itemJson = (JSONObject) itemObj;
+                String divisaoNome = (String) itemJson.get("divisao");
+                String tipo = (String) itemJson.get("tipo");
+
+                // Criar o item de acordo com o tipo especificado no JSON
+                Item item = null;
+                if ("kit de vida".equalsIgnoreCase(tipo)) {
+                    int pontosRecuperados = ((Long) itemJson.get("pontos-recuperados")).intValue();
+                    item = new Item(TipoItemEnum.KIT, null, pontosRecuperados); // Divisão será atribuída depois
+                } else if ("colete".equalsIgnoreCase(tipo)) {
+                    int pontosExtra = ((Long) itemJson.get("pontos-extra")).intValue();
+                    item = new Item(TipoItemEnum.COLETE, null, pontosExtra); // Divisão será atribuída depois
+                }
+
+                // Adicionar o item na divisão correspondente
+                if (item != null) {
+                    edificio.adicionarItensNaDivisao(divisaoNome, item);
+                    System.out.println("Item " + tipo + " adicionado na divisão " + divisaoNome);
+                }
+            }
+
+
+
+
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
     }
 
-    private Divisao encontrarDivisaoPorNome(String nome) {
-        for (int i = 0; i < network.size(); i++) {
-            Divisao divisao = network.getVertex(i);
-            if (divisao.getNome().equals(nome)) {
-                return divisao;
-            }
-        }
-        return null;
-    }
 
-    // Método para obter o grafo
-    public Network<Divisao> getGrafo() {
-        return network;
+
+
+    public Edificio getEdificio() {
+        return edificio;
     }
 }

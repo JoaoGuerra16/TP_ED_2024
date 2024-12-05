@@ -1,17 +1,33 @@
 package tp_ed_2024.Modelos.Edificio;
 
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
+import tp_ed_2024.Modelos.Items.Item;
 import tp_ed_2024.Modelos.Personagens.Inimigo;
 
 public class Divisao {
 
     private String nome;
     private UnorderedArrayList<Inimigo> inimigos;
+    private UnorderedArrayList<Item> itens;
+    private boolean isEntradaSaida;
+
 
     public Divisao(String nome) {
         this.nome = nome;
+        this.isEntradaSaida = false;
         this.inimigos = new UnorderedArrayList<>();
+        this.itens = new UnorderedArrayList<>();
     }
+
+    public boolean isEntradaSaida() {
+        return isEntradaSaida;
+    }
+
+    public void setEntradaSaida(boolean entradaSaida) {
+        isEntradaSaida = entradaSaida;
+    }
+
+
 
     public String getNome() {
         return nome;
@@ -26,6 +42,14 @@ public class Divisao {
         inimigos.addToRear(inimigo);
     }
 
+    public UnorderedArrayList<Item> getItens() {
+        return itens;
+    }
+
+    public void adicionarItem(Item itens) {
+        this.itens.addToRear(itens);
+    }
+
     // Remove um inimigo da divisão
     public void removerInimigo(Inimigo inimigo) {
         inimigos.remove(inimigo);
@@ -38,6 +62,6 @@ public class Divisao {
 
     @Override
     public String toString() {
-        return nome + " (Inimigos: " + getNumeroDeInimigos() + ")";
+        return nome + " (Inimigos: " + getNumeroDeInimigos() + ")" + "(Entrada/Saída)" + isEntradaSaida + "Itens:" +itens;
     }
 }

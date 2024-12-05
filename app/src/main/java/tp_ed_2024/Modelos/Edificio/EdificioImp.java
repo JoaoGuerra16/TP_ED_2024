@@ -16,4 +16,6 @@ public interface EdificioImp {
 
     // Exibe todas as divisões
     void exibirDivisoes();
+
+    void adicionarLigacao(String origem, String destino);
 }

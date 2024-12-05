@@ -12,9 +12,13 @@
     ["Escritório 3", "Escada 4"]
   ],
   "inimigos": [
-    {"nome": "badguy1", "poder": 5, "divisao": "Heliporto"},
-    {"nome": "badguy2", "poder": 10, "divisao": "Escada 6"},
-    {"nome": "badguy3", "poder": 20, "divisao": "Camaratas"}
+    {"nome": "Jose", "poder": 5, "divisao": "Heliporto"},
+    {"nome": "Antonio", "poder": 10, "divisao": "Escada 6"},
+    {"nome": "Joao", "poder": 10, "divisao": "Armazém"},
+    {"nome": "Pedro", "poder": 10, "divisao": "Escada 4"}
+
+
+
   ],
   "entradas-saidas": ["Escada 5", "Heliporto", "Escada 6"],
   "alvo": {"divisao": "Laboratório", "tipo": "quimico"},

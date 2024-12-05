@@ -274,43 +274,21 @@ public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
         return minIndex;
     }
 
-    @Override
-    public void addVertex(T vertex) {
-        if (vertex instanceof String) {
-            super.addVertex((T) new Divisao((String) vertex)); // Cria um objeto Divisao
-        } else {
-            super.addVertex(vertex); // Permite outros tipos genéricos
-        }
-    }
 
-    public void adicionarInimigo(String divisaoNome, Inimigo inimigo) {
-        for (int i = 0; i < numVertices; i++) {
-            Divisao divisao = (Divisao) vertices[i];
-            if (divisao.getNome().equals(divisaoNome)) {
-                divisao.adicionarInimigo(inimigo);
-                break;
-            }
-        }
-    }
-    public UnorderedArrayList<Inimigo> getInimigos(String divisaoNome) {
-        for (int i = 0; i < numVertices; i++) {
-            Divisao divisao = (Divisao) vertices[i];
-            if (divisao.getNome().equals(divisaoNome)) {
-                return divisao.getInimigos();
-            }
-        }
-        return new UnorderedArrayList<>();
-    }
+
+
     // Método para obter os vizinhos de um vértice
-    public UnorderedArrayList<Divisao> getVizinhos(Divisao divisao) {
-        int index = getIndex((T) divisao);
-        UnorderedArrayList<Divisao> vizinhos = new UnorderedArrayList<>();
-
+    public UnorderedArrayList<T> getVizinhos(T vertex) {
+        UnorderedArrayList<T> vizinhos = new UnorderedArrayList<>();
+        int index = getIndex(vertex);
+        if (!indexIsValid(index)) {
+            return vizinhos; // Retorna uma lista vazia se o índice não for válido
+        }
         for (int i = 0; i < numVertices; i++) {
             if (adjMatrix[index][i]) {
+                vizinhos.addToRear(vertices[i]);
             }
         }
-
         return vizinhos;
     }
 

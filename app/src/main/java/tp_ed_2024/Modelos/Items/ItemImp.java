@@ -1,6 +1,7 @@
 package tp_ed_2024.Modelos.Items;
 
 import tp_ed_2024.Enums.TipoItemEnum;
+import tp_ed_2024.Modelos.Edificio.Divisao;
 
 public interface ItemImp {
 
@@ -10,7 +11,7 @@ public interface ItemImp {
 
     void setDivisao(String divisao); // Setar a divisão em que o item está
 
-    String getDivisao(); // Obtém a divisão em que o item se encontra
+    Divisao getDivisao(); // Obtém a divisão em que o item se encontra
 
     int getPontos(); // Obtém os pontos de vida do item
 

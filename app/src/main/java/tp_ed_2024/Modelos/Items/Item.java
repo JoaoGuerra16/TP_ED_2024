@@ -1,14 +1,15 @@
 package tp_ed_2024.Modelos.Items;
 
 import tp_ed_2024.Enums.TipoItemEnum;
+import tp_ed_2024.Modelos.Edificio.Divisao;
 
 public class Item implements ItemImp {
 
     private TipoItemEnum tipo; // Alterado para usar a enum
-    private String divisao;
+    private Divisao divisao;
     private int pontos;
 
-    public Item(TipoItemEnum tipo, String divisao, int pontos) {
+    public Item(TipoItemEnum tipo, Divisao divisao, int pontos) {
         this.tipo = tipo;
         this.divisao = divisao;
         this.pontos = pontos;
@@ -25,12 +26,16 @@ public class Item implements ItemImp {
     }
 
     @Override
-    public String getDivisao() {
-        return divisao;
+    public void setDivisao(String divisao) {
+
     }
 
     @Override
-    public void setDivisao(String divisao) {
+    public Divisao getDivisao() {
+        return divisao;
+    }
+
+    public void setDivisao(Divisao divisao) {
         this.divisao = divisao;
     }
 
@@ -44,11 +49,11 @@ public class Item implements ItemImp {
         this.pontos = pontos;
     }
 
+
     @Override
     public String toString() {
         return "Item{" +
                 "tipo=" + tipo +
-                ", divisao='" + divisao + '\'' +
                 ", pontos=" + pontos +
                 '}';
     }

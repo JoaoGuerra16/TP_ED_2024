@@ -14,6 +14,9 @@ public class GraphMatrix<T> implements GraphADT<T> {
     protected boolean[][] adjMatrix; // adjacency matrix
     protected T[] vertices; // values of vertices
 
+
+
+
     /**
      * Creates an empty graph.
      */
@@ -21,6 +24,49 @@ public class GraphMatrix<T> implements GraphADT<T> {
         numVertices = 0;
         this.adjMatrix = new boolean[DEFAULT_CAPACITY][DEFAULT_CAPACITY];
         this.vertices = (T[]) (new Object[DEFAULT_CAPACITY]);
+    }
+
+    /**
+     * Adds a vertex to the graph, expanding the capacity of the graph
+     * if necessary. It also associates an object with the vertex.
+     *
+     * @param vertex the vertex to add to the graph
+     */
+    public void addVertex(T vertex) {
+        if (numVertices == vertices.length)
+            expandCapacity();
+        vertices[numVertices] = vertex;
+        for (int i = 0; i <= numVertices; i++) {
+            adjMatrix[numVertices][i] = false;
+            adjMatrix[i][numVertices] = false;
+        }
+        numVertices++;
+
+    }
+
+
+
+    @Override
+    public void removeVertex(T vertex) {
+        int index = getIndex(vertex);
+        if (!indexIsValid(index)) {
+            return;
+        }
+        for (int i = index; i < numVertices - 1; i++) {
+            vertices[i] = vertices[i + 1];
+        }
+        for (int i = index; i < numVertices - 1; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                adjMatrix[i][j] = adjMatrix[i + 1][j];
+            }
+        }
+
+        for (int i = index; i < numVertices - 1; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                adjMatrix[j][i] = adjMatrix[j][i + 1];
+            }
+        }
+        numVertices--;
     }
 
     /**
@@ -46,58 +92,22 @@ public class GraphMatrix<T> implements GraphADT<T> {
         }
     }
 
-    /**
-     * Adds a vertex to the graph, expanding the capacity of the graph
-     * if necessary. It also associates an object with the vertex.
-     *
-     * @param vertex the vertex to add to the graph
-     */
-    public void addVertex(T vertex) {
-        if (numVertices == vertices.length)
-            expandCapacity();
-        vertices[numVertices] = vertex;
-        for (int i = 0; i <= numVertices; i++) {
-            adjMatrix[numVertices][i] = false;
-            adjMatrix[i][numVertices] = false;
-        }
-        numVertices++;
-
-    }
-
-    @Override
-    public void removeVertex(T vertex) {
-        int index = getIndex(vertex);
-        if (!indexIsValid(index)) {
-            return;
-        }
-        for (int i = index; i < numVertices - 1; i++) {
-            vertices[i] = vertices[i + 1];
-        }
-        for (int i = index; i < numVertices - 1; i++) {
-            for (int j = 0; j < numVertices; j++) {
-                adjMatrix[i][j] = adjMatrix[i + 1][j];
-            }
-        }
-
-        for (int i = index; i < numVertices - 1; i++) {
-            for (int j = 0; j < numVertices; j++) {
-                adjMatrix[j][i] = adjMatrix[j][i + 1];
-            }
-        }
-        numVertices--;
-    }
-
     @Override
     public void removeEdge(T vertex1, T vertex2) {
-        int index1 = getIndex(vertex1);
-        int index2 = getIndex(vertex2);
-
-        if (index1 == -1 || index2 == -1)
-            return;
-
-        adjMatrix[index1][index2] = false;
-        adjMatrix[index2][index1] = false;
+        removeEdge(getIndex(vertex1), getIndex(vertex2));
     }
+
+
+    public void removeEdge(int index1, int index2) {
+
+        if (indexIsValid(index1) && indexIsValid(index2)) {
+
+            adjMatrix[index1][index2] = false;
+            adjMatrix[index2][index1] = false;
+        }
+    }
+
+
 
     @Override
     public Iterator iteratorBFS(T startVertex) {
@@ -235,17 +245,6 @@ public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
     public int size() {
         return numVertices;
     }
-
-    public boolean edgeExists(T vertex1, T vertex2) {
-        int index1 = getIndex(vertex1);
-        int index2 = getIndex(vertex2);
-
-        if (indexIsValid(index1) && indexIsValid(index2)) {
-            return adjMatrix[index1][index2];
-        } else {
-            return false;
-        }
-    }
     protected void expandCapacity(){
         T[] largerVertices = (T[]) (new Object[vertices.length * 2]);
         boolean[][] newAdjMatrix = new boolean[vertices.length * 2][vertices.length * 2];
@@ -287,7 +286,6 @@ public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
     protected boolean indexIsValid(int index) {
         return index >= 0 && index < numVertices;
     }
-
 
 
 }

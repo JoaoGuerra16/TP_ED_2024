@@ -11,6 +11,11 @@ public class Inimigo {
     private String nome;
     private int vida;
     private int poder;
+
+    public void setDivisaoAtual(Divisao divisaoAtual) {
+        this.divisaoAtual = divisaoAtual;
+    }
+
     private Divisao divisaoAtual;
 
     public Inimigo(String nome, int vida, int poder, Divisao divisaoAtual) {
@@ -20,6 +25,9 @@ public class Inimigo {
         this.divisaoAtual = divisaoAtual;
     }
 
+    public int getPoder(){
+        return  poder;
+    }
     public String getNome() {
         return nome;
     }
