@@ -32,7 +32,7 @@ public class Divisao {
         return alvo;
     }
 
-    public void setAlvo(Alvo alvo) {
+    public void adicionarAlvo(Alvo alvo) {
         this.alvo = alvo;
     }
 
@@ -44,32 +44,25 @@ public class Divisao {
         return inimigos;
     }
 
-    // Adiciona um inimigo à divisão
     public void adicionarInimigo(Inimigo inimigo) {
         inimigos.addToRear(inimigo);
+    }
+
+    public void removerInimigo(Inimigo inimigo) {
+        inimigos.remove(inimigo);
     }
 
     public UnorderedArrayList<Item> getItens() {
         return itens;
     }
 
-    public void adicionarItem(Item itens) {
-        this.itens.addToRear(itens);
-    }
-
-    // Remove um inimigo da divisão
-    public void removerInimigo(Inimigo inimigo) {
-        inimigos.remove(inimigo);
-    }
-
-    // Método que retorna o número de inimigos
-    public int getNumeroDeInimigos() {
-        return inimigos.size();
+    public void adicionarItem(Item item) {
+        itens.addToRear(item);
     }
 
     @Override
     public String toString() {
-        return nome + " (Inimigos: " + getNumeroDeInimigos() + ", Entrada/Saída: " + isEntradaSaida + ", Alvo: "
+        return nome + " (Inimigos: " + inimigos.size() + ", Entrada/Saída: " + isEntradaSaida + ", Alvo: "
                 + (alvo != null ? alvo : "Nenhum") + ")";
     }
 }

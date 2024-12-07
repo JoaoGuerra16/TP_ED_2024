@@ -21,7 +21,7 @@
   "entradas-saidas": ["Escada 5", "Heliporto", "Escada 6", "Armazém"],
   "alvo": {"divisao": "Laboratório", "tipo": "quimico"},
   "itens": [
-    {"divisao": "Camaratas", "pontos-recuperados": 20, "tipo": "kit de vida"},
+    {"divisao": "Camaratas", "pontos-extra": 20, "tipo": "colete"},
     {"divisao": "Armazém", "pontos-recuperados": 15, "tipo": "kit de vida"},
     {"divisao": "Escada 4", "pontos-extra": 25, "tipo": "colete"}
   ]

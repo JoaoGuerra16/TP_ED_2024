@@ -37,7 +37,6 @@ public class Alvo implements AlvoImp {
     public String toString() {
         return "Alvo{" +
                 "tipo='" + tipoAlvo +
-                '}';
+                '}' + " Divisao: " + (divisao != null ? divisao.getNome() : "Nenhuma");
     }
-
 }

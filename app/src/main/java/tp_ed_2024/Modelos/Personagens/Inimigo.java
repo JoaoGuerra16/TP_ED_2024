@@ -12,16 +12,24 @@ public class Inimigo {
     private int vida;
     private int poder;
 
-    public void setDivisaoAtual(Divisao divisaoAtual) {
-        this.divisaoAtual = divisaoAtual;
-    }
-
     private Divisao divisaoAtual;
 
     public Inimigo(String nome, int vida, int poder, Divisao divisaoAtual) {
         this.nome = nome;
         this.vida = vida;
         this.poder = poder;
+        this.divisaoAtual = divisaoAtual; // Pode estar sendo inicializado como null
+    }
+
+
+    public int getVida() {
+        return vida;
+    }
+
+    public void setVida(int vida) {
+        this.vida = vida;
+    }
+    public void setDivisaoAtual(Divisao divisaoAtual) {
         this.divisaoAtual = divisaoAtual;
     }
 
@@ -37,19 +45,31 @@ public class Inimigo {
     }
 
     public void moverInimigoAleatorio(Network<Divisao> network) {
+        // Obtém os vizinhos da divisão atual
         UnorderedArrayList<Divisao> vizinhos = network.getVizinhos(divisaoAtual);
 
+        // Se o inimigo tem vizinhos, ele pode se mover
         if (vizinhos.size() > 0) {
             Random random = new Random();
-            Divisao novaDivisao = vizinhos.getIndex(random.nextInt(vizinhos.size()));
 
-            divisaoAtual.removerInimigo(this);
-            novaDivisao.adicionarInimigo(this);
-            divisaoAtual = novaDivisao;
+            // Mover aleatoriamente para uma das divisões vizinhas
+            Divisao novoDestino = vizinhos.getIndex(random.nextInt(vizinhos.size()));
+            divisaoAtual = novoDestino;
+            System.out.println(nome + " se moveu para a divisão " + divisaoAtual.getNome());
 
-            System.out.println(nome + " se moveu para " + novaDivisao.getNome());
+            // Tenta se mover para outra divisão (ainda dentro de 2 divisões de distância)
+            // Vamos adicionar uma segunda "camada" de movimento, se necessário
+            if (random.nextBoolean()) {
+                // Agora escolhe aleatoriamente entre os vizinhos do novo destino
+                UnorderedArrayList<Divisao> vizinhosDoNovoDestino = network.getVizinhos(divisaoAtual);
+                if (!vizinhosDoNovoDestino.isEmpty()) {
+                    Divisao destinoFinal = vizinhosDoNovoDestino.getIndex(random.nextInt(vizinhosDoNovoDestino.size()));
+                    divisaoAtual = destinoFinal;
+                    System.out.println(nome + " se moveu novamente para a divisão " + divisaoAtual.getNome());
+                }
+            }
         } else {
-            System.out.println(nome + " não pode se mover.");
+            System.out.println(nome + " não tem divisões vizinhas para se mover.");
         }
     }
 
@@ -59,7 +79,8 @@ public class Inimigo {
                 "nome='" + nome + '\'' +
                 ", vida=" + vida +
                 ", poder=" + poder +
-                ", divisaoAtual='" + divisaoAtual.getNome() + '\'' +
+                ", divisaoAtual='" + (divisaoAtual != null ? divisaoAtual.getNome() : "Sem divisão") + '\'' +
                 '}';
     }
+
 }

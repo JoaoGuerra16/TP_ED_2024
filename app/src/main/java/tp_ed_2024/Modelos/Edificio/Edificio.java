@@ -20,7 +20,6 @@ public class Edificio implements EdificioImp {
     }
 
     public void adicionarLigacao(String origem, String destino) {
-
         Divisao divisaoOrigem = obterDivisaoPorNome(origem);
         Divisao divisaoDestino = obterDivisaoPorNome(destino);
 
@@ -28,10 +27,7 @@ public class Edificio implements EdificioImp {
             System.out.println("Erro ao adicionar ligação: divisões não encontradas.");
             return;
         }
-
-        // Inicializar o peso como 0
         int peso = 0;
-
         // Calcular o peso baseado nos inimigos presentes nas divisões
         for (Inimigo inimigo : divisaoOrigem.getInimigos()) {
             peso += inimigo.getPoder();
@@ -39,41 +35,14 @@ public class Edificio implements EdificioImp {
         for (Inimigo inimigo : divisaoDestino.getInimigos()) {
             peso += inimigo.getPoder();
         }
-        // Adicionar a aresta no grafo bidirecionalmente
+        // Adicionar ligação bidirecional
         network.addEdge(divisaoOrigem, divisaoDestino, peso);
         network.addEdge(divisaoDestino, divisaoOrigem, peso);
     }
 
-    public void adicionarItensNaDivisao(String nomeDivisao, Item item) {
-        Divisao divisao = obterDivisaoPorNome(nomeDivisao);
-        if (divisao != null) {
-            item.setDivisao(divisao);
-            divisao.adicionarItem(item);
-        } else {
-            System.out.println("Divisão " + nomeDivisao + " não encontrada.");
-        }
-    }
-
-    @Override
-    public void adicionarInimigoNaDivisao(String nomeDivisao, Inimigo inimigo) {
-        Divisao divisao = obterDivisaoPorNome(nomeDivisao);
-        if (divisao != null) {
-            inimigo.setDivisaoAtual(divisao);
-            divisao.adicionarInimigo(inimigo);
-        } else {
-            System.out.println("Divisão " + nomeDivisao + " não encontrada.");
-        }
-    }
-
-    @Override
-    public void adicionarAlvoNaDivisao(String nomeDivisao, Alvo alvo) {
-        Divisao divisao = obterDivisaoPorNome(nomeDivisao);
-        if (divisao != null) {
-            alvo.setDivisao(divisao);
-            divisao.setAlvo(alvo);
-        } else {
-            System.out.println("Divisão " + nomeDivisao + " não encontrada.");
-        }
+    public boolean verificarLigacao(Divisao divisao1, Divisao divisao2) {
+        UnorderedArrayList<Divisao> vizinhos = network.getVizinhos(divisao1);
+        return vizinhos.contains(divisao2);
     }
 
     @Override
@@ -108,6 +77,8 @@ public class Edificio implements EdificioImp {
             }
         }
     }
+
+
 
     public Network<Divisao> getNetwork() {
         return network;

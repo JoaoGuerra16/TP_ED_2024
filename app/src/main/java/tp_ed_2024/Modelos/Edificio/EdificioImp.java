@@ -9,8 +9,6 @@ public interface EdificioImp {
     // Adiciona uma divisão ao edifício
     void adicionarDivisao(Divisao divisao);
 
-    // Adiciona um inimigo a uma divisão específica
-    void adicionarInimigoNaDivisao(String nomeDivisao, Inimigo inimigo);
 
     // Obtém uma divisão por nome
     Divisao obterDivisaoPorNome(String nome);
@@ -20,5 +18,5 @@ public interface EdificioImp {
 
     void adicionarLigacao(String origem, String destino);
 
-     void adicionarAlvoNaDivisao(String nomeDivisao, Alvo alvo);
+
 }
