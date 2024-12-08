@@ -1,13 +1,13 @@
 package tp_ed_2024.Collections.Graphs;
 
 import java.util.Iterator;
-import java.util.Random;
+
 
 import tp_ed_2024.Collections.Interfaces.NetworkADT;
 import tp_ed_2024.Collections.Listas.AbstractArrayList;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Edificio.Divisao;
-import tp_ed_2024.Modelos.Personagens.Inimigo;
+
 
 public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
 
@@ -274,23 +274,6 @@ public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
         return minIndex;
     }
 
-
-
-
-    // Método para obter os vizinhos de um vértice
-    public UnorderedArrayList<T> getVizinhos(T vertex) {
-        UnorderedArrayList<T> vizinhos = new UnorderedArrayList<>();
-        int index = getIndex(vertex);
-        if (!indexIsValid(index)) {
-            return vizinhos; // Retorna uma lista vazia se o índice não for válido
-        }
-        for (int i = 0; i < numVertices; i++) {
-            if (adjMatrix[index][i]) {
-                vizinhos.addToRear(vertices[i]);
-            }
-        }
-        return vizinhos;
-    }
 
 
 

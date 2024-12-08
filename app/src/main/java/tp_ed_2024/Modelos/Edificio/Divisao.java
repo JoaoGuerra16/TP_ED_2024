@@ -1,17 +1,18 @@
 package tp_ed_2024.Modelos.Edificio;
 
+import tp_ed_2024.Collections.Graphs.Network;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Items.Item;
-import tp_ed_2024.Modelos.Personagens.Alvo;
-import tp_ed_2024.Modelos.Personagens.Inimigo;
+import tp_ed_2024.Modelos.Personagens.AlvoImp;
+import tp_ed_2024.Modelos.Personagens.InimigoImp;
 
 public class Divisao {
 
     private String nome;
-    private UnorderedArrayList<Inimigo> inimigos;
+    private UnorderedArrayList<InimigoImp> inimigos;
     private UnorderedArrayList<Item> itens;
     private boolean isEntradaSaida;
-    private Alvo alvo;
+    private AlvoImp alvo;
 
     public Divisao(String nome) {
         this.nome = nome;
@@ -28,11 +29,11 @@ public class Divisao {
         isEntradaSaida = entradaSaida;
     }
 
-    public Alvo getAlvo() {
+    public AlvoImp getAlvo() {
         return alvo;
     }
 
-    public void adicionarAlvo(Alvo alvo) {
+    public void adicionarAlvo(AlvoImp alvo) {
         this.alvo = alvo;
     }
 
@@ -40,15 +41,15 @@ public class Divisao {
         return nome;
     }
 
-    public UnorderedArrayList<Inimigo> getInimigos() {
+    public UnorderedArrayList<InimigoImp> getInimigos() {
         return inimigos;
     }
 
-    public void adicionarInimigo(Inimigo inimigo) {
+    public void adicionarInimigo(InimigoImp inimigo) {
         inimigos.addToRear(inimigo);
     }
 
-    public void removerInimigo(Inimigo inimigo) {
+    public void removerInimigo(InimigoImp inimigo) {
         inimigos.remove(inimigo);
     }
 
@@ -60,6 +61,7 @@ public class Divisao {
         itens.addToRear(item);
     }
 
+    
     @Override
     public String toString() {
         return nome + " (Inimigos: " + inimigos.size() + ", Entrada/Saída: " + isEntradaSaida + ", Alvo: "

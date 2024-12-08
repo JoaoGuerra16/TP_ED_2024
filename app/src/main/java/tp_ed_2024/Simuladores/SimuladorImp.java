@@ -1,19 +1,19 @@
 package tp_ed_2024.Simuladores;
 
-import tp_ed_2024.Modelos.Edificio.Edificio;
+import tp_ed_2024.Modelos.Edificio.EdificioImp;
 import tp_ed_2024.Modelos.Edificio.Divisao;
-import tp_ed_2024.Modelos.Personagens.Hero;
-import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemImp;
+import tp_ed_2024.Modelos.Personagens.HeroImp;
+import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.Personagem;
 
 import java.util.Scanner;
 
 public class SimuladorImp {
 
-    private Edificio edificio;
-    private Hero hero;
+    private EdificioImp edificio;
+    private HeroImp hero;
     private boolean emJogo;
 
-    public SimuladorImp(Edificio edificio, Hero hero) {
+    public SimuladorImp(EdificioImp edificio, HeroImp hero) {
         this.edificio = edificio;
         this.hero = hero;
         this.emJogo = true;
@@ -22,17 +22,22 @@ public class SimuladorImp {
     public void iniciarSimulacao() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Bem-vindo ao Simulador de Missão!");
+        System.out
+                .println(
+                        "\nBem-vindo Tó, a missão já começou!\n Até te desejava 'Boa sorte' mas sei que não precisas.");
         exibirEstadoAtual();
 
         while (emJogo) {
-            System.out.println("Escolha uma ação:");
+
+            System.out.println(edificio);
+
+            System.out.println("\nEscolha uma ação:");
             System.out.println("1. Mover para uma nova divisão");
             System.out.println("2. Usar item da mochila");
             System.out.println("3. Sair da simulação");
 
             int escolha = scanner.nextInt();
-            scanner.nextLine(); // Consumir nova linha
+            scanner.nextLine();
 
             switch (escolha) {
                 case 1:
@@ -45,22 +50,22 @@ public class SimuladorImp {
                     finalizarSimulacao();
                     break;
                 default:
-                    System.out.println("Escolha inválida. Tente novamente.");
+                    System.out.println("\nEscolha inválida. Tente novamente.");
             }
 
             verificarFimDeJogo();
         }
 
-        System.out.println("Simulação encerrada.");
+        System.out.println("\nSimulação encerrada.");
     }
 
     private void moverHero(Scanner scanner) {
-        System.out.println("Digite o nome da divisão para onde deseja mover-se:");
+        System.out.println("\nDiz o nome da divisão que queres entrar:");
         String nomeDivisao = scanner.nextLine();
 
         Divisao novaDivisao = edificio.obterDivisaoPorNome(nomeDivisao);
         if (novaDivisao == null) {
-            System.out.println("Divisão inválida. Tente novamente.");
+            System.out.println("\nDivisão inválida. Tente novamente.");
             return;
         }
 
@@ -68,14 +73,14 @@ public class SimuladorImp {
             hero.moverParaDivisao(novaDivisao, edificio);
             resolverEventosNaDivisao();
         } else {
-            System.out.println("Movimento inválido! Não há ligação entre as divisões.");
+            System.out.println("\nMovimento inválido! Não há ligação entre as divisões.");
         }
 
         exibirEstadoAtual();
     }
 
     private void usarItem() {
-        hero.aumentarVida(null, 0); // Ajuste o método para usar o próximo item da mochila
+        hero.aumentarVida(null, 0); 
         exibirEstadoAtual();
     }
 
@@ -83,31 +88,30 @@ public class SimuladorImp {
         Divisao divisaoAtual = hero.getDivisaoAtual();
 
         if (!divisaoAtual.getInimigos().isEmpty()) {
-            System.out.println("Inimigos encontrados! O combate começou.");
+            System.out.println("\nInimigos encontrados! O combate começou.");
             resolverCombate();
         }
 
-
         if (divisaoAtual.getAlvo() != null) {
-            System.out.println("Você encontrou o alvo na divisão!");
+            System.out.println("\nVocê encontrou o alvo na divisão!");
         }
     }
 
     private void resolverCombate() {
         Divisao divisaoAtual = hero.getDivisaoAtual();
         for (var inimigo : divisaoAtual.getInimigos()) {
-            hero.atacar((PersonagemImp) inimigo);
+            hero.atacar((Personagem) inimigo);
             if (inimigo.getVida() <= 0) {
                 divisaoAtual.removerInimigo(inimigo);
                 System.out.println("Inimigo derrotado!");
             } else {
                 hero.setVida(hero.getVida() - inimigo.getPoder());
-                System.out.println("O inimigo contra-atacou! Vida do herói: " + hero.getVida());
+                System.out.println("\nO inimigo contra-atacou! Vida do herói: " + hero.getVida());
             }
         }
+
+       // moverInimigoAleatorio(edificio);
     }
-
-
 
     private void exibirEstadoAtual() {
         System.out.println("Estado Atual:");
@@ -120,10 +124,10 @@ public class SimuladorImp {
     private void verificarFimDeJogo() {
         if (hero.getVida() <= 0) {
             System.out.println("O herói morreu! Missão fracassada.");
-            emJogo = false;
+            finalizarSimulacao();
         } else if (hero.getAlvo() != null && hero.getDivisaoAtual().isEntradaSaida()) {
             System.out.println("Você completou a missão com sucesso!");
-            emJogo = false;
+            finalizarSimulacao();
         }
     }
 

@@ -3,24 +3,22 @@ package tp_ed_2024.Modelos.Personagens;
 import tp_ed_2024.Collections.Stacks.ArrayStack;
 import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Modelos.Edificio.Divisao;
-import tp_ed_2024.Modelos.Edificio.Edificio;
+import tp_ed_2024.Modelos.Edificio.EdificioImp;
 import tp_ed_2024.Modelos.Items.*;
-import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemImp;
-import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemPrincipalImp;
+import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.Personagem;
+import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemPrincipal;
 
-public class Hero implements PersonagemPrincipalImp {
+public class HeroImp implements PersonagemPrincipal {
 
     private String nome = "Tó Cruz";
-    private int vida;
-    private int poder;
+    private int vida = 100;
+    private int poder = 100;
     private ArrayStack<Item> mochila;
     private Divisao divisaoAtual;
-    private Alvo alvo;
+    private AlvoImp alvo;
 
-    public Hero(int vida, Divisao divisaoAtual) {
-        this.vida = vida;
-        this.poder = poder;
-        this.mochila = new ArrayStack<>(5); // Limite de 5 itens
+    public HeroImp(Divisao divisaoAtual) {
+        this.mochila = new ArrayStack<>(5); // Limite de 5 items
         this.divisaoAtual = divisaoAtual;
     }
 
@@ -50,7 +48,7 @@ public class Hero implements PersonagemPrincipalImp {
     }
 
     @Override
-    public void atacar(PersonagemImp inimigo) {
+    public void atacar(Personagem inimigo) {
         int dano = this.poder;
         int vidaAntes = inimigo.getVida();
         int vidaDepois = Math.max(vidaAntes - dano, 0);
@@ -69,20 +67,19 @@ public class Hero implements PersonagemPrincipalImp {
     public void setDivisao(Divisao novaDivisao) {
         this.divisaoAtual = novaDivisao;
     }
-    
-    public Alvo getAlvo() {
+
+    public AlvoImp getAlvo() {
         return alvo;
     }
 
-    public void pegarAlvo(Alvo alvo) {
+    public void pegarAlvo(AlvoImp alvo) {
         this.alvo = alvo;
         alvo.setDivisao(this.divisaoAtual); // O alvo é colocado na divisão atual do herói
         System.out.println(nome + " pegou o alvo: " + alvo);
     }
 
-
     // Classe Hero
-    public void moverParaDivisao(Divisao novaDivisao, Edificio edificio) {
+    public void moverParaDivisao(Divisao novaDivisao, EdificioImp edificio) {
         if (edificio.verificarLigacao(divisaoAtual, novaDivisao)) {
             divisaoAtual = novaDivisao;
             System.out.println("Herói se moveu para: " + novaDivisao.getNome());
@@ -91,9 +88,11 @@ public class Hero implements PersonagemPrincipalImp {
                 System.out.println("O alvo " + alvo + " agora está na divisão: " + novaDivisao.getNome());
             }
         } else {
-            System.out.println("Movimento inválido! Não há ligação entre " + divisaoAtual.getNome() + " e " + novaDivisao.getNome());
+            System.out.println("Movimento inválido! Não há ligação entre " + divisaoAtual.getNome() + " e "
+                    + novaDivisao.getNome());
         }
     }
+
     public boolean sairDoEdificio() {
         if (divisaoAtual.isEntradaSaida()) {
             System.out.println(nome + " saiu do edifício pela divisão: " + divisaoAtual.getNome());
@@ -112,7 +111,6 @@ public class Hero implements PersonagemPrincipalImp {
         }
     }
 
-
     public void pegarItemNaDivisao() {
         if (divisaoAtual.getItens().size() > 0) {
             Item item = divisaoAtual.getItens().removeLast(); // Retira o item da divisão
@@ -123,7 +121,8 @@ public class Hero implements PersonagemPrincipalImp {
                     mochila.push(item);
                     System.out.println(nome + " pegou um medikit: " + item + "PS: Só fracos é que usam kits de cura");
                 } else {
-                    System.out.println( "A mochila está cheia! Não consegues carregar mais kits, na próxima traz uma mochila maior!");
+                    System.out.println(
+                            "A mochila está cheia! Não consegues carregar mais kits, na próxima traz uma mochila maior!");
                 }
             } else if (item.getTipo() == TipoItemEnum.COLETE) {
                 // Usar coletes imediatamente
@@ -133,8 +132,9 @@ public class Hero implements PersonagemPrincipalImp {
             System.out.println("Não há itens na divisão para pegar.");
         }
     }
+
     // Mostrar os itens na mochila
-// Mostrar os itens na mochila
+    // Mostrar os itens na mochila
     public void mostrarMochila() {
         System.out.println(nome + " tem os seguintes itens na mochila:");
         if (mochila.isEmpty()) {
@@ -145,9 +145,11 @@ public class Hero implements PersonagemPrincipalImp {
             }
         }
     }
+
     public void usarMedikit() {
         if (mochila.isEmpty()) {
-            System.out.println("Mochila vazia! Não há medikits para usar. Não precisas deles de qualquer maneira, vai-te a eles!!!");
+            System.out.println(
+                    "Mochila vazia! Não há medikits para usar. Não precisas deles de qualquer maneira, vai-te a eles!!!");
             return;
         }
 
@@ -158,7 +160,7 @@ public class Hero implements PersonagemPrincipalImp {
             int vidaAntes = vida;
             vida = Math.min(vida + pontosRecuperados, 100); // Vida máxima de 100
 
-            System.out.println(nome + " usou um medikit e recuperou " + (vida - vidaAntes) + " pontos de vida.");
+            System.out.println(nome + " usou um medikit e recuperou " + (vida - vidaAntes) + " pontos de vida. ");
             System.out.println("Vida atual: " + vida);
         } else {
             System.out.println("Erro: item no topo da mochila não é um medikit!");
@@ -177,6 +179,29 @@ public class Hero implements PersonagemPrincipalImp {
         }
     }
 
+    @Override
+    public void adicionarItem(Item item) {
+        if (mochila.size() < 55) {
+            mochila.push(item);
+            System.out.println("Item adicionado à mochila. \nPS: Só fracos é que usam kits de cura");
+        } else {
+            System.out.println(
+                    "A mochila está cheia! Não consegues carregar mais kits, na próxima traz uma mochila maior!");
+        }
+    }
 
+    @Override
+    public void aumentarVida(ItemImp item, int pontos) {
+        if (!mochila.isEmpty()) {
+            mochila.pop();
+            int pontosCura = item.getPontos();
+            vida = Math.min(vida + pontosCura, 100);
+            System.out.println(nome + " usou um kit de recuperação e agora tem " + vida
+                    + " pontos de vida. É bom que ganhes depois de teres usado um kit");
+        } else {
+            System.out.println(nome
+                    + " não tem kits de recuperação na mochila! Não precisas deles de qualquer maneira, vai-te a eles!!!");
+        }
+    }
 
 }

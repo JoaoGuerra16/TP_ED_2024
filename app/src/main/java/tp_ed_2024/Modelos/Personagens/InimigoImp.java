@@ -1,12 +1,14 @@
 package tp_ed_2024.Modelos.Personagens;
 
-import tp_ed_2024.Collections.Graphs.Network;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Edificio.Divisao;
+import tp_ed_2024.Modelos.Edificio.EdificioImp;
+import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.Personagem;
+import tp_ed_2024.Utilidades.CustomGraph;
 
 import java.util.Random;
 
-public class Inimigo {
+public class InimigoImp implements Personagem {
 
     private String nome;
     private int vida;
@@ -14,13 +16,12 @@ public class Inimigo {
 
     private Divisao divisaoAtual;
 
-    public Inimigo(String nome, int vida, int poder, Divisao divisaoAtual) {
+    public InimigoImp(String nome, int vida, int poder, Divisao divisaoAtual) {
         this.nome = nome;
         this.vida = vida;
         this.poder = poder;
         this.divisaoAtual = divisaoAtual; // Pode estar sendo inicializado como null
     }
-
 
     public int getVida() {
         return vida;
@@ -29,13 +30,15 @@ public class Inimigo {
     public void setVida(int vida) {
         this.vida = vida;
     }
+
     public void setDivisaoAtual(Divisao divisaoAtual) {
         this.divisaoAtual = divisaoAtual;
     }
 
-    public int getPoder(){
-        return  poder;
+    public int getPoder() {
+        return poder;
     }
+
     public String getNome() {
         return nome;
     }
@@ -44,7 +47,7 @@ public class Inimigo {
         return divisaoAtual;
     }
 
-    public void moverInimigoAleatorio(Network<Divisao> network) {
+    public void moverInimigoAleatorio(EdificioImp<Divisao> network) {
         // Obtém os vizinhos da divisão atual
         UnorderedArrayList<Divisao> vizinhos = network.getVizinhos(divisaoAtual);
 
@@ -71,6 +74,27 @@ public class Inimigo {
         } else {
             System.out.println(nome + " não tem divisões vizinhas para se mover.");
         }
+    }
+
+    @Override
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    @Override
+    public void atacar(Personagem inimigo) {
+        int dano = this.poder;
+        int vidaAntes = inimigo.getVida();
+        int vidaDepois = Math.max(vidaAntes - dano, 0);
+
+        inimigo.setVida(vidaDepois);
+        System.out.println(nome + " atacou " + inimigo.getNome() + " causando " + dano + " de dano.");
+        System.out.println(inimigo.getNome() + " agora tem " + inimigo.getVida() + " pontos de vida.");
+    }
+
+    @Override
+    public void setDivisao(Divisao novaDivisao) {
+        this.divisaoAtual = novaDivisao;
     }
 
     @Override
