@@ -1,14 +1,14 @@
 {
   "cod-missao": "pata de coelho",
   "versao": 1,
-  "edificio": ["Heliporto", "teste", "Camaratas", "teste2", "Escada 5", "Laboratório", "Escritório 3", "Escada 4"],
+  "edificio": ["Heliporto", "teste", "Camaratas", "teste2", "Escada 5", "Cozinha", "Escritório 3", "Escada 4"],
   "ligacoes": [
     ["Heliporto", "teste"],
     ["teste", "Camaratas"],
     ["Camaratas", "teste2"],
     ["teste2", "Escada 5"],
-    ["Escada 5", "Laboratório"],
-    ["Laboratório", "Escritório 3"],
+    ["Escada 5", "Cozinha"],
+    ["Cozinha", "Escritório 3"],
     ["Escritório 3", "Escada 4"]
   ],
   "inimigos": [
@@ -19,7 +19,7 @@
 
   ],
   "entradas-saidas": ["Escada 5", "Heliporto", "teste", "teste2"],
-  "alvo": {"divisao": "Laboratório", "tipo": "quimico"},
+  "alvo": {"divisao": "Cozinha", "tipo": "quimico"},
   "itens": [
     {"divisao": "Camaratas", "pontos-extra": 20, "tipo": "colete"},
     {"divisao": "teste2", "pontos-recuperados": 15, "tipo": "kit de vida"},

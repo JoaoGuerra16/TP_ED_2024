@@ -5,6 +5,7 @@ import tp_ed_2024.Modelos.Edificio.Divisao;
 import tp_ed_2024.Modelos.Personagens.Hero;
 import tp_ed_2024.Simuladores.SimuladorImp;
 
+
 public class Main {
     public static void main(String[] args) {
         // Carregar o edifício e os dados do JSON

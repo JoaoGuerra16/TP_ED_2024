@@ -20,7 +20,7 @@ public class Hero implements PersonagemPrincipalImp {
     public Hero(int vida, Divisao divisaoAtual) {
         this.vida = vida;
         this.poder = vida;
-        this.mochila = new ArrayStack<>(5); // Limite de 5 itens
+        this.mochila = new ArrayStack<>(5);
         this.divisaoAtual = divisaoAtual;
         this.prioridadeAtaque = true;
     }
@@ -142,10 +142,10 @@ public class Hero implements PersonagemPrincipalImp {
 
     // Mostrar os items na mochila
     public void mostrarMochila() {
-        System.out.println(nome + " tem os seguintes itens na mochila:");
         if (mochila.isEmpty()) {
             System.out.println("A mochila está vazia.");
         } else {
+            System.out.println(nome + " tem os seguintes itens na mochila:");
             for (int i = 0; i < mochila.size(); i++) {
                 System.out.println("- " + mochila.peek()); // Exibe o topo sem remover
             }

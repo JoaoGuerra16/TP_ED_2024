@@ -84,6 +84,7 @@ public class SimuladorImp {
         }
 
         hero.moverParaDivisao(novaDivisao, edificio);
+        moverInimigosForaDaSala(hero.getDivisaoAtual());
         resolverEventosNaDivisao();
         exibirEstadoAtual();
     }
@@ -152,67 +153,91 @@ public class SimuladorImp {
     private void resolverEventosNaDivisao() {
         Divisao divisaoAtual = hero.getDivisaoAtual();
 
-        // Verifica se há itens na divisão e o herói apanha-os
         if (!divisaoAtual.getItens().isEmpty()) {
             System.out.println("Encontras-te um item");
             hero.pegarItemNaDivisao();
         }
-
+        if (divisaoAtual.getAlvo() != null) {
+            System.out.println("Você encontrou o alvo na divisão!");
+        }
         if (!divisaoAtual.getInimigos().isEmpty()) {
             System.out.println("Inimigos encontrados! O combate começou.");
             resolverCombate();
         }
 
-        if (divisaoAtual.getAlvo() != null) {
-            System.out.println("Você encontrou o alvo na divisão!");
-        }
     }
 
     private void resolverCombate() {
         Divisao divisaoAtual = hero.getDivisaoAtual();
         UnorderedArrayList<Inimigo> inimigosNaSala = divisaoAtual.getInimigos();
 
-        if (inimigosNaSala.isEmpty()) {
-            System.out.println("Nenhum inimigo na sala.");
-            return;
+        if (divisaoAtual.getAlvo() != null) {
+            System.out.println("O alvo está nessa divisão!");
+
         }
 
-        // Verifica se o herói tem prioridade de ataque
-        if (hero.getPrioridadeAtaque()) {
-            System.out.println("Tó Cruz há inimigos na sala! Combate iniciado.");
+        System.out.println("Tó Cruz há inimigos na sala! Combate iniciado.");
+        Scanner scanner = new Scanner(System.in);
 
-            // Fase do jogador: Tó ataca todos os inimigos na sala.
-            for (Inimigo inimigo : inimigosNaSala) {
-                realizarAtaqueHeroi(inimigo);
-            }
+        while (divisaoAtual.getInimigos().size() > 0 && emJogo) {
+            System.out.println("Escolha uma ação:");
+            System.out.println("1. Atacar");
+            System.out.println("2. Usar kit de vida");
 
-            // Remover inimigos eliminados após o ataque do jogador.
-            for (int i = 0; i < inimigosNaSala.size(); i++) {
-                Inimigo inimigo = inimigosNaSala.getIndex(i);
-                if (inimigo.getVida() <= 0) {
-                    divisaoAtual.removerInimigo(inimigo);
-                    System.out.println("Inimigo " + inimigo.getNome() + " foi derrotado!");
-                    i--;
+            int escolha = scanner.nextInt();
+            scanner.nextLine(); // Consumir a quebra de linha
+
+            if (escolha == 1) {
+                // Fase do jogador: Tó ataca todos os inimigos na sala.
+                for (Inimigo inimigo : inimigosNaSala) {
+                    realizarAtaqueHeroi(inimigo);
                 }
-            }
 
-            // Se ainda houver inimigos, ocorre a fase de contra-ataque.
-            if (!inimigosNaSala.isEmpty()) {
-                System.out.println("Os inimigos restantes contra-atacam!");
+                // Remover inimigos eliminados após o ataque do jogador.
+                for (int i = 0; i < inimigosNaSala.size(); i++) {
+                    Inimigo inimigo = inimigosNaSala.getIndex(i);
+                    if (inimigo.getVida() <= 0) {
+                        divisaoAtual.removerInimigo(inimigo);
+                        System.out.println("Inimigo " + inimigo.getNome() + " foi derrotado!");
+                        i--;
+                    }
+                }
+
+                // Se ainda houver inimigos, ocorre a fase de contra-ataque.
+                if (!inimigosNaSala.isEmpty()) {
+                    System.out.println("Os inimigos restantes contra-atacam!");
+
+                    for (Inimigo inimigo : inimigosNaSala) {
+                        realizarContraAtaque(inimigo);
+                    }
+                    moverInimigosForaDaSala(divisaoAtual);
+
+                } else {
+                    System.out.println("Todos os inimigos foram derrotados! A ronda termina.");
+                }
+                exibirEstadoAtual();
+            } else if (escolha == 2) {
+                // Usar kit de vida
+                hero.usarMedikit();
 
                 for (Inimigo inimigo : inimigosNaSala) {
                     realizarContraAtaque(inimigo);
                 }
                 moverInimigosForaDaSala(divisaoAtual);
-
-            } else {
-                System.out.println("Todos os inimigos foram derrotados! A ronda termina.");
+                exibirEstadoAtual();
             }
 
+            // Verifica se o Tó perdeu a vida toda
+            verificarFimDeJogo();
         }
 
-        // Verificar se o Tó perdeu a vida toda.
-        verificarFimDeJogo();
+        if (divisaoAtual.getAlvo() != null && inimigosNaSala.isEmpty()) {
+            System.out.println("Não há inimigos por perto. Podes resgatar o alvo!");
+
+            hero.pegarAlvo(null);
+            System.out.println("Alvo resgatado com sucesso, és mesmo o maior!");
+
+        }
     }
 
     private void realizarAtaqueHeroi(Inimigo inimigo) {
@@ -232,6 +257,9 @@ public class SimuladorImp {
         System.out.println("Vida do Herói: " + hero.getVida());
         System.out.println("Inimigos na divisão: " + hero.getDivisaoAtual().getInimigos().size());
         System.out.println("Itens na divisão: " + hero.getDivisaoAtual().getItens().size());
+        if (hero.getDivisaoAtual().getNome().equals(hero.getAlvo().getDivisao().getNome())) {
+            System.out.println("O herói tem o alvo com ele!");
+        }
     }
 
     private void verificarFimDeJogo() {
