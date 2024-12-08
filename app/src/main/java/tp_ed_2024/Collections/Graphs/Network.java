@@ -6,7 +6,7 @@ import java.util.Iterator;
 import tp_ed_2024.Collections.Interfaces.NetworkADT;
 import tp_ed_2024.Collections.Listas.AbstractArrayList;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
-import tp_ed_2024.Modelos.Edificio.Divisao;
+
 
 
 public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
@@ -272,25 +272,6 @@ public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
             }
         }
         return minIndex;
-    }
-
-
-
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("Grafo:\n");
-        for (int i = 0; i < numVertices; i++) {
-            Divisao divisao = (Divisao) vertices[i];
-            sb.append(divisao.getNome()).append(": [");
-            for (int j = 0; j < numVertices; j++) {
-                if (adjMatrix[i][j]) {
-                    sb.append(vertices[j]).append(", ");
-                }
-            }
-            sb.append("] Inimigos: ").append(divisao.getInimigos().size()).append("\n");
-        }
-        return sb.toString();
     }
 
 

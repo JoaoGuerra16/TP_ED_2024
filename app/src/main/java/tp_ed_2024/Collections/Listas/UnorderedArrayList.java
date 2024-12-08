@@ -1,6 +1,5 @@
 package tp_ed_2024.Collections.Listas;
 
-import java.util.NoSuchElementException;
 
 import tp_ed_2024.Collections.Exceptions.ElementNotFoundException;
 import tp_ed_2024.Collections.Interfaces.*;

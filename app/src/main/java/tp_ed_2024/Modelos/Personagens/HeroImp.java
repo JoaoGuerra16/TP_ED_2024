@@ -78,8 +78,8 @@ public class HeroImp implements PersonagemPrincipal {
         System.out.println(nome + " pegou o alvo: " + alvo);
     }
 
-    // Classe Hero
-    public void moverParaDivisao(Divisao novaDivisao, EdificioImp edificio) {
+    
+    public void moverParaDivisao(Divisao novaDivisao, EdificioImp<Divisao> edificio) {
         if (edificio.verificarLigacao(divisaoAtual, novaDivisao)) {
             divisaoAtual = novaDivisao;
             System.out.println("Herói se moveu para: " + novaDivisao.getNome());

@@ -18,14 +18,14 @@ import java.io.IOException;
 
 public class JsonLoader {
     private String jsonPath;
-    private EdificioImp edificio;
+    private EdificioImp<Divisao> edificio;
 
     public JsonLoader(String jsonPath) {
         this.jsonPath = jsonPath;
-        this.edificio = new EdificioImp();
+        this.edificio = new EdificioImp<Divisao>();
     }
 
-    public EdificioImp carregarEdificio() {
+    public EdificioImp<Divisao> carregarEdificio() {
         JSONParser parser = new JSONParser();
 
         try (FileReader reader = new FileReader(jsonPath)) {
@@ -67,14 +67,14 @@ public class JsonLoader {
             Divisao divisao = edificio.obterDivisaoPorNome(divisaoNome);
             if (divisao != null) {
                 divisao.adicionarInimigo(inimigo);
-                inimigo.setDivisaoAtual(divisao); // Certifique-se de configurar a divisão do inimigo
+                inimigo.setDivisao(divisao); // Certifique-se de configurar a divisão do inimigo
                 System.out.println("Inimigo " + nome + " adicionado na divisão " + divisao.getNome());
             } else {
-                System.err.println("Erro: divisão " + divisaoNome + " não encontrada. Inimigo " + nome + " não foi adicionado.");
+                System.err.println(
+                        "Erro: divisão " + divisaoNome + " não encontrada. Inimigo " + nome + " não foi adicionado.");
             }
         }
     }
-
 
     private void carregarLigacoes(JSONObject json) {
         JSONArray ligacoes = (JSONArray) json.get("ligacoes");
@@ -123,7 +123,8 @@ public class JsonLoader {
                 divisao.adicionarItem(item);
                 System.out.println("Item " + tipo + " adicionado na divisão " + divisao.getNome());
             } else {
-                System.err.println("Erro: divisão " + divisaoNome + " não encontrada. Item " + tipo + " não foi adicionado.");
+                System.err.println(
+                        "Erro: divisão " + divisaoNome + " não encontrada. Item " + tipo + " não foi adicionado.");
             }
         }
     }

@@ -3,17 +3,18 @@ package tp_ed_2024.Simuladores;
 import tp_ed_2024.Modelos.Edificio.EdificioImp;
 import tp_ed_2024.Modelos.Edificio.Divisao;
 import tp_ed_2024.Modelos.Personagens.HeroImp;
+import tp_ed_2024.Modelos.Personagens.InimigoImp;
 import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.Personagem;
 
 import java.util.Scanner;
 
 public class SimuladorImp {
 
-    private EdificioImp edificio;
+    private EdificioImp<Divisao> edificio;
     private HeroImp hero;
     private boolean emJogo;
 
-    public SimuladorImp(EdificioImp edificio, HeroImp hero) {
+    public SimuladorImp(EdificioImp<Divisao> edificio, HeroImp hero) {
         this.edificio = edificio;
         this.hero = hero;
         this.emJogo = true;
@@ -21,7 +22,7 @@ public class SimuladorImp {
 
     public void iniciarSimulacao() {
         Scanner scanner = new Scanner(System.in);
-
+        resolverEventosNaDivisao();
         System.out
                 .println(
                         "\nBem-vindo Tó, a missão já começou!\n Até te desejava 'Boa sorte' mas sei que não precisas.");
@@ -71,7 +72,9 @@ public class SimuladorImp {
 
         if (edificio.verificarLigacao(hero.getDivisaoAtual(), novaDivisao)) {
             hero.moverParaDivisao(novaDivisao, edificio);
+            moverTodosInimigos();
             resolverEventosNaDivisao();
+
         } else {
             System.out.println("\nMovimento inválido! Não há ligação entre as divisões.");
         }
@@ -79,8 +82,19 @@ public class SimuladorImp {
         exibirEstadoAtual();
     }
 
+    private void moverTodosInimigos() {
+        System.out.println("\nOs inimigos estão se movendo...");
+        for (int i = 0; i < edificio.getNetwork().size(); i++) {
+            Divisao divisao = edificio.getNetwork().getVertex(i);
+            for (InimigoImp inimigo : divisao.getInimigos()) {
+                inimigo.moverInimigoAleatorio(edificio, inimigo);
+            }
+        }
+    }
+
     private void usarItem() {
-        hero.aumentarVida(null, 0); 
+        hero.aumentarVida(null, 0);
+        moverTodosInimigos();
         exibirEstadoAtual();
     }
 
@@ -109,8 +123,8 @@ public class SimuladorImp {
                 System.out.println("\nO inimigo contra-atacou! Vida do herói: " + hero.getVida());
             }
         }
+        moverTodosInimigos();
 
-       // moverInimigoAleatorio(edificio);
     }
 
     private void exibirEstadoAtual() {
