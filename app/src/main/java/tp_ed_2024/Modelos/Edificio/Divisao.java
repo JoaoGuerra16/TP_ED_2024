@@ -49,7 +49,10 @@ public class Divisao {
     }
 
     public void removerInimigo(Inimigo inimigo) {
-        inimigos.remove(inimigo);
+        if (!inimigos.isEmpty()) {
+            inimigos.remove(inimigo);
+        }
+
     }
 
     public UnorderedArrayList<Item> getItens() {

@@ -62,7 +62,7 @@ public class JsonLoader {
             int poder = ((Long) inimigoJson.get("poder")).intValue();
             String divisaoNome = (String) inimigoJson.get("divisao");
 
-            Inimigo inimigo = new Inimigo(nome, poder, poder, null);
+            Inimigo inimigo = new Inimigo(nome, 1000, poder, null);
 
             Divisao divisao = edificio.obterDivisaoPorNome(divisaoNome);
             if (divisao != null) {

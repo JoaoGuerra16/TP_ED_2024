@@ -2,8 +2,6 @@ package tp_ed_2024.Modelos.Edificio;
 
 import tp_ed_2024.Collections.Graphs.Network;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
-import tp_ed_2024.Modelos.Items.Item;
-import tp_ed_2024.Modelos.Personagens.Alvo;
 import tp_ed_2024.Modelos.Personagens.Inimigo;
 
 public class Edificio implements EdificioImp {
@@ -56,6 +54,17 @@ public class Edificio implements EdificioImp {
         return null;
     }
 
+
+    public UnorderedArrayList<Divisao> obterDivisoes() {
+        UnorderedArrayList<Divisao> divisoes = new UnorderedArrayList<>();
+        for (int i = 0; i < network.size(); i++) {
+            Divisao divisao = network.getVertex(i);
+            divisoes.addToFront(divisao);
+        }
+        return divisoes;
+    }
+    
+
     @Override
     public void exibirDivisoes() {
         for (int i = 0; i < network.size(); i++) {
@@ -78,7 +87,33 @@ public class Edificio implements EdificioImp {
         }
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("\n===== Mapa do Edifício ===== \n");
+        for (int i = 0; i < network.size(); i++) {
+            Divisao divisao = network.getVertex(i);
 
+            sb.append("- ").append(divisao.getNome());
+
+            // Verificar se há itens
+            if (divisao.getItens() != null && !divisao.getItens().isEmpty()) {
+                sb.append(" [Items: ").append(divisao.getItens().size()).append("]");
+            }
+
+            // Verificar se há inimigos
+            if (divisao.getInimigos() != null && !divisao.getInimigos().isEmpty()) {
+                sb.append(" [Inimigos: ").append(divisao.getInimigos().size()).append("]");
+            }
+
+            // Verificar se há alvo
+            if (divisao.getAlvo() != null) {
+                sb.append(" [Alvo AQUIIII]");
+            }
+
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 
     public Network<Divisao> getNetwork() {
         return network;
