@@ -1,8 +1,8 @@
 package tp_ed_2024.Utilidades;
 
-import tp_ed_2024.Modelos.Edificio.Edificio;
+import tp_ed_2024.Modelos.Edificio.EdificioImp;
 import tp_ed_2024.Modelos.Edificio.Divisao;
-import tp_ed_2024.Modelos.Personagens.Hero;
+import tp_ed_2024.Modelos.Personagens.HeroImp;
 import tp_ed_2024.Simuladores.SimuladorImp;
 
 
@@ -11,7 +11,7 @@ public class Main {
         // Carregar o edifício e os dados do JSON
         String jsonPath = "app\\src\\main\\java\\tp_ed_2024\\Utilidades\\json.json";
         JsonLoader loader = new JsonLoader(jsonPath);
-        Edificio edificio = loader.carregarEdificio();
+        EdificioImp edificio = loader.carregarEdificio();
 
         // Criar o jogador (Tó Cruz) e colocá-lo na divisão inicial
         Divisao divisaoInicial = edificio.obterDivisaoPorNome("Heliporto"); // Altere para a divisão inicial correta
@@ -20,7 +20,7 @@ public class Main {
             return;
         }
 
-        Hero heroi = new Hero(100, divisaoInicial);
+        HeroImp heroi = new HeroImp(100, divisaoInicial);
         SimuladorImp simulador = new SimuladorImp(edificio, heroi);
         simulador.iniciarSimulacao();
     }

@@ -1,9 +1,9 @@
 package tp_ed_2024.Modelos.Personagens.Personagens_Interfaces;
 
 import tp_ed_2024.Modelos.Edificio.Divisao;
-import tp_ed_2024.Modelos.Personagens.Inimigo;
+import tp_ed_2024.Modelos.Personagens.InimigoImp;
 
-public interface PersonagemImp {
+public interface Personagem {
     String getNome(); // Obtém o nome do personagem
 
     void setNome(String nome); // Setar o nome do personagem
@@ -14,7 +14,7 @@ public interface PersonagemImp {
 
     int getPoder(); // Obtém os pontos de ataque (poder)
 
-    public void atacar(Inimigo inimigo) ; // Reduz os pontos de vida
+    public void atacar(InimigoImp inimigo) ; // Reduz os pontos de vida
 
     Divisao getDivisaoAtual(); // Obtém a divisão em que o personagem se encontra
 

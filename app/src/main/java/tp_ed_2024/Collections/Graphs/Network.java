@@ -7,7 +7,7 @@ import tp_ed_2024.Collections.Interfaces.NetworkADT;
 import tp_ed_2024.Collections.Listas.AbstractArrayList;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Edificio.Divisao;
-import tp_ed_2024.Modelos.Personagens.Inimigo;
+import tp_ed_2024.Modelos.Personagens.InimigoImp;
 
 public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
 

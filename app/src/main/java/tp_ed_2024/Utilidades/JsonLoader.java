@@ -8,24 +8,24 @@ import org.json.simple.parser.ParseException;
 import tp_ed_2024.Enums.TipoAlvoEnum;
 import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Modelos.Edificio.Divisao;
-import tp_ed_2024.Modelos.Edificio.Edificio;
+import tp_ed_2024.Modelos.Edificio.EdificioImp;
 import tp_ed_2024.Modelos.Items.Item;
-import tp_ed_2024.Modelos.Personagens.Alvo;
-import tp_ed_2024.Modelos.Personagens.Inimigo;
+import tp_ed_2024.Modelos.Personagens.AlvoImp;
+import tp_ed_2024.Modelos.Personagens.InimigoImp;
 
 import java.io.FileReader;
 import java.io.IOException;
 
 public class JsonLoader {
     private String jsonPath;
-    private Edificio edificio;
+    private EdificioImp edificio;
 
     public JsonLoader(String jsonPath) {
         this.jsonPath = jsonPath;
-        this.edificio = new Edificio();
+        this.edificio = new EdificioImp();
     }
 
-    public Edificio carregarEdificio() {
+    public EdificioImp carregarEdificio() {
         JSONParser parser = new JSONParser();
 
         try (FileReader reader = new FileReader(jsonPath)) {
@@ -62,7 +62,7 @@ public class JsonLoader {
             int poder = ((Long) inimigoJson.get("poder")).intValue();
             String divisaoNome = (String) inimigoJson.get("divisao");
 
-            Inimigo inimigo = new Inimigo(nome, poder, poder, null);
+            InimigoImp inimigo = new InimigoImp(nome, poder, poder, null);
 
             Divisao divisao = edificio.obterDivisaoPorNome(divisaoNome);
             if (divisao != null) {
@@ -70,11 +70,11 @@ public class JsonLoader {
                 inimigo.setDivisaoAtual(divisao); // Certifique-se de configurar a divisão do inimigo
                 System.out.println("Inimigo " + nome + " adicionado na divisão " + divisao.getNome());
             } else {
-                System.err.println("Erro: divisão " + divisaoNome + " não encontrada. Inimigo " + nome + " não foi adicionado.");
+                System.err.println(
+                        "Erro: divisão " + divisaoNome + " não encontrada. Inimigo " + nome + " não foi adicionado.");
             }
         }
     }
-
 
     private void carregarLigacoes(JSONObject json) {
         JSONArray ligacoes = (JSONArray) json.get("ligacoes");
@@ -123,7 +123,8 @@ public class JsonLoader {
                 divisao.adicionarItem(item);
                 System.out.println("Item " + tipo + " adicionado na divisão " + divisao.getNome());
             } else {
-                System.err.println("Erro: divisão " + divisaoNome + " não encontrada. Item " + tipo + " não foi adicionado.");
+                System.err.println(
+                        "Erro: divisão " + divisaoNome + " não encontrada. Item " + tipo + " não foi adicionado.");
             }
         }
     }
@@ -141,11 +142,12 @@ public class JsonLoader {
                 tipoAlvo = TipoAlvoEnum.DESCONHECIDO;
             }
 
-            Alvo alvo = new Alvo(tipoAlvo);
+            AlvoImp alvo = new AlvoImp(tipoAlvo);
 
             Divisao divisao = edificio.obterDivisaoPorNome(divisaoNome);
             if (divisao != null) {
                 divisao.adicionarAlvo(alvo);
+                divisao.ativarFlagAlvo();
                 System.out.println("Alvo adicionado na divisão " + divisao.getNome());
             } else {
                 System.err.println("Erro: divisão " + divisaoNome + " não encontrada. Alvo não foi adicionado.");

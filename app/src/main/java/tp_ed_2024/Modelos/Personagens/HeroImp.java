@@ -3,26 +3,25 @@ package tp_ed_2024.Modelos.Personagens;
 import tp_ed_2024.Collections.Stacks.ArrayStack;
 import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Modelos.Edificio.Divisao;
-import tp_ed_2024.Modelos.Edificio.Edificio;
+import tp_ed_2024.Modelos.Edificio.EdificioImp;
 import tp_ed_2024.Modelos.Items.*;
-import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemPrincipalImp;
+import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemPrincipal;
 
-public class Hero implements PersonagemPrincipalImp {
+public class HeroImp implements PersonagemPrincipal {
 
     private String nome = "Tó Cruz";
     private int vida;
     private int poder;
     private ArrayStack<Item> mochila;
     private Divisao divisaoAtual;
-    private Alvo alvo;
-    private boolean prioridadeAtaque;
+    private boolean temAlvo;
 
-    public Hero(int vida, Divisao divisaoAtual) {
+    public HeroImp(int vida, Divisao divisaoAtual) {
         this.vida = vida;
         this.poder = vida;
         this.mochila = new ArrayStack<>(5);
         this.divisaoAtual = divisaoAtual;
-        this.prioridadeAtaque = true;
+        this.temAlvo = false;
     }
 
     @Override
@@ -33,6 +32,19 @@ public class Hero implements PersonagemPrincipalImp {
     @Override
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public boolean isTemAlvo() {
+        return temAlvo;
+    }
+
+    public void setTemAlvo(boolean temAlvo) {
+        this.temAlvo = temAlvo;
+    }
+
+    // Método para definir a flagAlvo como true
+    public void ativarFlagAlvo() {
+        this.temAlvo = true;
     }
 
     @Override
@@ -51,7 +63,7 @@ public class Hero implements PersonagemPrincipalImp {
     }
 
     @Override
-    public void atacar(Inimigo inimigo) {
+    public void atacar(InimigoImp inimigo) {
         int dano = this.poder;
         int vidaAntes = inimigo.getVida();
         int vidaDepois = Math.max(vidaAntes - dano, 0);
@@ -71,29 +83,16 @@ public class Hero implements PersonagemPrincipalImp {
         this.divisaoAtual = novaDivisao;
     }
 
-    public boolean getPrioridadeAtaque() {
-        return prioridadeAtaque;
-    }
-
-    public Alvo getAlvo() {
-        return alvo;
-    }
-
-    public void pegarAlvo(Alvo alvo) {
-        this.alvo = alvo;
-        alvo.setDivisao(this.divisaoAtual); // O alvo é colocado na divisão atual do herói
-        System.out.println(nome + " pegou o alvo: " + alvo);
+    public void pegarAlvo() {
+        this.temAlvo = true;
+        System.out.println(nome + " tens o alvo. ");
     }
 
     // Classe Hero
-    public void moverParaDivisao(Divisao novaDivisao, Edificio edificio) {
+    public void moverParaDivisao(Divisao novaDivisao, EdificioImp edificio) {
         if (edificio.verificarLigacao(divisaoAtual, novaDivisao)) {
             divisaoAtual = novaDivisao;
             System.out.println("Herói se moveu para: " + novaDivisao.getNome());
-            if (alvo != null) {
-                alvo.setDivisao(novaDivisao); // O alvo acompanha o herói
-                System.out.println("O alvo " + alvo + " agora está na divisão: " + novaDivisao.getNome());
-            }
         } else {
             System.out.println("Movimento inválido! Não há ligação entre " + divisaoAtual.getNome() + " e "
                     + novaDivisao.getNome());
@@ -105,7 +104,7 @@ public class Hero implements PersonagemPrincipalImp {
             System.out.println(nome + " saiu do edifício pela divisão: " + divisaoAtual.getNome());
 
             // Verifica se o alvo foi resgatado
-            if (alvo != null) {
+            if (temAlvo) {
                 System.out.println("Missão concluída com sucesso! Alvo resgatado.");
             } else {
                 System.out.println("Missão falhada! O alvo não foi resgatado.");
@@ -113,7 +112,7 @@ public class Hero implements PersonagemPrincipalImp {
 
             return true; // O jogo termina
         } else {
-            System.out.println(nome + " não está em uma saída.");
+            System.out.println(nome + " não está numa saída.");
             return false;
         }
     }
@@ -208,10 +207,6 @@ public class Hero implements PersonagemPrincipalImp {
             System.out.println(nome
                     + " não tem kits de recuperação na mochila! Não precisas deles de qualquer maneira, vai-te a eles!!!");
         }
-    }
-
-    public void setTemPrioridadeDeAtaque(boolean prioridadeAtaque) {
-        this.prioridadeAtaque = prioridadeAtaque;
     }
 
 }

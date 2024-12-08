@@ -2,7 +2,7 @@ package tp_ed_2024.Modelos.Personagens;
 
 import tp_ed_2024.Modelos.Edificio.Divisao;
 
-public class Inimigo {
+public class InimigoImp {
 
     private String nome;
     private int vida;
@@ -10,7 +10,7 @@ public class Inimigo {
     private Divisao divisaoAtual;
     private int movimentosRestantes;
 
-    public Inimigo(String nome, int vida, int poder, Divisao divisaoAtual) {
+    public InimigoImp(String nome, int vida, int poder, Divisao divisaoAtual) {
         this.nome = nome;
         this.vida = vida;
         this.poder = poder;
@@ -56,7 +56,7 @@ public class Inimigo {
         this.movimentosRestantes = 2;
     }
 
-    public void atacar(Hero hero) {
+    public void atacar(HeroImp hero) {
         int dano = this.poder;
         int vidaAntes = hero.getVida();
         int vidaDepois = Math.max(vidaAntes - dano, 0);
