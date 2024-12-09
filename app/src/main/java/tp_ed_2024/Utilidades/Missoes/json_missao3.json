@@ -1,0 +1,28 @@
+{
+  "cod-missao": "girafa sem pescoço",
+  "versao": 1,
+  "edificio": ["Heliporto", "teste", "Camaratas", "teste2", "Escada 5", "Cozinha", "Escritório 3", "Escada 4"],
+  "ligacoes": [
+    ["Heliporto", "teste"],
+    ["teste", "Camaratas"],
+    ["Camaratas", "teste2"],
+    ["teste2", "Escada 5"],
+    ["Escada 5", "Cozinha"],
+    ["Cozinha", "Escritório 3"],
+    ["Escritório 3", "Escada 4"]
+  ],
+  "inimigos": [
+    {"nome": "Jose", "poder": 5, "divisao": "Heliporto"},
+    {"nome": "Antonio", "poder": 10, "divisao": "teste"},
+    {"nome": "Joao", "poder": 10, "divisao": "teste2"},
+    {"nome": "Pedro", "poder": 10, "divisao": "Escada 4"}
+
+  ],
+  "entradas-saidas": ["Escada 5", "Heliporto", "teste", "teste2"],
+  "alvo": {"divisao": "Camaratas", "tipo": "quimico"},
+  "itens": [
+    {"divisao": "Camaratas", "pontos-extra": 20, "tipo": "colete"},
+    {"divisao": "teste2", "pontos-recuperados": 15, "tipo": "kit de vida"},
+    {"divisao": "Escada 4", "pontos-extra": 25, "tipo": "colete"}
+  ]
+}

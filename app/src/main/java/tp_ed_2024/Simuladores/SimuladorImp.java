@@ -16,16 +16,17 @@ public class SimuladorImp {
     private HeroImp hero;
     private boolean emJogo;
 
-    public SimuladorImp(EdificioImp  edificio, HeroImp hero) {
+    public SimuladorImp(EdificioImp edificio, HeroImp hero) {
         this.edificio = edificio;
         this.hero = hero;
         this.emJogo = true;
     }
 
     public void iniciarSimulacao() {
-        Scanner scanner = new Scanner(System.in);
+        System.out.println("Bem-vindo ao Simulador XPTO de missões!");
         System.out.println(edificio);
-        System.out.println("Bem-vindo ao Simulador de Missão!");
+        resolverEventosNaDivisao();
+        Scanner scanner = new Scanner(System.in);
         exibirEstadoAtual();
 
         while (emJogo) {
@@ -90,7 +91,7 @@ public class SimuladorImp {
     }
 
     private void moverInimigosForaDaSala(Divisao salaAtual) {
-        System.out.println("Inimigos em outras divisões estão se movendo.");
+        System.out.println("Inimigos em outras divisões estão em movimento.");
 
         Network<Divisao> mapa = edificio.getNetwork();
         UnorderedArrayList<Divisao> todasDivisoes = edificio.obterDivisoes();
@@ -158,7 +159,7 @@ public class SimuladorImp {
             hero.pegarItemNaDivisao();
         }
         if (divisaoAtual.getAlvo() != null) {
-            System.out.println("Você encontrou o alvo na divisão!");
+            System.out.println("Encontras-te o alvo na divisão!");
         }
         if (!divisaoAtual.getInimigos().isEmpty()) {
             System.out.println("Inimigos encontrados! O combate começou.");
@@ -215,7 +216,7 @@ public class SimuladorImp {
                 } else {
                     System.out.println("Todos os inimigos foram derrotados! A ronda termina.");
                 }
-                exibirEstadoAtual();
+
             } else if (escolha == 2) {
                 // Usar kit de vida
                 hero.usarMedikit();

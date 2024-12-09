@@ -104,27 +104,48 @@ public class JsonLoader {
 
     private void carregarItens(JSONObject json) {
         JSONArray itensArray = (JSONArray) json.get("itens");
+        if (itensArray == null) {
+            System.err.println("Erro: A chave 'itens' não foi encontrada no JSON.");
+            return;
+        }
+
         for (Object itemObj : itensArray) {
             JSONObject itemJson = (JSONObject) itemObj;
             String divisaoNome = (String) itemJson.get("divisao");
             String tipo = (String) itemJson.get("tipo");
 
-            Item item = null;
-            if ("kit de vida".equalsIgnoreCase(tipo)) {
-                int pontosRecuperados = ((Long) itemJson.get("pontos-recuperados")).intValue();
-                item = new Item(TipoItemEnum.KIT, null, pontosRecuperados);
-            } else if ("colete".equalsIgnoreCase(tipo)) {
-                int pontosExtra = ((Long) itemJson.get("pontos-extra")).intValue();
-                item = new Item(TipoItemEnum.COLETE, null, pontosExtra);
+            if (tipo == null || divisaoNome == null) {
+                System.err.println("Erro: item com tipo ou divisão ausente. Item ignorado.");
+                continue; // Pular para o próximo item
             }
 
-            Divisao divisao = edificio.obterDivisaoPorNome(divisaoNome);
-            if (divisao != null) {
-                divisao.adicionarItem(item);
-                System.out.println("Item " + tipo + " adicionado na divisão " + divisao.getNome());
-            } else {
-                System.err.println(
-                        "Erro: divisão " + divisaoNome + " não encontrada. Item " + tipo + " não foi adicionado.");
+            Item item = null;
+            if ("kit de vida".equalsIgnoreCase(tipo)) {
+                if (itemJson.containsKey("pontos-recuperados") && itemJson.get("pontos-recuperados") != null) {
+                    int pontosRecuperados = ((Long) itemJson.get("pontos-recuperados")).intValue();
+                    item = new Item(TipoItemEnum.KIT, null, pontosRecuperados);
+                } else {
+                    System.err.println(
+                            "Erro: chave 'pontos-recuperados' não encontrada ou é nula para o item 'kit de vida'.");
+                }
+            } else if ("colete".equalsIgnoreCase(tipo)) {
+                if (itemJson.containsKey("pontos-extra") && itemJson.get("pontos-extra") != null) {
+                    int pontosExtra = ((Long) itemJson.get("pontos-extra")).intValue();
+                    item = new Item(TipoItemEnum.COLETE, null, pontosExtra);
+                } else {
+                    System.err.println("Erro: chave 'pontos-extra' não encontrada ou é nula para o item 'colete'.");
+                }
+            }
+
+            if (item != null) {
+                Divisao divisao = edificio.obterDivisaoPorNome(divisaoNome);
+                if (divisao != null) {
+                    divisao.adicionarItem(item);
+                    System.out.println("Item " + tipo + " adicionado na divisão " + divisao.getNome());
+                } else {
+                    System.err.println(
+                            "Erro: divisão " + divisaoNome + " não encontrada. Item " + tipo + " não foi adicionado.");
+                }
             }
         }
     }

@@ -1,13 +1,13 @@
 package tp_ed_2024.Collections.Graphs;
 
 import java.util.Iterator;
-import java.util.Random;
+
 
 import tp_ed_2024.Collections.Interfaces.NetworkADT;
 import tp_ed_2024.Collections.Listas.AbstractArrayList;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Edificio.Divisao;
-import tp_ed_2024.Modelos.Personagens.InimigoImp;
+
 
 public class Network<T> extends Graph<T> implements NetworkADT<T> {
 

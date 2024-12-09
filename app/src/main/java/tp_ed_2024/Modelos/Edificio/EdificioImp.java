@@ -85,6 +85,19 @@ public class EdificioImp implements Edificio {
         }
     }
 
+    public UnorderedArrayList<Divisao> getEntradasSaidas() {
+        UnorderedArrayList<Divisao> entradasSaidas = new UnorderedArrayList<>();
+
+        for (int i = 0; i < network.size(); i++) {
+            Divisao divisao = network.getVertex(i);
+            if (divisao.isEntradaSaida()) {
+                entradasSaidas.addToRear(divisao);
+            }
+        }
+
+        return entradasSaidas;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("\n===== Mapa do Edifício ===== \n");
