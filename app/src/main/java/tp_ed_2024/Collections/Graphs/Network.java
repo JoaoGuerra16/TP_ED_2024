@@ -9,7 +9,7 @@ import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Edificio.Divisao;
 import tp_ed_2024.Modelos.Personagens.InimigoImp;
 
-public class Network<T> extends GraphMatrix<T> implements NetworkADT<T> {
+public class Network<T> extends Graph<T> implements NetworkADT<T> {
 
     /**
      * Matrix to store the weights of the edges.

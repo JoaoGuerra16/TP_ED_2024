@@ -5,7 +5,7 @@ import java.util.Iterator;
 public class GraphTest {
     public static void main(String[] args) {
         // Criar um grafo
-        GraphMatrix<String> graph = new GraphMatrix<>();
+        Graph<String> graph = new Graph<>();
 
         // Adicionar vértices
         graph.addVertex("A");

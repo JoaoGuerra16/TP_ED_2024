@@ -8,7 +8,7 @@ import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Collections.Queues.LinkedQueue;
 import tp_ed_2024.Collections.Stacks.LinkedStack;
 
-public class GraphMatrix<T> implements GraphADT<T> {
+public class Graph<T> implements GraphADT<T> {
     protected final int DEFAULT_CAPACITY = 10;
     protected int numVertices; // number of vertices in the graph
     protected boolean[][] adjMatrix; // adjacency matrix
@@ -20,7 +20,7 @@ public class GraphMatrix<T> implements GraphADT<T> {
     /**
      * Creates an empty graph.
      */
-    public GraphMatrix() {
+    public Graph() {
         numVertices = 0;
         this.adjMatrix = new boolean[DEFAULT_CAPACITY][DEFAULT_CAPACITY];
         this.vertices = (T[]) (new Object[DEFAULT_CAPACITY]);
