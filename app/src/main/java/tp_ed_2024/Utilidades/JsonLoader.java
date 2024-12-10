@@ -46,6 +46,8 @@ public class JsonLoader {
         return edificio;
     }
 
+
+
     private void carregarDivisoes(JSONObject json) {
         JSONArray edificioArray = (JSONArray) json.get("edificio");
         for (Object divisaoNome : edificioArray) {
@@ -54,6 +56,26 @@ public class JsonLoader {
             System.out.println("Divisão carregada: " + divisao.getNome());
         }
     }
+
+    private void carregarLigacoes(JSONObject json) {
+        JSONArray ligacoes = (JSONArray) json.get("ligacoes");
+        for (Object ligacao : ligacoes) {
+            JSONArray conexao = (JSONArray) ligacao;
+            String origem = (String) conexao.get(0);
+            String destino = (String) conexao.get(1);
+
+            Divisao divisaoOrigem = edificio.obterDivisaoPorNome(origem);
+            Divisao divisaoDestino = edificio.obterDivisaoPorNome(destino);
+
+            if (divisaoOrigem != null && divisaoDestino != null) {
+                edificio.adicionarLigacao(origem, destino);
+                System.out.println("Ligação adicionada: " + origem + " -> " + destino);
+            } else {
+                System.err.println("Erro ao adicionar ligação: " + origem + " ou " + destino + " não encontrada.");
+            }
+        }
+    }
+
 
     private void carregarInimigos(JSONObject json) {
         JSONArray inimigosArray = (JSONArray) json.get("inimigos");
@@ -77,15 +99,6 @@ public class JsonLoader {
         }
     }
 
-    private void carregarLigacoes(JSONObject json) {
-        JSONArray ligacoes = (JSONArray) json.get("ligacoes");
-        for (Object ligacao : ligacoes) {
-            JSONArray conexao = (JSONArray) ligacao;
-            String origem = (String) conexao.get(0);
-            String destino = (String) conexao.get(1);
-            edificio.adicionarLigacao(origem, destino);
-        }
-    }
 
     
 

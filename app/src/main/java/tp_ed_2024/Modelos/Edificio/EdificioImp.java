@@ -25,7 +25,7 @@ public class EdificioImp<T> extends Network<Divisao> implements Edificio {
             return;
         }
 
-        int peso = 0;
+        int peso = 1;
         // Calcular o peso baseado nos inimigos presentes nas divisões
         for (InimigoImp inimigo : divisaoOrigem.getInimigos()) {
             peso += inimigo.getPoder();
