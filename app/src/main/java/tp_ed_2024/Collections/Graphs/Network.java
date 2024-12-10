@@ -278,7 +278,7 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
             return vizinhos; // Retorna uma lista vazia se o índice não for válido
         }
         for (int i = 0; i < numVertices; i++) {
-            if (weightMatrix[index][i] > 0) {
+            if (weightMatrix[index][i] > 0 && weightMatrix[index][i] != Double.POSITIVE_INFINITY) {
                 vizinhos.addToRear(vertices[i]);
             }
         }

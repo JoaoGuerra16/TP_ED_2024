@@ -48,7 +48,7 @@ public class SimuladorImp {
                     System.out.println(edificio);
                     break;
                 case 2:
-                    usarItem();
+                    hero.usarMedikit();
                     for (Divisao divisao : edificio.obterDivisoes()) {
                         for (InimigoImp inimigo : divisao.getInimigos()) {
                             inimigo.resetarMovimentos(); // Reset os movimentos permitidos para a nova ronda
@@ -146,12 +146,7 @@ public class SimuladorImp {
 
     }
 
-    private void usarItem() {
-        hero.aumentarVida(null, 0);
-        moverInimigosForaDaSala(hero.getDivisaoAtual());
-        resolverCombate();
-        exibirEstadoAtual();
-    }
+
 
     private void resolverEventosNaDivisao() {
         Divisao divisaoAtual = hero.getDivisaoAtual();

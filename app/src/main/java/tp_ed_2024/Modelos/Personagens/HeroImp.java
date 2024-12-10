@@ -152,9 +152,13 @@ public class HeroImp implements PersonagemPrincipal {
     }
 
     public void usarMedikit() {
+
         if (mochila.isEmpty()) {
             System.out.println(
                     "Mochila vazia! Não há medikits para usar. Não precisas deles de qualquer maneira, vai-te a eles!!!");
+            return;
+        } else if(getVida() >= 100){
+            System.out.println("A tua vida ja está 100 oh espertinho.");
             return;
         }
 
