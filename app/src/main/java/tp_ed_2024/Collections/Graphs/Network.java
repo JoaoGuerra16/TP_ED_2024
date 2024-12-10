@@ -2,24 +2,22 @@ package tp_ed_2024.Collections.Graphs;
 
 import java.util.Iterator;
 
-
 import tp_ed_2024.Collections.Interfaces.NetworkADT;
 import tp_ed_2024.Collections.Listas.AbstractArrayList;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Edificio.Divisao;
-
 
 public class Network<T> extends Graph<T> implements NetworkADT<T> {
 
     /**
      * Matrix to store the weights of the edges.
      */
-    private double[][] weightMatrix;
+    public double[][] weightMatrix;
 
     /**
      * Indicates whether the network is bidirectional.
      */
-    private boolean isBidirectional;
+    protected boolean isBidirectional;
 
     /**
      * Default constructor that initializes the network with a default capacity.
@@ -51,11 +49,8 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
     private void initializeWeightMatrix() {
         for (int i = 0; i < DEFAULT_CAPACITY; i++) {
             for (int j = 0; j < DEFAULT_CAPACITY; j++) {
-                if (i == j) {
-                    weightMatrix[i][j] = 0;
-                } else {
-                    weightMatrix[i][j] = Double.POSITIVE_INFINITY;
-                }
+                weightMatrix[i][j] = Double.POSITIVE_INFINITY;
+
             }
         }
     }
@@ -69,9 +64,10 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
 
         double[][] largerWeightMatrix = new double[vertices.length][vertices.length];
         for (int i = 0; i < numVertices; i++) {
-            System.arraycopy(weightMatrix[i], 0, largerWeightMatrix[i], 0, numVertices);
+            for (int j = 0; j < numVertices; j++) {
+                largerWeightMatrix[i][j] = weightMatrix[i][j];
+            }
         }
-        weightMatrix = largerWeightMatrix;
 
         for (int i = numVertices; i < weightMatrix.length; i++) {
             for (int j = numVertices; j < weightMatrix.length; j++) {
@@ -274,9 +270,6 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
         return minIndex;
     }
 
-
-
-
     // Método para obter os vizinhos de um vértice
     public UnorderedArrayList<T> getVizinhos(T vertex) {
         UnorderedArrayList<T> vizinhos = new UnorderedArrayList<>();
@@ -285,14 +278,12 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
             return vizinhos; // Retorna uma lista vazia se o índice não for válido
         }
         for (int i = 0; i < numVertices; i++) {
-            if (adjMatrix[index][i]) {
+            if (weightMatrix[index][i] > 0) {
                 vizinhos.addToRear(vertices[i]);
             }
         }
         return vizinhos;
     }
-
-
 
     @Override
     public String toString() {
@@ -309,7 +300,5 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
         }
         return sb.toString();
     }
-
-
 
 }

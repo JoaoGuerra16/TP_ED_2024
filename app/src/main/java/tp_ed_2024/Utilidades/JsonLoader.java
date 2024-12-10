@@ -18,14 +18,15 @@ import java.io.IOException;
 
 public class JsonLoader {
     private String jsonPath;
-    private EdificioImp edificio;
+    private EdificioImp<Divisao> edificio;
 
     public JsonLoader(String jsonPath) {
         this.jsonPath = jsonPath;
-        this.edificio = new EdificioImp();
+        this.edificio = new EdificioImp<>(true);
     }
 
-    public EdificioImp carregarEdificio() {
+    public EdificioImp<Divisao> carregarEdificio() {
+
         JSONParser parser = new JSONParser();
 
         try (FileReader reader = new FileReader(jsonPath)) {
@@ -86,6 +87,8 @@ public class JsonLoader {
         }
     }
 
+    
+
     private void carregarEntradasESaidas(JSONObject json) {
         JSONArray entradasSaidasArray = (JSONArray) json.get("entradas-saidas");
         if (entradasSaidasArray != null) {
@@ -116,7 +119,7 @@ public class JsonLoader {
 
             if (tipo == null || divisaoNome == null) {
                 System.err.println("Erro: item com tipo ou divisão ausente. Item ignorado.");
-                continue; // Pular para o próximo item
+                continue; 
             }
 
             Item item = null;

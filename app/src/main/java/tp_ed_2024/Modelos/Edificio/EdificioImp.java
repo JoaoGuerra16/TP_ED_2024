@@ -4,17 +4,16 @@ import tp_ed_2024.Collections.Graphs.Network;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Personagens.InimigoImp;
 
-public class EdificioImp implements Edificio {
+public class EdificioImp<T> extends Network<Divisao> implements Edificio {
 
-    private Network<Divisao> network;
-
-    public EdificioImp() {
-        this.network = new Network<>();
+    public EdificioImp(boolean isBidirectional) {
+        super();
+        this.isBidirectional = isBidirectional;
     }
 
     @Override
     public void adicionarDivisao(Divisao divisao) {
-        network.addVertex(divisao);
+        addVertex(divisao);
     }
 
     public void adicionarLigacao(String origem, String destino) {
@@ -25,6 +24,7 @@ public class EdificioImp implements Edificio {
             System.out.println("Erro ao adicionar ligação: divisões não encontradas.");
             return;
         }
+
         int peso = 0;
         // Calcular o peso baseado nos inimigos presentes nas divisões
         for (InimigoImp inimigo : divisaoOrigem.getInimigos()) {
@@ -33,20 +33,23 @@ public class EdificioImp implements Edificio {
         for (InimigoImp inimigo : divisaoDestino.getInimigos()) {
             peso += inimigo.getPoder();
         }
-        // Adicionar ligação bidirecional
-        network.addEdge(divisaoOrigem, divisaoDestino, peso);
-        network.addEdge(divisaoDestino, divisaoOrigem, peso);
+
+        System.out.println("Divisao : " + divisaoOrigem.getNome() + " está ligada a " + divisaoDestino.getNome()
+                + " com o peso de " + peso);
+
+        addEdge(divisaoOrigem, divisaoDestino, peso);
+        addEdge(divisaoDestino, divisaoOrigem, peso);
     }
 
     public boolean verificarLigacao(Divisao divisao1, Divisao divisao2) {
-        UnorderedArrayList<Divisao> vizinhos = network.getVizinhos(divisao1);
+        UnorderedArrayList<Divisao> vizinhos = getVizinhos(divisao1);
         return vizinhos.contains(divisao2);
     }
 
     @Override
     public Divisao obterDivisaoPorNome(String nome) {
-        for (int i = 0; i < network.size(); i++) {
-            Divisao divisao = network.getVertex(i);
+        for (int i = 0; i < size(); i++) {
+            Divisao divisao = getVertex(i);
             if (divisao.getNome().equals(nome)) {
                 return divisao;
             }
@@ -56,8 +59,8 @@ public class EdificioImp implements Edificio {
 
     public UnorderedArrayList<Divisao> obterDivisoes() {
         UnorderedArrayList<Divisao> divisoes = new UnorderedArrayList<>();
-        for (int i = 0; i < network.size(); i++) {
-            Divisao divisao = network.getVertex(i);
+        for (int i = 0; i < size(); i++) {
+            Divisao divisao = getVertex(i);
             divisoes.addToFront(divisao);
         }
         return divisoes;
@@ -65,21 +68,21 @@ public class EdificioImp implements Edificio {
 
     @Override
     public void exibirDivisoes() {
-        for (int i = 0; i < network.size(); i++) {
-            Divisao divisao = network.getVertex(i);
+        for (int i = 0; i < size(); i++) {
+            Divisao divisao = getVertex(i);
             System.out.println(divisao);
         }
     }
 
     public void exibirLigacoes() {
-        for (int i = 0; i < network.size(); i++) {
-            Divisao divisao = network.getVertex(i);
+        for (int i = 0; i < size(); i++) {
+            Divisao divisao = getVertex(i);
             System.out.println("Divisão: " + divisao.getNome() + " está conectada com:");
 
-            UnorderedArrayList<Divisao> vizinhos = network.getVizinhos(divisao);
+            UnorderedArrayList<Divisao> vizinhos = getVizinhos(divisao);
             for (int j = 0; j < vizinhos.size(); j++) {
                 Divisao vizinho = vizinhos.getIndex(j);
-                double peso = network.getWeight(divisao, vizinho); // Obter o peso da ligação
+                double peso = getWeight(divisao, vizinho);
                 System.out.println("  -> " + vizinho.getNome() + " (Peso: " + peso + ")");
             }
         }
@@ -88,8 +91,8 @@ public class EdificioImp implements Edificio {
     public UnorderedArrayList<Divisao> getEntradasSaidas() {
         UnorderedArrayList<Divisao> entradasSaidas = new UnorderedArrayList<>();
 
-        for (int i = 0; i < network.size(); i++) {
-            Divisao divisao = network.getVertex(i);
+        for (int i = 0; i < size(); i++) {
+            Divisao divisao = getVertex(i);
             if (divisao.isEntradaSaida()) {
                 entradasSaidas.addToRear(divisao);
             }
@@ -98,11 +101,83 @@ public class EdificioImp implements Edificio {
         return entradasSaidas;
     }
 
+    public double[][] obterMatrizAdjacente() {
+        int tamanho = size(); // Número de divisões
+        double[][] matrizAdjacente = new double[tamanho][tamanho];
+
+        // Inicializar a matriz com valores padrão (ausência de conexão)
+        for (int i = 0; i < tamanho; i++) {
+            for (int j = 0; j < tamanho; j++) {
+                if (i == j) {
+                    matrizAdjacente[i][j] = 0; // Distância para si mesmo é 0
+                } else {
+                    matrizAdjacente[i][j] = Double.POSITIVE_INFINITY; // Sem conexão
+                }
+            }
+        }
+
+        // Preencher a matriz com os pesos das conexões
+        for (int i = 0; i < tamanho; i++) {
+            Divisao divisaoOrigem = getVertex(i);
+            UnorderedArrayList<Divisao> vizinhos = getVizinhos(divisaoOrigem);
+
+            for (int j = 0; j < vizinhos.size(); j++) {
+                Divisao divisaoDestino = vizinhos.getIndex(j);
+                int indiceDestino = getIndex(divisaoDestino);
+
+                if (indiceDestino != -1) { // Verificar se o índice do destino é válido
+                    matrizAdjacente[i][indiceDestino] = getWeight(divisaoOrigem, divisaoDestino);
+                }
+            }
+        }
+
+        return matrizAdjacente;
+    }
+
+    public void resetPeso(EdificioImp<Divisao> edificio, Divisao divisaoAtual) {
+        // Obter vizinhos da divisão atual
+        UnorderedArrayList<Divisao> vizinhos = edificio.getVizinhos(divisaoAtual);
+
+        // Atualizar pesos das arestas apenas para os vizinhos
+        for (int i = 0; i < vizinhos.size(); i++) {
+            Divisao vizinho = vizinhos.getIndex(i);
+
+            if (edificio.getWeight(divisaoAtual, vizinho) > 0) {
+                int novoPeso = calcularPeso(divisaoAtual, vizinho);
+                setEdgeWeight(divisaoAtual, vizinho, novoPeso);
+            }
+        }
+    }
+
+    private int calcularPeso(Divisao divisao1, Divisao divisao2) {
+        int pesoBase = 1;
+
+        for (InimigoImp inimigo : divisao1.getInimigos()) {
+            pesoBase += inimigo.getPoder();
+        }
+        for (InimigoImp inimigo : divisao2.getInimigos()) {
+            pesoBase += inimigo.getPoder();
+        }
+
+        return pesoBase;
+    }
+
+    public void setEdgeWeight(Divisao origem, Divisao destino, int novoPeso) {
+        if (origem == null || destino == null) {
+            throw new IllegalArgumentException("As divisões origem e destino não podem ser nulas.");
+        }
+
+        int origemIndex = this.getIndex(origem);
+        int destinoIndex = this.getIndex(destino);
+
+        this.weightMatrix[origemIndex][destinoIndex] = novoPeso;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("\n===== Mapa do Edifício ===== \n");
-        for (int i = 0; i < network.size(); i++) {
-            Divisao divisao = network.getVertex(i);
+        for (int i = 0; i < size(); i++) {
+            Divisao divisao = getVertex(i);
 
             sb.append("- ").append(divisao.getNome());
 
@@ -125,7 +200,4 @@ public class EdificioImp implements Edificio {
         return sb.toString();
     }
 
-    public Network<Divisao> getNetwork() {
-        return network;
-    }
 }

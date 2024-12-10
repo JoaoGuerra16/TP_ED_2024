@@ -14,9 +14,6 @@ public class Graph<T> implements GraphADT<T> {
     protected boolean[][] adjMatrix; // adjacency matrix
     protected T[] vertices; // values of vertices
 
-
-
-
     /**
      * Creates an empty graph.
      */
@@ -32,10 +29,10 @@ public class Graph<T> implements GraphADT<T> {
      *
      * @param vertex the vertex to add to the graph
      */
-    public void addVertex(T vertex) {
+    public void addVertex() {
         if (numVertices == vertices.length)
             expandCapacity();
-        vertices[numVertices] = vertex;
+        vertices[numVertices] = null;
         for (int i = 0; i <= numVertices; i++) {
             adjMatrix[numVertices][i] = false;
             adjMatrix[i][numVertices] = false;
@@ -44,7 +41,14 @@ public class Graph<T> implements GraphADT<T> {
 
     }
 
-
+    @Override
+    public void addVertex(T vertex) {
+        if (numVertices == vertices.length) {
+            expandCapacity();
+        }
+        vertices[numVertices] = vertex;
+        numVertices++;
+    }
 
     @Override
     public void removeVertex(T vertex) {
@@ -97,7 +101,6 @@ public class Graph<T> implements GraphADT<T> {
         removeEdge(getIndex(vertex1), getIndex(vertex2));
     }
 
-
     public void removeEdge(int index1, int index2) {
 
         if (indexIsValid(index1) && indexIsValid(index2)) {
@@ -106,8 +109,6 @@ public class Graph<T> implements GraphADT<T> {
             adjMatrix[index2][index1] = false;
         }
     }
-
-
 
     @Override
     public Iterator iteratorBFS(T startVertex) {
@@ -142,21 +143,21 @@ public class Graph<T> implements GraphADT<T> {
         int startIndex = getIndex(startVertex);
         if (startIndex == -1)
             return null;
-        
+
         boolean[] visited = new boolean[numVertices];
         LinkedStack<Integer> stack = new LinkedStack<>();
         UnorderedArrayList<T> result = new UnorderedArrayList<>();
 
         stack.push(startIndex);
 
-        while(!stack.isEmpty()){
+        while (!stack.isEmpty()) {
             int currentIndex = stack.pop();
-            if(!visited[currentIndex]){
+            if (!visited[currentIndex]) {
                 result.addToRear(vertices[currentIndex]);
                 visited[currentIndex] = true;
 
-                for(int i = numVertices -1; i>0; i--){
-                    if(adjMatrix[currentIndex][i] && !visited[i]){
+                for (int i = numVertices - 1; i > 0; i--) {
+                    if (adjMatrix[currentIndex][i] && !visited[i]) {
                         stack.push(i);
                     }
                 }
@@ -166,59 +167,59 @@ public class Graph<T> implements GraphADT<T> {
     }
 
     @Override
-public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
-    int startIndex = getIndex(startVertex);
-    int targetIndex = getIndex(targetVertex);
+    public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
+        int startIndex = getIndex(startVertex);
+        int targetIndex = getIndex(targetVertex);
 
-    if (startIndex == -1 || targetIndex == -1) {
-        throw new NoSuchElementException("Vértice não encontrado");
-    }
-
-    // Array para marcar os vértices visitados
-    boolean[] visited = new boolean[numVertices];
-    // Array para armazenar o "pai" de cada vértice, usado para reconstruir o caminho
-    int[] parent = new int[numVertices];
-
-    // Fila para BFS
-    LinkedQueue<Integer> queue = new LinkedQueue<>();
-    queue.enqueue(startIndex);
-    visited[startIndex] = true;
-    parent[startIndex] = -1; // O "pai" de startVertex é -1, pois não tem pai
-
-    // Realiza a BFS
-    while (!queue.isEmpty()) {
-        int currentIndex = queue.dequeue();
-
-        // Se encontramos o vértice alvo, paramos
-        if (currentIndex == targetIndex) {
-            break;
+        if (startIndex == -1 || targetIndex == -1) {
+            throw new NoSuchElementException("Vértice não encontrado");
         }
 
-        // Explora os vizinhos
-        for (int i = 0; i < numVertices; i++) {
-            if (adjMatrix[currentIndex][i] && !visited[i]) {
-                queue.enqueue(i);
-                visited[i] = true;
-                parent[i] = currentIndex; // Armazena o vértice anterior para reconstrução do caminho
+        // Array para marcar os vértices visitados
+        boolean[] visited = new boolean[numVertices];
+        // Array para armazenar o "pai" de cada vértice, usado para reconstruir o
+        // caminho
+        int[] parent = new int[numVertices];
+
+        // Fila para BFS
+        LinkedQueue<Integer> queue = new LinkedQueue<>();
+        queue.enqueue(startIndex);
+        visited[startIndex] = true;
+        parent[startIndex] = -1; // O "pai" de startVertex é -1, pois não tem pai
+
+        // Realiza a BFS
+        while (!queue.isEmpty()) {
+            int currentIndex = queue.dequeue();
+
+            // Se encontramos o vértice alvo, paramos
+            if (currentIndex == targetIndex) {
+                break;
+            }
+
+            // Explora os vizinhos
+            for (int i = 0; i < numVertices; i++) {
+                if (adjMatrix[currentIndex][i] && !visited[i]) {
+                    queue.enqueue(i);
+                    visited[i] = true;
+                    parent[i] = currentIndex; // Armazena o vértice anterior para reconstrução do caminho
+                }
             }
         }
+
+        // Se não encontramos o vértice alvo
+        if (!visited[targetIndex]) {
+            throw new NoSuchElementException("Caminho não encontrado");
+        }
+
+        // Agora, reconstruímos o caminho a partir do targetVertex
+        UnorderedArrayList<T> path = new UnorderedArrayList<>();
+        for (int at = targetIndex; at != -1; at = parent[at]) {
+            path.addToFront(vertices[at]);
+        }
+
+        // Retorna um iterador para o caminho
+        return path.iterator();
     }
-
-    // Se não encontramos o vértice alvo
-    if (!visited[targetIndex]) {
-        throw new NoSuchElementException("Caminho não encontrado");
-    }
-
-    // Agora, reconstruímos o caminho a partir do targetVertex
-    UnorderedArrayList<T> path = new UnorderedArrayList<>();
-    for (int at = targetIndex; at != -1; at = parent[at]) {
-        path.addToFront(vertices[at]);
-    }
-
-    // Retorna um iterador para o caminho
-    return path.iterator();
-}
-
 
     @Override
     public boolean isEmpty() {
@@ -228,13 +229,13 @@ public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
     @Override
     public boolean isConnected() {
 
-        if(isEmpty()){
+        if (isEmpty()) {
             return false;
         }
         Iterator<T> bfsIterator = iteratorBFS(vertices[0]);
         int count = 0;
 
-        while(bfsIterator.hasNext()){
+        while (bfsIterator.hasNext()) {
             bfsIterator.next();
             count++;
         }
@@ -245,17 +246,18 @@ public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
     public int size() {
         return numVertices;
     }
-    protected void expandCapacity(){
+
+    protected void expandCapacity() {
         T[] largerVertices = (T[]) (new Object[vertices.length * 2]);
         boolean[][] newAdjMatrix = new boolean[vertices.length * 2][vertices.length * 2];
-    
-        for(int i = 0; i< numVertices;i++){
-            for(int j = 0; j< numVertices; j++){
+
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
                 newAdjMatrix[i][j] = adjMatrix[i][j];
             }
             largerVertices[i] = vertices[i];
         }
-    
+
         vertices = largerVertices;
         adjMatrix = newAdjMatrix;
     }
@@ -274,7 +276,7 @@ public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
         return sb.toString();
     }
 
-    protected int getIndex(T vertex) {
+    public int getIndex(T vertex) {
         for (int i = 0; i < numVertices; i++) {
             if (vertices[i].equals(vertex)) {
                 return i;
@@ -286,6 +288,5 @@ public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
     protected boolean indexIsValid(int index) {
         return index >= 0 && index < numVertices;
     }
-
 
 }

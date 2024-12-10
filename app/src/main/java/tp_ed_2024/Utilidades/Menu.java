@@ -28,6 +28,8 @@ public class Menu {
     }
 
     public Divisao escolherEntrada(UnorderedArrayList<Divisao> entradasSaidas) {
+
+      
         System.out.println("Escolha uma entrada para começar:");
         int index = 1;
         for (Divisao divisao : entradasSaidas) {

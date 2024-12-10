@@ -18,7 +18,7 @@ public class HeroImp implements PersonagemPrincipal {
 
     public HeroImp(int vida, Divisao divisaoAtual) {
         this.vida = vida;
-        this.poder = vida;
+        this.poder = 20;
         this.mochila = new ArrayStack<>(5);
         this.divisaoAtual = divisaoAtual;
         this.temAlvo = false;
@@ -89,7 +89,7 @@ public class HeroImp implements PersonagemPrincipal {
     }
 
     // Classe Hero
-    public void moverParaDivisao(Divisao novaDivisao, EdificioImp edificio) {
+    public void moverParaDivisao(Divisao novaDivisao, EdificioImp<Divisao> edificio) {
         if (edificio.verificarLigacao(divisaoAtual, novaDivisao)) {
             divisaoAtual = novaDivisao;
             System.out.println("Herói se moveu para: " + novaDivisao.getNome());

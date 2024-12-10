@@ -12,17 +12,15 @@
     ["Escritório 3", "Escada 4"]
   ],
   "inimigos": [
-    {"nome": "Jose", "poder": 5, "divisao": "Heliporto"},
-    {"nome": "Antonio", "poder": 10, "divisao": "teste"},
-    {"nome": "Joao", "poder": 10, "divisao": "teste2"},
-    {"nome": "Pedro", "poder": 10, "divisao": "Escada 4"}
-
+    {"nome": "Antonio", "poder": 30, "divisao": "teste"},
+    {"nome": "Joao", "poder": 30, "divisao": "teste2"}
   ],
   "entradas-saidas": ["Escada 5", "Heliporto", "teste", "teste2"],
   "alvo": {"divisao": "Camaratas", "tipo": "quimico"},
   "itens": [
-    {"divisao": "Camaratas", "pontos-extra": 20, "tipo": "colete"},
-    {"divisao": "teste2", "pontos-recuperados": 15, "tipo": "kit de vida"},
+    {"divisao": "Heliporto", "pontos-extra": 15, "tipo": "kit de vida"},
+    {"divisao": "teste", "pontos-extra": 15, "tipo": "kit de vida"},
+    {"divisao": "teste2", "pontos-recuperados": 20, "tipo": "colete"},
     {"divisao": "Escada 4", "pontos-extra": 25, "tipo": "colete"}
   ]
 }

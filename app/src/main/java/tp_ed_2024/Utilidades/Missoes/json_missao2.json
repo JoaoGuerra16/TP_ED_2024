@@ -16,7 +16,6 @@
     {"nome": "Antonio", "poder": 10, "divisao": "teste"},
     {"nome": "Joao", "poder": 10, "divisao": "teste2"},
     {"nome": "Pedro", "poder": 10, "divisao": "Escada 4"}
-
   ],
   "entradas-saidas": ["Escada 5", "Heliporto", "teste", "teste2"],
   "alvo": {"divisao": "Camaratas", "tipo": "quimico"},

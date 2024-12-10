@@ -28,7 +28,7 @@ public class GameRunner {
             return;
         }
 
-        EdificioImp edificio = loader.carregarEdificio(jsonPath);
+        EdificioImp<Divisao> edificio = loader.carregarEdificio(jsonPath);
         if (edificio == null) {
             return;
         }

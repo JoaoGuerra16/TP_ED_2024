@@ -46,6 +46,10 @@ public class Divisao {
         return inimigos;
     }
 
+    public boolean temInimigos() {
+        return inimigos != null && !inimigos.isEmpty();
+    }
+
     public void adicionarInimigo(InimigoImp inimigo) {
         inimigos.addToRear(inimigo);
     }

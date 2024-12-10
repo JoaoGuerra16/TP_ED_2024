@@ -1,7 +1,6 @@
 package tp_ed_2024.Simuladores;
 
 import tp_ed_2024.Modelos.Edificio.EdificioImp;
-import tp_ed_2024.Collections.Graphs.Network;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Edificio.Divisao;
 import tp_ed_2024.Modelos.Personagens.HeroImp;
@@ -12,11 +11,11 @@ import java.util.Scanner;
 
 public class SimuladorImp {
 
-    private EdificioImp edificio;
+    private EdificioImp<Divisao> edificio;
     private HeroImp hero;
     private boolean emJogo;
 
-    public SimuladorImp(EdificioImp edificio, HeroImp hero) {
+    public SimuladorImp(EdificioImp<Divisao> edificio, HeroImp hero) {
         this.edificio = edificio;
         this.hero = hero;
         this.emJogo = true;
@@ -93,7 +92,7 @@ public class SimuladorImp {
     private void moverInimigosForaDaSala(Divisao salaAtual) {
         System.out.println("Inimigos em outras divisões estão em movimento.");
 
-        Network<Divisao> mapa = edificio.getNetwork();
+        EdificioImp<Divisao> mapa = edificio;
         UnorderedArrayList<Divisao> todasDivisoes = edificio.obterDivisoes();
 
         for (Divisao divisao : todasDivisoes) {
@@ -111,7 +110,7 @@ public class SimuladorImp {
         }
     }
 
-    private void moverInimigosAleatoriamente(Network<Divisao> mapa, InimigoImp inimigo, Divisao divisaoAtual) {
+    private void moverInimigosAleatoriamente(EdificioImp<Divisao> mapa, InimigoImp inimigo, Divisao divisaoAtual) {
         UnorderedArrayList<Divisao> vizinhos = mapa.getVizinhos(divisaoAtual);
 
         if (vizinhos.size() > 0) {
@@ -142,6 +141,9 @@ public class SimuladorImp {
         } else {
             System.out.println(inimigo.getNome() + " não tem divisões vizinhas para se mover.");
         }
+
+        edificio.resetPeso(mapa, inimigo.getDivisaoAtual());
+
     }
 
     private void usarItem() {
@@ -154,28 +156,29 @@ public class SimuladorImp {
     private void resolverEventosNaDivisao() {
         Divisao divisaoAtual = hero.getDivisaoAtual();
 
+        // Primeiro verifica itens
         if (!divisaoAtual.getItens().isEmpty()) {
-            System.out.println("Encontras-te um item");
+            System.out.println("Encontras-te um medikit, não esquecer que só os fracos é que os usam");
             hero.pegarItemNaDivisao();
         }
-        if (divisaoAtual.getAlvo() != null) {
-            System.out.println("Encontras-te o alvo na divisão!");
-        }
+
+        // Depois verifica inimigos
         if (!divisaoAtual.getInimigos().isEmpty()) {
             System.out.println("Inimigos encontrados! O combate começou.");
             resolverCombate();
         }
 
+        // Finalmente verifica o alvo (apenas se não houver inimigos)
+        if (divisaoAtual.getInimigos().isEmpty() && divisaoAtual.getAlvo() != null) {
+            System.out.println("Encontras-te o alvo na divisão!");
+            hero.ativarFlagAlvo();
+            divisaoAtual.desativarFlagAlvo();
+        }
     }
 
     private void resolverCombate() {
         Divisao divisaoAtual = hero.getDivisaoAtual();
         UnorderedArrayList<InimigoImp> inimigosNaSala = divisaoAtual.getInimigos();
-
-        if (divisaoAtual.getAlvo() != null) {
-            System.out.println("O alvo está nessa divisão!");
-
-        }
 
         System.out.println("Tó Cruz há inimigos na sala! Combate iniciado.");
         Scanner scanner = new Scanner(System.in);
@@ -186,7 +189,7 @@ public class SimuladorImp {
             System.out.println("2. Usar kit de vida");
 
             int escolha = scanner.nextInt();
-            scanner.nextLine(); // Consumir a quebra de linha
+            scanner.nextLine();
 
             if (escolha == 1) {
                 // Fase do jogador: Tó ataca todos os inimigos na sala.
@@ -215,7 +218,10 @@ public class SimuladorImp {
 
                 } else {
                     System.out.println("Todos os inimigos foram derrotados! A ronda termina.");
+
                 }
+
+                exibirEstadoAtual();
 
             } else if (escolha == 2) {
                 // Usar kit de vida
@@ -228,18 +234,17 @@ public class SimuladorImp {
                 exibirEstadoAtual();
             }
 
-            // Verifica se o Tó perdeu a vida toda
             verificarFimDeJogo();
         }
 
         if (divisaoAtual.getAlvo() != null && inimigosNaSala.isEmpty()) {
             System.out.println("Não há inimigos por perto. Podes resgatar o alvo!");
-
             hero.ativarFlagAlvo();
             divisaoAtual.desativarFlagAlvo();
             System.out.println("Alvo resgatado com sucesso, és mesmo o maior!");
-
         }
+
+        exibirEstadoAtual();
     }
 
     private void realizarAtaqueHeroi(InimigoImp inimigo) {
@@ -253,25 +258,28 @@ public class SimuladorImp {
         System.out.println("O inimigo " + inimigo.getNome() + " contra-atacou! Vida do Tó Cruz: " + hero.getVida());
     }
 
-    private void exibirEstadoAtual() {
-
+    public void exibirEstadoAtual() {
         System.out.println("================Estado atual===================");
         System.out.println("Divisão Atual: " + hero.getDivisaoAtual().getNome());
         System.out.println("Vida do Herói: " + hero.getVida());
         System.out.println("Inimigos na divisão: " + hero.getDivisaoAtual().getInimigos().size());
-        System.out.println("Itens na divisão: " + hero.getDivisaoAtual().getItens().size());
+        System.out.println("Items na divisão: " + hero.getDivisaoAtual().getItens().size());
         if (hero.isTemAlvo()) {
+            System.out.println("|||||||||||||||||||||||||||||");
             System.out.println("Tens o alvo! Sai do edifício");
+            System.out.println("|||||||||||||||||||||||||||||");
         }
         System.out.println("===================================");
+        printPesosVizinhos(edificio, hero.getDivisaoAtual());
+
     }
 
     private void verificarFimDeJogo() {
         if (hero.getVida() <= 0) {
-            System.out.println("O herói morreu! Missão fracassada.");
+            System.out.println("Morreste...");
             finalizarSimulacao();
         } else if (hero.isTemAlvo() && hero.getDivisaoAtual().isEntradaSaida()) {
-            System.out.println("Você completou a missão com sucesso!");
+            System.out.println("Parabéns cumpriste a tua missão! GOAT");
             finalizarSimulacao();
         }
     }
@@ -279,4 +287,51 @@ public class SimuladorImp {
     private void finalizarSimulacao() {
         emJogo = false;
     }
+
+    public void printPesosVizinhos(EdificioImp<Divisao> mapa, Divisao divisaoAtual) {
+        if (divisaoAtual == null) {
+            System.out.println("A divisão atual não pode ser nula.");
+            return;
+        }
+
+        System.out.println("Pesos das conexões da divisão " + divisaoAtual.getNome() + " com os vizinhos:");
+
+        UnorderedArrayList<Divisao> vizinhos = mapa.getVizinhos(divisaoAtual);
+
+        if (vizinhos.isEmpty()) {
+            System.out.println("A divisão " + divisaoAtual.getNome() + " não possui vizinhos.");
+            return;
+        }
+
+        for (int i = 0; i < vizinhos.size(); i++) {
+            Divisao vizinho = vizinhos.getIndex(i);
+            double peso = mapa.getWeight(divisaoAtual, vizinho);
+            if (peso <= 0) {
+                System.out.println("  -> Conexão inválida ou peso zero entre " + divisaoAtual.getNome() + " e "
+                        + vizinho.getNome());
+            } else {
+                System.out.println("  -> Para " + vizinho.getNome() + ": " + peso);
+            }
+        }
+    }
+
+    // public void printAdjMatrix() {
+    // System.out.println("Matriz de Adjacência:");
+    // for (int i = 0; i < edificio.numVertices; i++) {
+    // for (int j = 0; j < edificio.numVertices; j++) {
+    // System.out.print((edificio.adjMatrix[i][j] ? 1 : 0) + " ");
+    // }
+    // System.out.println();
+    // }
+    // }
+    public void imprimirMatrizDePesos() {
+        for (int i = 0; i < edificio.weightMatrix.length; i++) {
+            for (int j = 0; j < edificio.weightMatrix[i].length; j++) {
+
+                System.out.print(edificio.weightMatrix[i][j] + "\t");
+            }
+            System.out.println();
+        }
+    }
+
 }
