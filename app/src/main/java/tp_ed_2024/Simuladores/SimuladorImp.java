@@ -108,6 +108,7 @@ public class SimuladorImp {
                 }
             }
         }
+        edificio.resetPeso(mapa, salaAtual);
     }
 
     private void moverInimigosAleatoriamente(EdificioImp<Divisao> mapa, InimigoImp inimigo, Divisao divisaoAtual) {
@@ -142,7 +143,7 @@ public class SimuladorImp {
             System.out.println(inimigo.getNome() + " não tem divisões vizinhas para se mover.");
         }
 
-        edificio.resetPeso(mapa, inimigo.getDivisaoAtual());
+
 
     }
 
@@ -174,6 +175,7 @@ public class SimuladorImp {
     private void resolverCombate() {
         Divisao divisaoAtual = hero.getDivisaoAtual();
         UnorderedArrayList<InimigoImp> inimigosNaSala = divisaoAtual.getInimigos();
+        EdificioImp<Divisao> mapa = edificio;
 
         System.out.println("Tó Cruz há inimigos na sala! Combate iniciado.");
         Scanner scanner = new Scanner(System.in);
@@ -197,6 +199,7 @@ public class SimuladorImp {
                     InimigoImp inimigo = inimigosNaSala.getIndex(i);
                     if (inimigo.getVida() <= 0) {
                         divisaoAtual.removerInimigo(inimigo);
+                        edificio.resetPeso(mapa, hero.getDivisaoAtual());
                         System.out.println("Inimigo " + inimigo.getNome() + " foi derrotado!");
                         i--;
                     }
@@ -240,6 +243,8 @@ public class SimuladorImp {
         }
 
         exibirEstadoAtual();
+
+
     }
 
     private void realizarAtaqueHeroi(InimigoImp inimigo) {

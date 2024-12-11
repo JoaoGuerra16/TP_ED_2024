@@ -25,14 +25,7 @@ public class EdificioImp<T> extends Network<Divisao> implements Edificio {
             return;
         }
 
-        int peso = 1;
-        // Calcular o peso baseado nos inimigos presentes nas divisões
-        for (InimigoImp inimigo : divisaoOrigem.getInimigos()) {
-            peso += inimigo.getPoder();
-        }
-        for (InimigoImp inimigo : divisaoDestino.getInimigos()) {
-            peso += inimigo.getPoder();
-        }
+      int peso = calcularPeso(divisaoOrigem, divisaoDestino);
 
         System.out.println("Divisao : " + divisaoOrigem.getNome() + " está ligada a " + divisaoDestino.getNome()
                 + " com o peso de " + peso);
@@ -143,15 +136,21 @@ public class EdificioImp<T> extends Network<Divisao> implements Edificio {
             Divisao vizinho = vizinhos.getIndex(i);
 
             if (edificio.getWeight(divisaoAtual, vizinho) > 0) {
+                // Calcular o novo peso para a aresta entre divisaoAtual e vizinho
                 int novoPeso = calcularPeso(divisaoAtual, vizinho);
-                setEdgeWeight(divisaoAtual, vizinho, novoPeso);
+
+                // Atualizar o peso da aresta usando o método setEdgeWeight
+                edificio.setEdgeWeight(divisaoAtual, vizinho, novoPeso);
+                edificio.setEdgeWeight(vizinho, divisaoAtual, novoPeso); // Para grafos bidirecionais
             }
         }
     }
 
-    private int calcularPeso(Divisao divisao1, Divisao divisao2) {
-        int pesoBase = 1;
 
+    private int calcularPeso(Divisao divisao1, Divisao divisao2) {
+        int pesoBase = 1;  // Peso mínimo por padrão
+
+        // Verificar se há inimigos em cada divisão e somar o poder se houver
         for (InimigoImp inimigo : divisao1.getInimigos()) {
             pesoBase += inimigo.getPoder();
         }
@@ -159,10 +158,13 @@ public class EdificioImp<T> extends Network<Divisao> implements Edificio {
             pesoBase += inimigo.getPoder();
         }
 
-        return pesoBase;
+        // Garantir que o peso não seja menor que 1
+        return  pesoBase;  // Peso não pode ser menor que 1
     }
 
-    public void setEdgeWeight(Divisao origem, Divisao destino, int novoPeso) {
+
+
+    private void setEdgeWeight(Divisao origem, Divisao destino, int novoPeso) {
         if (origem == null || destino == null) {
             throw new IllegalArgumentException("As divisões origem e destino não podem ser nulas.");
         }
@@ -170,8 +172,10 @@ public class EdificioImp<T> extends Network<Divisao> implements Edificio {
         int origemIndex = this.getIndex(origem);
         int destinoIndex = this.getIndex(destino);
 
+        // Atualizar o peso na matriz de pesos
         this.weightMatrix[origemIndex][destinoIndex] = novoPeso;
     }
+
 
     @Override
     public String toString() {
