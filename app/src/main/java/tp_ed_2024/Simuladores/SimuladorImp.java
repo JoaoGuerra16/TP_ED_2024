@@ -9,8 +9,6 @@ import tp_ed_2024.Modelos.Personagens.HeroImp;
 import tp_ed_2024.Modelos.Personagens.InimigoImp;
 import tp_ed_2024.Algoritmos.Paths;
 
-import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
