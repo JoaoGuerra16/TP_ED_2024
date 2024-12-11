@@ -29,7 +29,6 @@ public class Menu {
 
     public Divisao escolherEntrada(UnorderedArrayList<Divisao> entradasSaidas) {
 
-      
         System.out.println("Escolha uma entrada para começar:");
         int index = 1;
         for (Divisao divisao : entradasSaidas) {
@@ -57,6 +56,29 @@ public class Menu {
         }
 
         return entradasSaidas.getIndex(escolha - 1);
+    }
+
+    public String escolherModo() {
+        System.out.println("Escolha o modo de simulação:");
+        System.out.println("1. Manual");
+        System.out.println("2. Automático");
+
+        int escolha;
+        do {
+            System.out.print("Digite o número da sua escolha (1 ou 2): ");
+            while (!scanner.hasNextInt()) {
+                System.out.print("Por favor, insira um número válido (1 ou 2): ");
+                scanner.next(); // Limpar a entrada inválida
+            }
+            escolha = scanner.nextInt();
+        } while (escolha < 1 || escolha > 2);
+
+        if (escolha == 1) {
+            return "Manual";
+        } else {
+            return "Automático";
+        }
+
     }
 
 }

@@ -34,6 +34,10 @@ public class Divisao {
         return alvo;
     }
 
+    public boolean temAlvo() {
+        return flagAlvo;
+    }
+
     public void adicionarAlvo(AlvoImp alvo) {
         this.alvo = alvo;
     }

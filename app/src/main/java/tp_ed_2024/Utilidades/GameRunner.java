@@ -5,6 +5,7 @@ import tp_ed_2024.Modelos.Edificio.EdificioImp;
 import tp_ed_2024.Modelos.Personagens.HeroImp;
 import tp_ed_2024.Simuladores.SimuladorImp;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
+import java.util.Random;
 
 public class GameRunner {
     private Menu menu;
@@ -23,6 +24,9 @@ public class GameRunner {
                 "app\\src\\main\\java\\tp_ed_2024\\Utilidades\\Missoes\\json_missao3.json"
         };
 
+        String modoEscolhido = menu.escolherModo();
+        System.out.println("Modo escolhido: " + modoEscolhido);
+
         String jsonPath = menu.escolherJson(jsonFiles);
         if (jsonPath == null) {
             return;
@@ -40,9 +44,19 @@ public class GameRunner {
             return;
         }
 
-        Divisao divisaoInicial = menu.escolherEntrada(entradasSaidas);
+        Divisao divisaoInicial;
+
+        // Se o modo for manual, o jogador escolhe a entrada
+        if ("Manual".equals(modoEscolhido)) {
+            divisaoInicial = menu.escolherEntrada(entradasSaidas);
+        } else { // Se for automático, escolhe uma entrada aleatória
+            Random random = new Random();
+            divisaoInicial = entradasSaidas.getIndex(random.nextInt(entradasSaidas.size()));
+            System.out.println("Modo Automático: A entrada escolhida aleatoriamente é: " + divisaoInicial.getNome());
+        }
+
         if (divisaoInicial == null) {
-            System.out.println("Nenhuma entrada escolhida. Encerrando o programa.");
+            System.out.println("Nenhuma entrada escolhida. A encerrar o jogo.");
             return;
         }
 

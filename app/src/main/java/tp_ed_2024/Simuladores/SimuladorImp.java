@@ -1,11 +1,16 @@
 package tp_ed_2024.Simuladores;
 
 import tp_ed_2024.Modelos.Edificio.EdificioImp;
+import tp_ed_2024.Modelos.Items.Item;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
+import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Modelos.Edificio.Divisao;
 import tp_ed_2024.Modelos.Personagens.HeroImp;
 import tp_ed_2024.Modelos.Personagens.InimigoImp;
+import tp_ed_2024.Algoritmos.Paths;
 
+import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -20,6 +25,8 @@ public class SimuladorImp {
         this.hero = hero;
         this.emJogo = true;
     }
+
+    Paths path = new Paths(edificio);
 
     public void iniciarSimulacao() {
         System.out.println("Bem-vindo ao Simulador XPTO de missões!");
@@ -146,8 +153,6 @@ public class SimuladorImp {
 
     }
 
-
-
     private void resolverEventosNaDivisao() {
         Divisao divisaoAtual = hero.getDivisaoAtual();
 
@@ -254,19 +259,64 @@ public class SimuladorImp {
     }
 
     public void exibirEstadoAtual() {
+
+        Divisao kit = DivisaoComKit(); // Método que retorna o kit de recuperação, se houver.
+        Divisao atual = hero.getDivisaoAtual();
+        Divisao alvoDivisao = DivisaoAlvo(); // Método que retorna o alvo, se houver.
+
         System.out.println("================Estado atual===================");
         System.out.println("Divisão Atual: " + hero.getDivisaoAtual().getNome());
         System.out.println("Vida do Herói: " + hero.getVida());
         System.out.println("Inimigos na divisão: " + hero.getDivisaoAtual().getInimigos().size());
-        System.out.println("Items na divisão: " + hero.getDivisaoAtual().getItens().size());
+        System.out.println("Itens na divisão: " + hero.getDivisaoAtual().getItens().size());
+
         if (hero.isTemAlvo()) {
             System.out.println("|||||||||||||||||||||||||||||");
             System.out.println("Tens o alvo! Sai do edifício");
             System.out.println("|||||||||||||||||||||||||||||");
         }
+
         System.out.println("===================================");
+
         printPesosVizinhos(edificio, hero.getDivisaoAtual());
 
+        path.calcularCaminhos(atual, alvoDivisao, kit, edificio);
+
+    }
+
+    private Divisao DivisaoComKit() {
+        UnorderedArrayList<Divisao> todasDivisoes = edificio.obterDivisoes();
+
+        for (Divisao divisao : todasDivisoes) {
+            for (Item item : divisao.getItens()) {
+                if (item.getTipo() == TipoItemEnum.KIT) { // Assumindo que TipoItem é o enum
+                    return divisao; // Retorna a divisão com um item do tipo KIT
+                }
+            }
+        }
+
+        // Se nenhuma divisão com itens for encontrada, exibe uma mensagem e retorna
+        // null
+        System.out.println("Não há divisões com kits disponíveis.");
+        return null;
+    }
+
+    private Divisao DivisaoAlvo() {
+
+        UnorderedArrayList<Divisao> todasDivisoes = edificio.obterDivisoes();
+        boolean alvoResgatado = false;
+        for (Divisao divisao : todasDivisoes) {
+            if (divisao.temAlvo()) {
+                alvoResgatado = true;
+                return divisao;
+            }
+        }
+
+        if (alvoResgatado) {
+            System.out.println("O Alvo já se encontra com o Tó");
+        }
+
+        return null;
     }
 
     private void verificarFimDeJogo() {
