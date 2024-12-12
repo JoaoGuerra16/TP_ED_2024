@@ -101,10 +101,12 @@ public class SimuladorImp {
         // Mover o herói para a nova divisão
         novaDivisao.adicionarHeroi(hero); // Método para adicionar o herói à nova divisão
 
+        if (!novaDivisao.temInimigos()) {
+            moverInimigosForaDaSala(divisaoAtual);
+        }
         System.out.println("O herói foi movido para a divisão " + novaDivisao.getNome());
 
         // Resolver eventos na nova divisão
-        moverInimigosForaDaSala(divisaoAtual);
         resolverEventosNaDivisao();
         exibirEstadoAtual();
     }
@@ -146,12 +148,16 @@ public class SimuladorImp {
 
             System.out.println(inimigo.getNome() + " moveu-se para a divisão " + divisaoAtual.getNome());
 
-            // **Verifica se o inimigo entrou na divisão do herói**
+            // Verifica se o inimigo entrou na divisão do herói
             Divisao divisaoDoHeroi = encontrarDivisaoDoHeroi();
             if (novoDestino == divisaoDoHeroi) {
                 System.out.println(inimigo.getNome() + " encontrou o herói! Contra-ataque imediato!");
                 realizarContraAtaque(inimigo);
-            } else if (inimigo.getMovimentosRestantes() > 1 && random.nextBoolean()) {
+
+            }
+
+            // Se o inimigo ainda pode se mover e decide fazer um segundo movimento
+            if (novoDestino != divisaoDoHeroi && inimigo.getMovimentosRestantes() > 1 && random.nextBoolean()) {
                 UnorderedArrayList<Divisao> vizinhosDoNovoDestino = mapa.getVizinhos(divisaoAtual);
                 if (!vizinhosDoNovoDestino.isEmpty()) {
                     Divisao destinoFinal = vizinhosDoNovoDestino.getIndex(random.nextInt(vizinhosDoNovoDestino.size()));
@@ -163,8 +169,7 @@ public class SimuladorImp {
                     System.out.println(
                             inimigo.getNome() + " moveu-se novamente para a divisão " + divisaoAtual.getNome());
 
-                    // **Verifica novamente se o inimigo encontrou o herói após o segundo
-                    // movimento**
+                    // Verifica novamente se o inimigo encontrou o herói após o segundo movimento
                     if (destinoFinal == divisaoDoHeroi) {
                         System.out.println(inimigo.getNome() + " encontrou o herói novamente! Contra-ataque imediato!");
                         realizarContraAtaque(inimigo);
