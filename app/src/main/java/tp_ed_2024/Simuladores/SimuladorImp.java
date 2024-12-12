@@ -54,9 +54,11 @@ public class SimuladorImp {
                     for (Divisao divisao : edificio.obterDivisoes()) {
                         for (InimigoImp inimigo : divisao.getInimigos()) {
                             inimigo.resetarMovimentos(); // Reset os movimentos permitidos para a nova ronda
-                            moverInimigosForaDaSala(divisaoAtual);
+
                         }
+
                     }
+                    moverInimigosForaDaSala(divisaoAtual);
                     resolverCombate();
                     System.out.println(edificio);
                     break;
@@ -100,11 +102,13 @@ public class SimuladorImp {
 
         // Mover o herói para a nova divisão
         novaDivisao.adicionarHeroi(hero); // Método para adicionar o herói à nova divisão
+        System.out.println("O herói foi movido para a divisão " + novaDivisao.getNome());
+
 
         if (!novaDivisao.temInimigos()) {
             moverInimigosForaDaSala(divisaoAtual);
         }
-        System.out.println("O herói foi movido para a divisão " + novaDivisao.getNome());
+
 
         // Resolver eventos na nova divisão
         resolverEventosNaDivisao();
@@ -227,14 +231,20 @@ public class SimuladorImp {
 
     private void resolverCombate() {
         Divisao divisaoAtual = encontrarDivisaoDoHeroi();
-        UnorderedArrayList<InimigoImp> inimigosNaSala = divisaoAtual.getInimigos(); // Ainda é correto pegar os inimigos
-                                                                                    // aqui
+        UnorderedArrayList<InimigoImp> inimigosNaSala = divisaoAtual.getInimigos();
         EdificioImp<Divisao> mapa = edificio;
 
         System.out.println("Tó Cruz, há inimigos na sala! Combate iniciado.");
         Scanner scanner = new Scanner(System.in);
 
-        while (divisaoAtual.getInimigos().size() > 0 && emJogo) {
+        // Reset dos movimentos de todos os inimigos no início do combate
+        for (Divisao divisao : edificio.obterDivisoes()) {
+            for (InimigoImp inimigo : divisao.getInimigos()) {
+                inimigo.resetarMovimentos();
+            }
+        }
+
+        while (!divisaoAtual.getInimigos().isEmpty() && emJogo) {
             System.out.println("Escolha uma ação:");
             System.out.println("1. Atacar");
             System.out.println("2. Usar kit de vida");
@@ -247,6 +257,7 @@ public class SimuladorImp {
                 for (InimigoImp inimigo : inimigosNaSala) {
                     realizarAtaqueHeroi(inimigo);
                 }
+
                 // Remover inimigos eliminados após o ataque do jogador.
                 for (int i = 0; i < inimigosNaSala.size(); i++) {
                     InimigoImp inimigo = inimigosNaSala.getIndex(i);
@@ -262,11 +273,19 @@ public class SimuladorImp {
                 if (!inimigosNaSala.isEmpty()) {
                     System.out.println("Os inimigos restantes contra-atacam!");
 
+
+                    for (Divisao divisao : edificio.obterDivisoes()) {
+                        for (InimigoImp inimigo : divisao.getInimigos()) {
+                            inimigo.resetarMovimentos();
+                        }
+                    }
+
+                    // Inimigos contra-atacam após o uso do medikit
                     for (InimigoImp inimigo : inimigosNaSala) {
                         realizarContraAtaque(inimigo);
                     }
-                    moverInimigosForaDaSala(divisaoAtual);
 
+                    moverInimigosForaDaSala(divisaoAtual);
                 } else {
                     System.out.println("Todos os inimigos foram derrotados! A ronda termina.");
                 }
@@ -277,11 +296,20 @@ public class SimuladorImp {
                 // Usar kit de vida
                 hero.usarMedikit();
 
+                // Reset movimentos após usar o medikit
+                for (Divisao divisao : edificio.obterDivisoes()) {
+                    for (InimigoImp inimigo : divisao.getInimigos()) {
+                        inimigo.resetarMovimentos();
+                    }
+                }
+
                 // Inimigos contra-atacam após o uso do medikit
                 for (InimigoImp inimigo : inimigosNaSala) {
                     realizarContraAtaque(inimigo);
                 }
+
                 moverInimigosForaDaSala(divisaoAtual);
+
                 exibirEstadoAtual();
             }
 
@@ -297,6 +325,7 @@ public class SimuladorImp {
 
         exibirEstadoAtual();
     }
+
 
     private void realizarAtaqueHeroi(InimigoImp inimigo) {
         hero.atacar(inimigo);
