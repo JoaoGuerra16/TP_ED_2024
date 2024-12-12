@@ -8,6 +8,7 @@ public class InimigoImp {
     private int vida;
     private int poder;
 
+    private boolean contraAtaqueRealizado;
     private int movimentosRestantes;
 
     public InimigoImp(String nome, int vida, int poder) {
@@ -27,6 +28,15 @@ public class InimigoImp {
     }
 
 
+    // Método para marcar o contra-ataque como realizado
+    public void setContraAtaqueRealizado(boolean realizado) {
+        this.contraAtaqueRealizado = realizado;
+    }
+
+    // Método para verificar se o contra-ataque foi realizado
+    public boolean isContraAtaqueRealizado() {
+        return this.contraAtaqueRealizado;
+    }
 
     public int getPoder() {
         return poder;

@@ -17,7 +17,7 @@ public class HeroImp implements PersonagemPrincipal {
 
     public HeroImp(int vida) {
         this.vida = vida;
-        this.poder = 100;
+        this.poder = 30;
         this.mochila = new ArrayStack<>(5);
         this.temAlvo = false;
     }

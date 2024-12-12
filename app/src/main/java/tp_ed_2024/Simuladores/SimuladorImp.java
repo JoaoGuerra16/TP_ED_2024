@@ -124,8 +124,11 @@ public class SimuladorImp {
                     InimigoImp inimigo = inimigosNaDivisao.getIndex(i);
 
                     if (inimigo.getMovimentosRestantes() > 0) {
-                        moverInimigosAleatoriamente(mapa, inimigo);
-                        inimigo.decrementarMovimentosRestantes();
+                        // Só mova se o inimigo ainda não tiver encontrado o herói e realizado um contra-ataque
+                        if (!inimigo.isContraAtaqueRealizado()) {
+                            moverInimigosAleatoriamente(mapa, inimigo);
+                            inimigo.decrementarMovimentosRestantes();
+                        }
                     }
                 }
             }
@@ -154,10 +157,13 @@ public class SimuladorImp {
                 System.out.println(inimigo.getNome() + " encontrou o herói! Contra-ataque imediato!");
                 realizarContraAtaque(inimigo);
 
+                // Marcar que o contra-ataque foi realizado para não continuar com os movimentos
+                inimigo.setContraAtaqueRealizado(true); // Bloquear movimentos subsequentes
+                return; // Interrompe o movimento após o contra-ataque
             }
 
             // Se o inimigo ainda pode se mover e decide fazer um segundo movimento
-            if (novoDestino != divisaoDoHeroi && inimigo.getMovimentosRestantes() > 1 && random.nextBoolean()) {
+            if (inimigo.getMovimentosRestantes() > 1 && random.nextBoolean()) {
                 UnorderedArrayList<Divisao> vizinhosDoNovoDestino = mapa.getVizinhos(divisaoAtual);
                 if (!vizinhosDoNovoDestino.isEmpty()) {
                     Divisao destinoFinal = vizinhosDoNovoDestino.getIndex(random.nextInt(vizinhosDoNovoDestino.size()));
@@ -166,13 +172,15 @@ public class SimuladorImp {
                     destinoFinal.adicionarInimigo(inimigo);
                     divisaoAtual = destinoFinal;
 
-                    System.out.println(
-                            inimigo.getNome() + " moveu-se novamente para a divisão " + divisaoAtual.getNome());
+                    System.out.println(inimigo.getNome() + " moveu-se novamente para a divisão " + divisaoAtual.getNome());
 
                     // Verifica novamente se o inimigo encontrou o herói após o segundo movimento
                     if (destinoFinal == divisaoDoHeroi) {
                         System.out.println(inimigo.getNome() + " encontrou o herói novamente! Contra-ataque imediato!");
                         realizarContraAtaque(inimigo);
+
+                        // Marcar que o contra-ataque foi realizado para não continuar com os movimentos
+                        inimigo.setContraAtaqueRealizado(true); // Bloquear movimentos subsequentes
                     }
 
                     inimigo.decrementarMovimentosRestantes(); // Decrementa o contador de movimentações
@@ -182,6 +190,8 @@ public class SimuladorImp {
             System.out.println(inimigo.getNome() + " não tem divisões vizinhas para se mover.");
         }
     }
+
+
 
     private Divisao encontrarDivisaoDoInimigo(EdificioImp<Divisao> mapa, InimigoImp inimigo) {
         for (Divisao divisao : mapa.obterDivisoes()) {
