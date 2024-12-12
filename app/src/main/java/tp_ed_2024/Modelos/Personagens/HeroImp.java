@@ -2,12 +2,9 @@ package tp_ed_2024.Modelos.Personagens;
 
 import tp_ed_2024.Collections.Stacks.ArrayStack;
 import tp_ed_2024.Enums.TipoItemEnum;
-import tp_ed_2024.Modelos.Edificio.Divisao;
-import tp_ed_2024.Modelos.Edificio.Edificio;
-import tp_ed_2024.Modelos.Edificio.EdificioImp;
 import tp_ed_2024.Modelos.Items.*;
 import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemPrincipal;
-import tp_ed_2024.Simuladores.SimuladorImp;
+
 
 public class HeroImp implements PersonagemPrincipal {
 

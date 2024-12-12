@@ -53,8 +53,9 @@ public class Divisao {
     public String getNome() {
         return nome;
     }
+
     public boolean temHeroi() {
-        return this.hero != null;  // Verifica se a divisão tem um herói
+        return this.hero != null; // Verifica se a divisão tem um herói
     }
 
     public UnorderedArrayList<InimigoImp> getInimigos() {

@@ -1,7 +1,6 @@
 package tp_ed_2024.Modelos.Items;
 
 import tp_ed_2024.Enums.TipoItemEnum;
-import tp_ed_2024.Modelos.Edificio.Divisao;
 
 public class Item implements ItemImp {
 
