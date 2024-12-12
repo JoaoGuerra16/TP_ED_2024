@@ -7,8 +7,13 @@ import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Modelos.Edificio.Divisao;
 import tp_ed_2024.Modelos.Personagens.HeroImp;
 import tp_ed_2024.Modelos.Personagens.InimigoImp;
+import tp_ed_2024.Utilidades.Export.GuardarMissaoData;
 import tp_ed_2024.Algoritmos.Paths;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -376,5 +381,27 @@ public class SimuladorImp {
             System.out.println();
         }
     }
+
+    // private void salvarSimulacao() {
+    //     // Criar os dados da simulação
+    //     GuardarMissaoData missaoData = new GuardarMissaoData(
+    //             codMissao, // Código da missão
+    //             trajetos, // Trajetos percorridos
+    //             inimigosDerrotados, // Inimigos derrotados
+    //             heroi.getVida(), // Vida final do herói
+    //             heroi.isAlvoResgatado() // Se o alvo foi resgatado
+    //     );
+
+    //     // Converter para JSON
+    //     JSONObject jsonObject = missaoData.toJson();
+
+    //     // Gravar no arquivo JSON
+    //     try (FileWriter file = new FileWriter("missao_" + codMissao + ".json")) {
+    //         file.write(jsonObject.toJSONString());
+    //         System.out.println("Missão salva no arquivo missao_" + codMissao + ".json");
+    //     } catch (IOException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
 
 }
