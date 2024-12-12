@@ -9,9 +9,6 @@ public interface ItemImp {
 
     void setTipo(TipoItemEnum tipo); // Setar o tipo do item
 
-    void setDivisao(String divisao); // Setar a divisão em que o item está
-
-    Divisao getDivisao(); // Obtém a divisão em que o item se encontra
 
     int getPontos(); // Obtém os pontos de vida do item
 

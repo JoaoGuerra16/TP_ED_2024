@@ -16,7 +16,5 @@ public interface Personagem {
 
     public void atacar(InimigoImp inimigo) ; // Reduz os pontos de vida
 
-    Divisao getDivisaoAtual(); // Obtém a divisão em que o personagem se encontra
 
-    void setDivisao(Divisao novaDivisao); // Move o personagem para outra divisão
 }

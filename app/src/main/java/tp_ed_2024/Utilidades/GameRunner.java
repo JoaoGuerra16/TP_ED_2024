@@ -28,6 +28,7 @@ public class GameRunner {
             return;
         }
 
+        // Carregar o edifício a partir do JSON
         EdificioImp<Divisao> edificio = loader.carregarEdificio(jsonPath);
         if (edificio == null) {
             return;
@@ -40,14 +41,18 @@ public class GameRunner {
             return;
         }
 
+        // Escolher a entrada do edifício
         Divisao divisaoInicial = menu.escolherEntrada(entradasSaidas);
         if (divisaoInicial == null) {
             System.out.println("Nenhuma entrada escolhida. Encerrando o programa.");
             return;
         }
 
-        // Criar o jogador (Tó Cruz) e colocá-lo na divisão inicial escolhida
-        HeroImp heroi = new HeroImp(100, divisaoInicial);
+        // Criar o herói (Tó Cruz) e colocá-lo na divisão inicial escolhida
+        HeroImp heroi = new HeroImp(100);
+        divisaoInicial.adicionarHeroi(heroi);  // Certifique-se de que o herói é adicionado à divisão inicial
+
+        // Iniciar o simulador
         SimuladorImp simulador = new SimuladorImp(edificio, heroi);
         simulador.iniciarSimulacao();
     }

@@ -7,14 +7,14 @@ public class InimigoImp {
     private String nome;
     private int vida;
     private int poder;
-    private Divisao divisaoAtual;
+
     private int movimentosRestantes;
 
-    public InimigoImp(String nome, int vida, int poder, Divisao divisaoAtual) {
+    public InimigoImp(String nome, int vida, int poder) {
         this.nome = nome;
         this.vida = vida;
         this.poder = poder;
-        this.divisaoAtual = divisaoAtual;
+
         this.movimentosRestantes = 2;
     }
 
@@ -26,9 +26,7 @@ public class InimigoImp {
         this.vida = vida;
     }
 
-    public void setDivisaoAtual(Divisao divisaoAtual) {
-        this.divisaoAtual = divisaoAtual;
-    }
+
 
     public int getPoder() {
         return poder;
@@ -38,9 +36,7 @@ public class InimigoImp {
         return nome;
     }
 
-    public Divisao getDivisaoAtual() {
-        return divisaoAtual;
-    }
+
 
     public int getMovimentosRestantes() {
         return movimentosRestantes;
@@ -72,7 +68,7 @@ public class InimigoImp {
                 "nome='" + nome + '\'' +
                 ", vida=" + vida +
                 ", poder=" + poder +
-                ", divisaoAtual='" + (divisaoAtual != null ? divisaoAtual.getNome() : "Sem divisão") + '\'' +
+                 '\'' +
                 '}';
     }
 

@@ -85,12 +85,11 @@ public class JsonLoader {
             int poder = ((Long) inimigoJson.get("poder")).intValue();
             String divisaoNome = (String) inimigoJson.get("divisao");
 
-            InimigoImp inimigo = new InimigoImp(nome, poder, poder, null);
+            InimigoImp inimigo = new InimigoImp(nome, poder, poder);
 
             Divisao divisao = edificio.obterDivisaoPorNome(divisaoNome);
             if (divisao != null) {
-                divisao.adicionarInimigo(inimigo);
-                inimigo.setDivisaoAtual(divisao); // Certifique-se de configurar a divisão do inimigo
+                divisao.adicionarInimigo(inimigo);// Certifique-se de configurar a divisão do inimigo
                 System.out.println("Inimigo " + nome + " adicionado na divisão " + divisao.getNome());
             } else {
                 System.err.println(
@@ -139,7 +138,7 @@ public class JsonLoader {
             if ("kit de vida".equalsIgnoreCase(tipo)) {
                 if (itemJson.containsKey("pontos-recuperados") && itemJson.get("pontos-recuperados") != null) {
                     int pontosRecuperados = ((Long) itemJson.get("pontos-recuperados")).intValue();
-                    item = new Item(TipoItemEnum.KIT, null, pontosRecuperados);
+                    item = new Item(TipoItemEnum.KIT,  pontosRecuperados);
                 } else {
                     System.err.println(
                             "Erro: chave 'pontos-recuperados' não encontrada ou é nula para o item 'kit de vida'.");
@@ -147,7 +146,7 @@ public class JsonLoader {
             } else if ("colete".equalsIgnoreCase(tipo)) {
                 if (itemJson.containsKey("pontos-extra") && itemJson.get("pontos-extra") != null) {
                     int pontosExtra = ((Long) itemJson.get("pontos-extra")).intValue();
-                    item = new Item(TipoItemEnum.COLETE, null, pontosExtra);
+                    item = new Item(TipoItemEnum.COLETE,  pontosExtra);
                 } else {
                     System.err.println("Erro: chave 'pontos-extra' não encontrada ou é nula para o item 'colete'.");
                 }

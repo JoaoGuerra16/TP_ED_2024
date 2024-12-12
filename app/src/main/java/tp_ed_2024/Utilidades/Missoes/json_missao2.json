@@ -18,7 +18,7 @@
     {"nome": "Pedro", "poder": 10, "divisao": "Escada 4"}
   ],
   "entradas-saidas": ["Escada 5", "Heliporto", "teste", "teste2"],
-  "alvo": {"divisao": "Camaratas", "tipo": "quimico"},
+  "alvo": {"divisao": "Escada 4", "tipo": "quimico"},
   "itens": [
     {"divisao": "Heliporto", "pontos-extra": 20, "tipo": "colete"},
     {"divisao": "teste", "pontos-recuperados": 15, "tipo": "kit de vida"},

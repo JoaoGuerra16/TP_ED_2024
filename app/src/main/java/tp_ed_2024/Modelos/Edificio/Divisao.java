@@ -3,6 +3,7 @@ package tp_ed_2024.Modelos.Edificio;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Items.Item;
 import tp_ed_2024.Modelos.Personagens.AlvoImp;
+import tp_ed_2024.Modelos.Personagens.HeroImp;
 import tp_ed_2024.Modelos.Personagens.InimigoImp;
 
 public class Divisao {
@@ -11,11 +12,13 @@ public class Divisao {
     private UnorderedArrayList<InimigoImp> inimigos;
     private UnorderedArrayList<Item> itens;
     private boolean isEntradaSaida;
+    private HeroImp hero;
     private AlvoImp alvo;
     private boolean flagAlvo;
 
     public Divisao(String nome) {
         this.nome = nome;
+        this.hero = null;
         this.isEntradaSaida = false;
         this.inimigos = new UnorderedArrayList<>();
         this.itens = new UnorderedArrayList<>();
@@ -24,6 +27,15 @@ public class Divisao {
 
     public boolean isEntradaSaida() {
         return isEntradaSaida;
+    }
+
+    public void adicionarHeroi(HeroImp hero) {
+        this.hero = hero;
+    }
+
+    // Método para remover o herói da divisão
+    public void removerHeroi() {
+        this.hero = null;
     }
 
     public void setEntradaSaida(boolean entradaSaida) {
@@ -40,6 +52,9 @@ public class Divisao {
 
     public String getNome() {
         return nome;
+    }
+    public boolean temHeroi() {
+        return this.hero != null;  // Verifica se a divisão tem um herói
     }
 
     public UnorderedArrayList<InimigoImp> getInimigos() {

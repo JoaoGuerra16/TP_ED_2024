@@ -3,9 +3,11 @@ package tp_ed_2024.Modelos.Personagens;
 import tp_ed_2024.Collections.Stacks.ArrayStack;
 import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Modelos.Edificio.Divisao;
+import tp_ed_2024.Modelos.Edificio.Edificio;
 import tp_ed_2024.Modelos.Edificio.EdificioImp;
 import tp_ed_2024.Modelos.Items.*;
 import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemPrincipal;
+import tp_ed_2024.Simuladores.SimuladorImp;
 
 public class HeroImp implements PersonagemPrincipal {
 
@@ -13,15 +15,23 @@ public class HeroImp implements PersonagemPrincipal {
     private int vida;
     private int poder;
     private ArrayStack<Item> mochila;
-    private Divisao divisaoAtual;
+
     private boolean temAlvo;
 
-    public HeroImp(int vida, Divisao divisaoAtual) {
+    public HeroImp(int vida) {
         this.vida = vida;
         this.poder = 20;
         this.mochila = new ArrayStack<>(5);
-        this.divisaoAtual = divisaoAtual;
         this.temAlvo = false;
+    }
+
+
+    public ArrayStack<Item> getMochila() {
+        return mochila;
+    }
+
+    public void setMochila(ArrayStack<Item> mochila) {
+        this.mochila = mochila;
     }
 
     @Override
@@ -73,84 +83,76 @@ public class HeroImp implements PersonagemPrincipal {
         System.out.println(inimigo.getNome() + " agora tem " + inimigo.getVida() + " pontos de vida.");
     }
 
-    @Override
-    public Divisao getDivisaoAtual() {
-        return divisaoAtual;
-    }
 
-    @Override
-    public void setDivisao(Divisao novaDivisao) {
-        this.divisaoAtual = novaDivisao;
-    }
 
     public void pegarAlvo() {
         this.temAlvo = true;
         System.out.println(nome + " tens o alvo. ");
     }
 
-    // Classe Hero
-    public void moverParaDivisao(Divisao novaDivisao, EdificioImp<Divisao> edificio) {
-        if (edificio.verificarLigacao(divisaoAtual, novaDivisao)) {
-            divisaoAtual = novaDivisao;
-            System.out.println("Herói se moveu para: " + novaDivisao.getNome());
-        } else {
-            System.out.println("Movimento inválido! Não há ligação entre " + divisaoAtual.getNome() + " e "
-                    + novaDivisao.getNome());
-        }
-    }
-
-    public boolean sairDoEdificio() {
-        if (divisaoAtual.isEntradaSaida()) {
-            System.out.println(nome + " saiu do edifício pela divisão: " + divisaoAtual.getNome());
-
-            // Verifica se o alvo foi resgatado
-            if (temAlvo) {
-                System.out.println("Missão concluída com sucesso! Alvo resgatado.");
-            } else {
-                System.out.println("Missão falhada! O alvo não foi resgatado.");
-            }
-
-            return true; // O jogo termina
-        } else {
-            System.out.println(nome + " não está numa saída.");
-            return false;
-        }
-    }
-
-    public void pegarItemNaDivisao() {
-        if (divisaoAtual.getItens().size() > 0) {
-            Item item = divisaoAtual.getItens().removeLast(); // Retira o item da divisão
-
-            if (item.getTipo() == TipoItemEnum.KIT) {
-                // Guardar medikits na mochila
-                if (mochila.size() < 5) {
-                    mochila.push(item);
-                    System.out.println(nome + " pegou um medikit: " + item + "PS: Só fracos é que usam kits de cura");
-                } else {
-                    System.out.println(
-                            "A mochila está cheia! Não consegues carregar mais kits, na próxima traz uma mochila maior!");
-                }
-            } else if (item.getTipo() == TipoItemEnum.COLETE) {
-                // Usar coletes imediatamente
-                aplicarColete(item);
-            }
-        } else {
-            System.out.println("Não há itens na divisão para pegar.");
-        }
-    }
-
-    // Mostrar os items na mochila
-    public void mostrarMochila() {
-        if (mochila.isEmpty()) {
-            System.out.println("A mochila está vazia.");
-        } else {
-            System.out.println(nome + " tem os seguintes itens na mochila:");
-            for (int i = 0; i < mochila.size(); i++) {
-                System.out.println("- " + mochila.peek()); // Exibe o topo sem remover
-            }
-        }
-    }
-
+//    // Classe Hero
+//    public void moverParaDivisao(Divisao novaDivisao, EdificioImp<Divisao> edificio) {
+//        if (edificio.verificarLigacao(divisaoAtual, novaDivisao)) {
+//            divisaoAtual = novaDivisao;
+//            System.out.println("Herói se moveu para: " + novaDivisao.getNome());
+//        } else {
+//            System.out.println("Movimento inválido! Não há ligação entre " + divisaoAtual.getNome() + " e "
+//                    + novaDivisao.getNome());
+//        }
+//    }
+//
+//    public boolean sairDoEdificio() {
+//        if (divisaoAtual.isEntradaSaida()) {
+//            System.out.println(nome + " saiu do edifício pela divisão: " + divisaoAtual.getNome());
+//
+//            // Verifica se o alvo foi resgatado
+//            if (temAlvo) {
+//                System.out.println("Missão concluída com sucesso! Alvo resgatado.");
+//            } else {
+//                System.out.println("Missão falhada! O alvo não foi resgatado.");
+//            }
+//
+//            return true; // O jogo termina
+//        } else {
+//            System.out.println(nome + " não está numa saída.");
+//            return false;
+//        }
+//    }
+//
+//    public void pegarItemNaDivisao() {
+//        if (divisaoAtual.getItens().size() > 0) {
+//            Item item = divisaoAtual.getItens().removeLast(); // Retira o item da divisão
+//
+//            if (item.getTipo() == TipoItemEnum.KIT) {
+//                // Guardar medikits na mochila
+//                if (mochila.size() < 5) {
+//                    mochila.push(item);
+//                    System.out.println(nome + " pegou um medikit: " + item + "PS: Só fracos é que usam kits de cura");
+//                } else {
+//                    System.out.println(
+//                            "A mochila está cheia! Não consegues carregar mais kits, na próxima traz uma mochila maior!");
+//                }
+//            } else if (item.getTipo() == TipoItemEnum.COLETE) {
+//                // Usar coletes imediatamente
+//                aplicarColete(item);
+//            }
+//        } else {
+//            System.out.println("Não há itens na divisão para pegar.");
+//        }
+//    }
+//
+//    // Mostrar os items na mochila
+//    public void mostrarMochila() {
+//        if (mochila.isEmpty()) {
+//            System.out.println("A mochila está vazia.");
+//        } else {
+//            System.out.println(nome + " tem os seguintes itens na mochila:");
+//            for (int i = 0; i < mochila.size(); i++) {
+//                System.out.println("- " + mochila.peek()); // Exibe o topo sem remover
+//            }
+//        }
+//    }
+//
     public void usarMedikit() {
 
         if (mochila.isEmpty()) {
@@ -188,7 +190,7 @@ public class HeroImp implements PersonagemPrincipal {
         }
     }
 
-    @Override
+
     public void adicionarItem(Item item) {
         if (mochila.size() < 55) {
             mochila.push(item);
@@ -199,7 +201,7 @@ public class HeroImp implements PersonagemPrincipal {
         }
     }
 
-    @Override
+
     public void aumentarVida(ItemImp item, int pontos) {
         if (!mochila.isEmpty()) {
             mochila.pop();
