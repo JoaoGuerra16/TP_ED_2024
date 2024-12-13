@@ -9,7 +9,7 @@ import tp_ed_2024.Collections.Queues.LinkedQueue;
 import tp_ed_2024.Collections.Stacks.LinkedStack;
 
 public class Graph<T> implements GraphADT<T> {
-    protected final int DEFAULT_CAPACITY = 10;
+    protected final int DEFAULT_CAPACITY = 100;
     protected int numVertices; // number of vertices in the graph
     protected boolean[][] adjMatrix; // adjacency matrix
     protected T[] vertices; // values of vertices
@@ -18,7 +18,7 @@ public class Graph<T> implements GraphADT<T> {
      * Creates an empty graph.
      */
     public Graph() {
-        numVertices = 0;
+        this.numVertices = 0;
         this.adjMatrix = new boolean[DEFAULT_CAPACITY][DEFAULT_CAPACITY];
         this.vertices = (T[]) (new Object[DEFAULT_CAPACITY]);
     }
@@ -232,11 +232,11 @@ public class Graph<T> implements GraphADT<T> {
         if (isEmpty()) {
             return false;
         }
-        Iterator<T> bfsIterator = iteratorBFS(vertices[0]);
+        Iterator<T> iterator = iteratorBFS(vertices[0]);
         int count = 0;
 
-        while (bfsIterator.hasNext()) {
-            bfsIterator.next();
+        while (iterator.hasNext()) {
+            iterator.next();
             count++;
         }
         return count == numVertices;

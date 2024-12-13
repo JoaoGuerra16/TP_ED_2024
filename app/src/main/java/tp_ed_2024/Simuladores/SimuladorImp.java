@@ -8,6 +8,7 @@ import tp_ed_2024.Modelos.Items.Item;
 import tp_ed_2024.Modelos.Personagens.HeroImp;
 import tp_ed_2024.Modelos.Personagens.InimigoImp;
 import tp_ed_2024.Recursos.ConsoleColors;
+import tp_ed_2024.Algoritmos.Paths;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -16,6 +17,7 @@ public class SimuladorImp {
     private EdificioImp<Divisao> edificio;
     private HeroImp hero;
     private boolean emJogo;
+    Paths path = new Paths(edificio);
 
     public SimuladorImp(EdificioImp<Divisao> edificio, HeroImp hero) {
         this.edificio = edificio;
@@ -361,12 +363,60 @@ public class SimuladorImp {
                 return divisao;
             }
         }
-        return null; // Caso o herói não esteja em nenhuma divisão (isso não deveria acontecer se a
-                     // lógica estiver correta)
+        return null;
+
     }
 
+    public Divisao encontrarDivisaoDoAlvo(){
+        for (Divisao divisao : edificio.obterDivisoes()) {
+            if (divisao.isFlagAlvo()) { // Método que verifica se a divisão tem o alvo
+                return divisao;
+            }
+        }
+        return null;
+    }
+
+    public Divisao encontrarDivisaoDosKits(){
+
+        UnorderedArrayList<Divisao> todasDivisoes = edificio.obterDivisoes();
+
+        for (Divisao divisao : todasDivisoes) {
+            for (Item item : divisao.getItens()) {
+                if (item.getTipo() == TipoItemEnum.KIT) { // Assumindo que TipoItem é o enum
+                    return divisao; // Retorna a divisão com um item do tipo KIT
+                }
+            }
+        }
+
+        System.out.println("Não há divisões com kits disponíveis.");
+        return null;
+    }
+
+    public Divisao encontrarDivisaoDosColetes(){
+        UnorderedArrayList<Divisao> todasDivisoes = edificio.obterDivisoes();
+
+        for (Divisao divisao : todasDivisoes) {
+            for (Item item : divisao.getItens()) {
+            if (item.getTipo() == TipoItemEnum.COLETE) { // Assumindo que TipoItem é o enum
+                    return divisao; // Retorna a divisão com um item do tipo KIT
+                }
+            }
+        }
+
+        System.out.println("Não há divisões com kits disponíveis.");
+        return null;
+    }
+
+
     public void exibirEstadoAtual() {
+
+
+
         Divisao divisaoAtual = encontrarDivisaoDoHeroi();
+        Divisao alvoDivisao = encontrarDivisaoDoAlvo();
+        Divisao kitDivisao = encontrarDivisaoDosKits();
+        Divisao coleteDivisao = encontrarDivisaoDosColetes();
+
         System.out.println("================Estado atual===================");
         System.out.println("Divisão Atual: " + divisaoAtual.getNome());
         System.out.println("Vida do Herói: " + hero.getVida());
@@ -379,6 +429,7 @@ public class SimuladorImp {
         }
         System.out.println("===================================");
 
+        path.calcularCaminhos(divisaoAtual, alvoDivisao, kitDivisao, coleteDivisao, edificio);
     }
 
     public void pegarItemNaDivisao() {
