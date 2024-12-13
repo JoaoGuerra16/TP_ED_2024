@@ -55,7 +55,6 @@ public class SimuladorAutomaticoImp {
 
 
 
-
         }
 
         System.out.println("Simulação encerrada.");
