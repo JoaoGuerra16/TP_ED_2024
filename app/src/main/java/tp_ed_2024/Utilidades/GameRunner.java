@@ -49,7 +49,7 @@ public class GameRunner {
         }
 
         // Criar o herói (Tó Cruz) e colocá-lo na divisão inicial escolhida
-        HeroImp heroi = new HeroImp(100);
+        HeroImp heroi = new HeroImp(115);
         divisaoInicial.adicionarHeroi(heroi);  // Certifique-se de que o herói é adicionado à divisão inicial
 
         // Iniciar o simulador

@@ -1,9 +1,11 @@
 package tp_ed_2024.Modelos.Personagens;
 
+import org.checkerframework.checker.units.qual.C;
 import tp_ed_2024.Collections.Stacks.ArrayStack;
 import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Modelos.Items.*;
 import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemPrincipal;
+import tp_ed_2024.Recursos.ConsoleColors;
 
 
 public class HeroImp implements PersonagemPrincipal {
@@ -180,10 +182,10 @@ public class HeroImp implements PersonagemPrincipal {
             int pontosExtra = colete.getPontos();
             vida += pontosExtra; // Sem limite de 100 para coletes
 
-            System.out.println(nome + " usou um colete e ganhou " + pontosExtra + " pontos extras de vida.");
-            System.out.println("Vida atual: " + vida);
+            System.out.println(nome + " usou um colete e ganhou " + pontosExtra + " pontos extras de "+ConsoleColors.GREEN_BRIGHT+  "vida." + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.GREEN_BRIGHT + "Vida atual: " +ConsoleColors.RESET+ vida);
         } else {
-            System.out.println("Erro: item não é um colete!");
+            System.out.println(ConsoleColors.RED + "Erro: item não é um colete!" + ConsoleColors.RESET);
         }
     }
 

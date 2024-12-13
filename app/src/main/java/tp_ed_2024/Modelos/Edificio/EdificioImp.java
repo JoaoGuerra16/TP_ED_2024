@@ -3,7 +3,7 @@ package tp_ed_2024.Modelos.Edificio;
 import tp_ed_2024.Collections.Graphs.Network;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Personagens.InimigoImp;
-
+import tp_ed_2024.Recursos.ConsoleColors;
 public class EdificioImp<T> extends Network<Divisao> implements Edificio {
 
     public EdificioImp(boolean isBidirectional) {
@@ -187,17 +187,17 @@ public class EdificioImp<T> extends Network<Divisao> implements Edificio {
 
             // Verificar se há itens
             if (divisao.getItens() != null && !divisao.getItens().isEmpty()) {
-                sb.append(" [Items: ").append(divisao.getItens().size()).append("]");
+                sb.append(ConsoleColors.GREEN_BRIGHT +" [Items: " + ConsoleColors.RESET).append(divisao.getItens().size()).append("]");
             }
 
             // Verificar se há inimigos
             if (divisao.getInimigos() != null && !divisao.getInimigos().isEmpty()) {
-                sb.append(" [Inimigos: ").append(divisao.getInimigos().size()).append("]");
+                sb.append(ConsoleColors.RED + " [Inimigos: "+ ConsoleColors.RESET).append(divisao.getInimigos().size()).append("]");
             }
 
             // Verificar se há alvo
             if (divisao.isFlagAlvo()) {
-                sb.append(" [Alvo AQUIIII]");
+                sb.append(ConsoleColors.YELLOW_BRIGHT +" [Alvo AQUIIII]" + ConsoleColors.RESET);
             }
             sb.append("\n");
         }
