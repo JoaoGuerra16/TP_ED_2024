@@ -116,10 +116,11 @@ public class SimuladorImp {
         System.out.println("O"+ ConsoleColors.YELLOW_BRIGHT+" Herói "+ConsoleColors.RESET+ "foi movido para a divisão: " + novaDivisao.getNome());
 
 
+
         if (!novaDivisao.temInimigos()) {
             moverInimigosForaDaSala(divisaoAtual);
         }
-
+        edificio.resetPeso(edificio, novaDivisao);
 
         // Resolver eventos na nova divisão
         resolverEventosNaDivisao();
@@ -150,10 +151,7 @@ public class SimuladorImp {
                 }
             }
         }
-        edificio.resetPeso(mapa, salaAtual);
-
     }
-
     private void moverInimigosAleatoriamente(EdificioImp<Divisao> mapa, InimigoImp inimigo) {
         Divisao divisaoAtual = encontrarDivisaoDoInimigo(mapa, inimigo);
         UnorderedArrayList<Divisao> vizinhos = mapa.getVizinhos(divisaoAtual);
@@ -171,8 +169,8 @@ public class SimuladorImp {
             // Verifica se o inimigo entrou na divisão do herói
             Divisao divisaoDoHeroi = encontrarDivisaoDoHeroi();
             if (novoDestino == divisaoDoHeroi) {
-                System.out.println(ConsoleColors.RED +inimigo.getNome()+ConsoleColors.RESET + " encontrou o herói! Contra-ataque imediato!");
-                realizarContraAtaque(inimigo);
+                System.out.println(ConsoleColors.RED +inimigo.getNome()+ConsoleColors.RESET + " encontrou o herói! Ataque imediato!");
+                inimigo.atacar(hero);
 
                 // Marcar que o contra-ataque foi realizado para não continuar com os movimentos
                 inimigo.setContraAtaqueRealizado(true); // Bloquear movimentos subsequentes
@@ -193,8 +191,8 @@ public class SimuladorImp {
 
                     // Verifica novamente se o inimigo encontrou o herói após o segundo movimento
                     if (destinoFinal == divisaoDoHeroi) {
-                        System.out.println(ConsoleColors.RED +inimigo.getNome()+ConsoleColors.RESET + " encontrou o herói novamente! Contra-ataque imediato!");
-                        realizarContraAtaque(inimigo);
+                        System.out.println(ConsoleColors.RED +inimigo.getNome()+ConsoleColors.RESET + " encontrou o herói novamente! Ataque imediato!");
+                        inimigo.atacar(hero);
 
                         // Marcar que o contra-ataque foi realizado para não continuar com os movimentos
                         inimigo.setContraAtaqueRealizado(true); // Bloquear movimentos subsequentes
@@ -267,7 +265,7 @@ public class SimuladorImp {
             if (escolha == 1) {
                 // Fase do jogador: Tó ataca todos os inimigos na sala.
                 for (InimigoImp inimigo : inimigosNaSala) {
-                    realizarAtaqueHeroi(inimigo);
+                    hero.atacar(inimigo);
                 }
 
                 // Remover inimigos eliminados após o ataque do jogador.
@@ -298,9 +296,8 @@ public class SimuladorImp {
 
                     // Inimigos contra-atacam após o uso do medikit
                     for (InimigoImp inimigo : inimigosNaSala) {
-                        realizarContraAtaque(inimigo);
+                        inimigo.atacar(hero);
                     }
-
                     moverInimigosForaDaSala(divisaoAtual);
 
                 } else {
@@ -322,7 +319,7 @@ public class SimuladorImp {
 
                 // Inimigos contra-atacam após o uso do medikit
                 for (InimigoImp inimigo : inimigosNaSala) {
-                    realizarContraAtaque(inimigo);
+                    inimigo.atacar(hero);
                 }
 
                 moverInimigosForaDaSala(divisaoAtual);
@@ -346,16 +343,7 @@ public class SimuladorImp {
     }
 
 
-    private void realizarAtaqueHeroi(InimigoImp inimigo) {
-        hero.atacar(inimigo);
-        System.out.println(
-                "Tó Cruz atacou " + inimigo.getNome() + " causando dano. Vida do inimigo: " + inimigo.getVida());
-    }
 
-    private void realizarContraAtaque(InimigoImp inimigo) {
-        hero.setVida(hero.getVida() - inimigo.getPoder());
-        System.out.println("O inimigo " + inimigo.getNome() + " contra-atacou! Vida do Tó Cruz: " + hero.getVida());
-    }
 
     public Divisao encontrarDivisaoDoHeroi() {
         for (Divisao divisao : edificio.obterDivisoes()) {

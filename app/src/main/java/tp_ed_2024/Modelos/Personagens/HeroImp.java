@@ -19,7 +19,7 @@ public class HeroImp implements PersonagemPrincipal {
 
     public HeroImp(int vida) {
         this.vida = vida;
-        this.poder = 1;
+        this.poder = 10;
         this.mochila = new ArrayStack<>(5);
         this.temAlvo = false;
     }
@@ -84,21 +84,6 @@ public class HeroImp implements PersonagemPrincipal {
 
 
 
-    public void pegarAlvo() {
-        this.temAlvo = true;
-        System.out.println(nome + " tens o alvo. ");
-    }
-
-//    // Classe Hero
-//    public void moverParaDivisao(Divisao novaDivisao, EdificioImp<Divisao> edificio) {
-//        if (edificio.verificarLigacao(divisaoAtual, novaDivisao)) {
-//            divisaoAtual = novaDivisao;
-//            System.out.println("Herói se moveu para: " + novaDivisao.getNome());
-//        } else {
-//            System.out.println("Movimento inválido! Não há ligação entre " + divisaoAtual.getNome() + " e "
-//                    + novaDivisao.getNome());
-//        }
-//    }
 //
 //    public boolean sairDoEdificio() {
 //        if (divisaoAtual.isEntradaSaida()) {
@@ -118,27 +103,7 @@ public class HeroImp implements PersonagemPrincipal {
 //        }
 //    }
 //
-//    public void pegarItemNaDivisao() {
-//        if (divisaoAtual.getItens().size() > 0) {
-//            Item item = divisaoAtual.getItens().removeLast(); // Retira o item da divisão
 //
-//            if (item.getTipo() == TipoItemEnum.KIT) {
-//                // Guardar medikits na mochila
-//                if (mochila.size() < 5) {
-//                    mochila.push(item);
-//                    System.out.println(nome + " pegou um medikit: " + item + "PS: Só fracos é que usam kits de cura");
-//                } else {
-//                    System.out.println(
-//                            "A mochila está cheia! Não consegues carregar mais kits, na próxima traz uma mochila maior!");
-//                }
-//            } else if (item.getTipo() == TipoItemEnum.COLETE) {
-//                // Usar coletes imediatamente
-//                aplicarColete(item);
-//            }
-//        } else {
-//            System.out.println("Não há itens na divisão para pegar.");
-//        }
-//    }
 //
 //    // Mostrar os items na mochila
 //    public void mostrarMochila() {
@@ -188,18 +153,6 @@ public class HeroImp implements PersonagemPrincipal {
             System.out.println(ConsoleColors.RED + "Erro: item não é um colete!" + ConsoleColors.RESET);
         }
     }
-
-
-    public void adicionarItem(Item item) {
-        if (mochila.size() < 55) {
-            mochila.push(item);
-            System.out.println("Item adicionado à mochila. \nPS: Só fracos é que usam kits de cura");
-        } else {
-            System.out.println(
-                    "A mochila está cheia! Não consegues carregar mais kits, na próxima traz uma mochila maior!");
-        }
-    }
-
 
     public void aumentarVida(ItemImp item, int pontos) {
         if (!mochila.isEmpty()) {

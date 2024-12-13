@@ -34,11 +34,10 @@ public class Paths {
                                                     EdificioImp<Divisao> edificio) {
         // Encontrar o menor caminho para o kit de recuperação mais próximo
         Iterator<Integer> caminhoParaKit = null;
-        double menorDistanciaKit = Double.POSITIVE_INFINITY;
+
 
         if (kitDivisao != null) {
             int indexKit = edificio.getIndex(kitDivisao);
-            menorDistanciaKit = edificio.shortestPathWeight(posicaoAtualDivisao, kitDivisao);
             caminhoParaKit = edificio.findShortestPath(
                     edificio.getIndex(posicaoAtualDivisao),
                     indexKit,
@@ -47,7 +46,7 @@ public class Paths {
 
         // Exibe a distância para o kit
         if (kitDivisao != null) {
-            System.out.println("Distância para o kit de recuperação mais próximo: " + menorDistanciaKit);
+            System.out.println("Distância para o kit de recuperação mais próximo: " );
         } else {
             System.out.println("Nenhum kit de recuperação disponível.");
         }
@@ -101,9 +100,9 @@ public class Paths {
 
                 // Verificar se há mais divisões no caminho
                 if (caminhoParaKit.hasNext()) {
-                    System.out.print(ConsoleColors.GREEN_BRIGHT + divisao.getNome() + " -> " + ConsoleColors.RESET );
+                    System.out.print(ConsoleColors.GREEN_BRIGHT + divisao.getNome() + " -> " );
                 } else {
-                    System.out.print(divisao.getNome());
+                    System.out.print(divisao.getNome() + ConsoleColors.RESET);
                 }
             }
 
@@ -124,9 +123,9 @@ public class Paths {
 
                 // Verificar se há mais divisões no caminho
                 if (caminhoParaColete.hasNext()) {
-                    System.out.print(ConsoleColors.GREEN_BRIGHT + divisao.getNome() + " -> " + ConsoleColors.RESET);
+                    System.out.print(ConsoleColors.GREEN_BRIGHT + divisao.getNome() + " -> " );
                 } else {
-                    System.out.print(divisao.getNome());
+                    System.out.print(divisao.getNome() + ConsoleColors.RESET);
                 }
             }
 
