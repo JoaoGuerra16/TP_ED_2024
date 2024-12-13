@@ -1,109 +1,68 @@
 package tp_ed_2024.Modelos.Edificio;
 
-import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Items.Item;
 import tp_ed_2024.Modelos.Personagens.AlvoImp;
 import tp_ed_2024.Modelos.Personagens.HeroImp;
 import tp_ed_2024.Modelos.Personagens.InimigoImp;
+import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 
-public class Divisao {
+public interface Divisao {
 
-    private String nome;
-    private UnorderedArrayList<InimigoImp> inimigos;
-    private UnorderedArrayList<Item> itens;
-    private boolean isEntradaSaida;
-    private HeroImp hero;
-    private AlvoImp alvo;
-    private boolean flagAlvo;
+    // Retorna o nome da divisão
+    String getNome();
 
-    public Divisao(String nome) {
-        this.nome = nome;
-        this.hero = null;
-        this.isEntradaSaida = false;
-        this.inimigos = new UnorderedArrayList<>();
-        this.itens = new UnorderedArrayList<>();
-        this.flagAlvo = false;
-    }
+    // Adiciona um herói a essa divisão
+    void adicionarHeroi(HeroImp hero);
 
-    public boolean isEntradaSaida() {
-        return isEntradaSaida;
-    }
+    // Remove o herói da divisão
+    void removerHeroi();
 
-    public void adicionarHeroi(HeroImp hero) {
-        this.hero = hero;
-    }
+    // Verifica se a divisão contém um herói
+    boolean temHeroi();
 
-    // Método para remover o herói da divisão
-    public void removerHeroi() {
-        this.hero = null;
-    }
+    // Definir se a divisão é uma entrada ou saída
+    void setEntradaSaida(boolean entradaSaida);
 
-    public void setEntradaSaida(boolean entradaSaida) {
-        isEntradaSaida = entradaSaida;
-    }
+    // Verifica se a divisão é uma entrada ou saída
+    boolean isEntradaSaida();
 
-    public AlvoImp getAlvo() {
-        return alvo;
-    }
+    // Adiciona um alvo à divisão
+    void adicionarAlvo(AlvoImp alvo);
 
-    public void adicionarAlvo(AlvoImp alvo) {
-        this.alvo = alvo;
-    }
+    // Obtém o alvo da divisão
+    AlvoImp getAlvo();
 
-    public String getNome() {
-        return nome;
-    }
+    // Adiciona um inimigo à divisão
+    void adicionarInimigo(InimigoImp inimigo);
 
-    public boolean temHeroi() {
-        return this.hero != null; // Verifica se a divisão tem um herói
-    }
+    // Remove um inimigo da divisão
+    void removerInimigo(InimigoImp inimigo);
 
-    public UnorderedArrayList<InimigoImp> getInimigos() {
-        return inimigos;
-    }
+    // Verifica se a divisão tem inimigos
+    boolean temInimigos();
 
-    public boolean temInimigos() {
-        return inimigos != null && !inimigos.isEmpty();
-    }
+    // Obtém a lista de inimigos dessa divisão
+    UnorderedArrayList<InimigoImp> getInimigos();
 
-    public void adicionarInimigo(InimigoImp inimigo) {
-        inimigos.addToRear(inimigo);
-    }
+    // Adiciona um item à divisão
+    void adicionarItem(Item item);
 
-    public void removerInimigo(InimigoImp inimigo) {
-        if (!inimigos.isEmpty()) {
-            inimigos.remove(inimigo);
-        }
+    // Obtém a lista de itens dessa divisão
+    UnorderedArrayList<Item> getItens();
 
-    }
+    // Define a flag do alvo
+    void setFlagAlvo(boolean flagAlvo);
 
-    public UnorderedArrayList<Item> getItens() {
-        return itens;
-    }
+    // Verifica se a flag do alvo está ativa
+    boolean isFlagAlvo();
 
-    public void adicionarItem(Item item) {
-        itens.addToRear(item);
-    }
+    // Ativa a flag do alvo
+    void ativarFlagAlvo();
 
-    public boolean isFlagAlvo() {
-        return flagAlvo;
-    }
+    // Desativa a flag do alvo
+    void desativarFlagAlvo();
 
-    public void setFlagAlvo(boolean flagAlvo) {
-        this.flagAlvo = flagAlvo;
-    }
-
-    public void ativarFlagAlvo() {
-        this.flagAlvo = true;
-    }
-
-    public void desativarFlagAlvo() {
-        this.flagAlvo = false;
-    }
-
+    // Método toString para mostrar informações sobre a divisão
     @Override
-    public String toString() {
-        return nome + " (Inimigos: " + inimigos.size() + ", Entrada/Saída: " + isEntradaSaida + ", Alvo: "
-                + (alvo != null ? alvo : "Nenhum") + ")";
-    }
+    String toString();
 }

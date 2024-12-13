@@ -4,7 +4,7 @@ import tp_ed_2024.Enums.TipoItemEnum;
 
 public class Item implements ItemImp {
 
-    private TipoItemEnum tipo; // Alterado para usar a enum
+    private TipoItemEnum tipo;
 
     private int pontos;
 

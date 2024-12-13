@@ -1,6 +1,6 @@
 package tp_ed_2024.Utilidades;
 
-import tp_ed_2024.Modelos.Edificio.Divisao;
+import tp_ed_2024.Modelos.Edificio.DivisaoImp;
 import tp_ed_2024.Modelos.Edificio.EdificioImp;
 import tp_ed_2024.Modelos.Personagens.HeroImp;
 import tp_ed_2024.Simuladores.SimuladorAutomaticoImp;
@@ -17,7 +17,7 @@ public class GameRunner {
     }
 
     public void iniciar() {
-        // Caminho para os arquivos JSON
+
         String[] jsonFiles = {
                 "app\\src\\main\\java\\tp_ed_2024\\Utilidades\\Missoes\\json_missao1.json",
                 "app\\src\\main\\java\\tp_ed_2024\\Utilidades\\Missoes\\json_missao2.json",
@@ -29,23 +29,23 @@ public class GameRunner {
             return;
         }
 
-        // Carregar o edifício a partir do JSON
-        EdificioImp<Divisao> edificio = loader.carregarEdificio(jsonPath);
+
+        EdificioImp<DivisaoImp> edificio = loader.carregarEdificio(jsonPath);
         if (edificio == null) {
             return;
         }
 
-        UnorderedArrayList<Divisao> entradasSaidas = edificio.getEntradasSaidas();
+        UnorderedArrayList<DivisaoImp> entradasSaidas = edificio.getEntradasSaidas();
         if (entradasSaidas == null || entradasSaidas.isEmpty()) {
             System.err.println("Erro: Nenhuma entrada ou saída foi definida no edifício.");
             return;
         }
-        Divisao divisaoInicial = menu.escolherEntrada(entradasSaidas);
+        DivisaoImp divisaoInicial = menu.escolherEntrada(entradasSaidas);
         if (divisaoInicial == null) {
             System.out.println("Nenhuma entrada escolhida. Encerrando o programa.");
             return;
         }
-        HeroImp heroi = new HeroImp(115);
+        HeroImp heroi = new HeroImp(100);
         divisaoInicial.adicionarHeroi(heroi);
 
         String modo = menu.escolherModo();

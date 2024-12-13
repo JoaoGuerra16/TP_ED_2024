@@ -1,20 +1,14 @@
 package tp_ed_2024.Modelos.Personagens.Personagens_Interfaces;
 
-import tp_ed_2024.Modelos.Edificio.Divisao;
-import tp_ed_2024.Modelos.Personagens.InimigoImp;
-
 public interface Personagem {
-    String getNome(); // Obtém o nome do personagem
 
-    void setNome(String nome); // Setar o nome do personagem
+    // Métodos para obter e definir os atributos básicos do personagem
+    String getNome();
 
-    int getVida(); // Obtém a vida do personagem
+    int getVida();
+    void setVida(int vida);
+    int getPoder();
 
-    void setVida(int vida); // Setar a vida do personagem
-
-    int getPoder(); // Obtém os pontos de ataque (poder)
-
-    public void atacar(InimigoImp inimigo) ; // Reduz os pontos de vida
-
-
+    // Método para ataque de um personagem contra outro
+    void atacar(Personagem inimigo);  // Aceita um Personagem, pode ser HeroImp ou InimigoImp
 }

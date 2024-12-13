@@ -6,21 +6,9 @@ import tp_ed_2024.Collections.Exceptions.ElementNotFoundException;
 import tp_ed_2024.Collections.Interfaces.*;
 
 
-
-/**
- * The ArrayUnorderedList class represents an unordered list implemented using an array.
- * It extends ArrayList and implements the UnorderedListADT interface, providing methods
- * to add elements to the front, rear, or after a specific target element in the list.
- *
- * @param <T> the type of elements held in this list
- */
 public class UnorderedArrayList<T> extends AbstractArrayList<T> implements UnorderedListADT<T> {
 
-    /**
-     * Adds a new element to the front of the list.
-     *
-     * @param element the element to be added to the front of the list
-     */
+
     @Override
     public void addToFront(T element) {
         if (rear == list.length) {
@@ -36,11 +24,7 @@ public class UnorderedArrayList<T> extends AbstractArrayList<T> implements Unord
         modCount++;
     }
 
-    /**
-     * Adds a new element to the rear of the list.
-     *
-     * @param element the element to be added to the rear of the list
-     */
+
     @Override
     public void addToRear(T element) {
         if (rear == list.length) {
@@ -52,14 +36,7 @@ public class UnorderedArrayList<T> extends AbstractArrayList<T> implements Unord
         modCount++;
     }
 
-    /**
-     * Adds a new element after a specific target element in the list.
-     * If the target element is not found, an ElementNotFoundException is thrown.
-     *
-     * @param element the element to be added
-     * @param target  the target element after which the new element should be added
-     * @throws ElementNotFoundException if the target element is not found in the list
-     */
+
     @Override
     public void addAfter(T element, T target) throws ElementNotFoundException {
         int targetIndex = -1;
@@ -88,13 +65,6 @@ public class UnorderedArrayList<T> extends AbstractArrayList<T> implements Unord
         modCount++;
     }
 
-    /**
-     * Retrieves the element at a specific index in the list.
-     *
-     * @param index the index of the element to retrieve
-     * @return the element at the specified index
-     * @throws IndexOutOfBoundsException if the index is out of bounds
-     */
     public T getIndex(int index) {
         if (index >= 0 && index < rear) {
             return list[index];

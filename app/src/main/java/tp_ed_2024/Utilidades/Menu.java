@@ -1,7 +1,7 @@
 package tp_ed_2024.Utilidades;
 
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
-import tp_ed_2024.Modelos.Edificio.Divisao;
+import tp_ed_2024.Modelos.Edificio.DivisaoImp;
 
 import java.util.Scanner;
 
@@ -28,7 +28,7 @@ public class Menu {
             System.out.print("Digite o número da sua escolha (1-" + jsonFiles.length + "): ");
             while (!scanner.hasNextInt()) {
                 System.out.print("Por favor, insira um número válido: ");
-                scanner.next(); // Limpar a entrada inválida
+                scanner.next();
             }
             escolha = scanner.nextInt();
         } while (escolha < 1 || escolha > jsonFiles.length);
@@ -42,27 +42,27 @@ public class Menu {
      * @param entradasSaidas the entradas saidas
      * @return the divisao
      */
-    public Divisao escolherEntrada(UnorderedArrayList<Divisao> entradasSaidas) {
+    public DivisaoImp escolherEntrada(UnorderedArrayList<DivisaoImp> entradasSaidas) {
 
         System.out.println("Escolha uma entrada para começar:");
         int index = 1;
-        for (Divisao divisao : entradasSaidas) {
+        for (DivisaoImp divisao : entradasSaidas) {
             System.out.println(index + ". " + divisao.getNome());
             index++;
         }
 
-        int escolha = -1; // Valor inicial para indicar que a escolha é inválida
+        int escolha = -1;
         while (escolha < 1 || escolha > entradasSaidas.size()) {
             System.out.print("Digite o número da missão que deseja simular: ");
 
-            // Verifica se a entrada é um número válido
+
             while (!scanner.hasNextInt()) {
                 System.out.print("Entrada inválida! Por favor, insira um número válido: ");
-                scanner.next(); // Limpa a entrada inválida
+                scanner.next();
             }
 
             escolha = scanner.nextInt();
-            scanner.nextLine(); // Consome a quebra de linha
+            scanner.nextLine();
 
             if (escolha < 1 || escolha > entradasSaidas.size()) {
                 System.err.println(

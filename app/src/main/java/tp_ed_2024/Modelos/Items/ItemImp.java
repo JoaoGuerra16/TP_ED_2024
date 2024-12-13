@@ -1,17 +1,22 @@
 package tp_ed_2024.Modelos.Items;
 
 import tp_ed_2024.Enums.TipoItemEnum;
-import tp_ed_2024.Modelos.Edificio.Divisao;
+
 
 public interface ItemImp {
 
-    TipoItemEnum getTipo(); // Obtém o tipo do item
+    // Retorna o tipo do item (como KIT, COLETE, etc.)
+    TipoItemEnum getTipo();
 
-    void setTipo(TipoItemEnum tipo); // Setar o tipo do item
+    // Define o tipo do item
+    void setTipo(TipoItemEnum tipo);
 
+    // Retorna os pontos associados ao item (ex: pontos de recuperação, poder)
+    int getPontos();
 
-    int getPontos(); // Obtém os pontos de vida do item
+    // Define os pontos do item
+    void setPontos(int pontos);
 
-    void setPontos(int pontos); // Setar os pontos de vida que o item dá
-
+    // Representação do objeto em formato de string
+    String toString();
 }

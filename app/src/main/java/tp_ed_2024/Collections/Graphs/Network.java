@@ -1,11 +1,8 @@
 package tp_ed_2024.Collections.Graphs;
 
-import java.util.Iterator;
-
 import tp_ed_2024.Collections.Interfaces.NetworkADT;
-import tp_ed_2024.Collections.Listas.AbstractArrayList;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
-import tp_ed_2024.Modelos.Edificio.Divisao;
+import tp_ed_2024.Modelos.Edificio.DivisaoImp;
 
 public class Network<T> extends Graph<T> implements NetworkADT<T> {
 
@@ -195,7 +192,7 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
      * @param visited   an array indicating whether each vertex has been visited
      * @return the index of the vertex with the minimum distance
      */
-    private int minDistance(double[] distances, boolean[] visited) {
+    protected int minDistance(double[] distances, boolean[] visited) {
         double min = Double.POSITIVE_INFINITY;
         int minIndex = -1;
 
@@ -229,7 +226,7 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
     public String toString() {
         StringBuilder sb = new StringBuilder("Grafo:\n");
         for (int i = 0; i < numVertices; i++) {
-            Divisao divisao = (Divisao) vertices[i];
+            DivisaoImp divisao = (DivisaoImp) vertices[i];
             sb.append(divisao.getNome()).append(": [");
             for (int j = 0; j < numVertices; j++) {
                 if (adjMatrix[i][j]) {

@@ -77,28 +77,6 @@ public class ArrayBinaryTree<T> implements BinaryTreeADT<T> {
         return element;
     }
 
-    public int findIndex(T targetElement) throws EmptyCollectionException, ElementNotFoundException {
-        if (isEmpty()) {
-            throw new EmptyCollectionException();
-        }
-
-        int index = 0;
-        boolean found = false;
-
-        for (int i = 0; i < size && !found; i++) {
-            if (tree[i].equals(targetElement)) {
-                found = true;
-                index = i;
-            }
-        }
-
-        if (!found) {
-            throw new ElementNotFoundException();
-        }
-
-        return index;
-    }
-
     @Override
     public String toString() {
         String result = getClass().getSimpleName() + " { ";

@@ -10,8 +10,11 @@ public class ConsoleColors {
     public static final String GREEN = "\033[32m";
     public static final String YELLOW = "\033[33m";
     public static final String BLUE = "\033[34m";
+
+
     public static final String GREEN_BRIGHT = "\033[0;92m";
     public static final String YELLOW_BRIGHT = "\033[0;93m"; // YELLOW
+    public static final String YELLOW_BOLD = "\033[1;33m";
     public static final String GREEN_BOLD = "\033[1;32m";  // GREEN
     public static final String PURPLE = "\033[35m";
     public static final String CYAN = "\033[36m";

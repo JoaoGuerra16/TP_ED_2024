@@ -1,8 +1,8 @@
 package tp_ed_2024.Modelos.Personagens;
 
-import tp_ed_2024.Modelos.Edificio.Divisao;
+import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.Personagem;
 
-public class InimigoImp {
+public class InimigoImp implements Personagem {
 
     private String nome;
     private int vida;
@@ -27,13 +27,10 @@ public class InimigoImp {
         this.vida = vida;
     }
 
-
-    // Método para marcar o contra-ataque como realizado
     public void setContraAtaqueRealizado(boolean realizado) {
         this.contraAtaqueRealizado = realizado;
     }
 
-    // Método para verificar se o contra-ataque foi realizado
     public boolean isContraAtaqueRealizado() {
         return this.contraAtaqueRealizado;
     }
@@ -62,7 +59,7 @@ public class InimigoImp {
         this.movimentosRestantes = 2;
     }
 
-    public void atacar(HeroImp hero) {
+    public void atacar(Personagem hero) {
         int dano = this.poder;
         int vidaAntes = hero.getVida();
         int vidaDepois = Math.max(vidaAntes - dano, 0);

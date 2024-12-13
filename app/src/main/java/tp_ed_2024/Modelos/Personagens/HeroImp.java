@@ -4,6 +4,7 @@ import org.checkerframework.checker.units.qual.C;
 import tp_ed_2024.Collections.Stacks.ArrayStack;
 import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Modelos.Items.*;
+import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.Personagem;
 import tp_ed_2024.Modelos.Personagens.Personagens_Interfaces.PersonagemPrincipal;
 import tp_ed_2024.Recursos.ConsoleColors;
 
@@ -14,7 +15,6 @@ public class HeroImp implements PersonagemPrincipal {
     private int vida;
     private int poder;
     private ArrayStack<Item> mochila;
-
     private boolean temAlvo;
 
     public HeroImp(int vida) {
@@ -29,9 +29,6 @@ public class HeroImp implements PersonagemPrincipal {
         return mochila;
     }
 
-    public void setMochila(ArrayStack<Item> mochila) {
-        this.mochila = mochila;
-    }
 
     @Override
     public String getNome() {
@@ -51,7 +48,6 @@ public class HeroImp implements PersonagemPrincipal {
         this.temAlvo = temAlvo;
     }
 
-    // Método para definir a flagAlvo como true
     public void ativarFlagAlvo() {
         this.temAlvo = true;
     }
@@ -72,7 +68,7 @@ public class HeroImp implements PersonagemPrincipal {
     }
 
     @Override
-    public void atacar(InimigoImp inimigo) {
+    public void atacar(Personagem inimigo) {
         int dano = this.poder;
         int vidaAntes = inimigo.getVida();
         int vidaDepois = Math.max(vidaAntes - dano, 0);
@@ -84,39 +80,6 @@ public class HeroImp implements PersonagemPrincipal {
 
 
 
-//
-//    public boolean sairDoEdificio() {
-//        if (divisaoAtual.isEntradaSaida()) {
-//            System.out.println(nome + " saiu do edifício pela divisão: " + divisaoAtual.getNome());
-//
-//            // Verifica se o alvo foi resgatado
-//            if (temAlvo) {
-//                System.out.println("Missão concluída com sucesso! Alvo resgatado.");
-//            } else {
-//                System.out.println("Missão falhada! O alvo não foi resgatado.");
-//            }
-//
-//            return true; // O jogo termina
-//        } else {
-//            System.out.println(nome + " não está numa saída.");
-//            return false;
-//        }
-//    }
-//
-//
-//
-//    // Mostrar os items na mochila
-//    public void mostrarMochila() {
-//        if (mochila.isEmpty()) {
-//            System.out.println("A mochila está vazia.");
-//        } else {
-//            System.out.println(nome + " tem os seguintes itens na mochila:");
-//            for (int i = 0; i < mochila.size(); i++) {
-//                System.out.println("- " + mochila.peek()); // Exibe o topo sem remover
-//            }
-//        }
-//    }
-//
     public void usarMedikit() {
 
         if (mochila.isEmpty()) {
@@ -128,12 +91,11 @@ public class HeroImp implements PersonagemPrincipal {
             return;
         }
 
-        // Recuperar o medikit do topo
         Item medikit = mochila.pop();
         if (medikit.getTipo() == TipoItemEnum.KIT) {
             int pontosRecuperados = medikit.getPontos();
             int vidaAntes = vida;
-            vida = Math.min(vida + pontosRecuperados, 100); // Vida máxima de 100
+            vida = Math.min(vida + pontosRecuperados, 100);
 
             System.out.println(nome + " usou um medikit e recuperou " + (vida - vidaAntes) + " pontos de vida.");
             System.out.println("Vida atual: " + vida);
@@ -145,7 +107,7 @@ public class HeroImp implements PersonagemPrincipal {
     public void aplicarColete(Item colete) {
         if (colete.getTipo() == TipoItemEnum.COLETE) {
             int pontosExtra = colete.getPontos();
-            vida += pontosExtra; // Sem limite de 100 para coletes
+            vida += pontosExtra;
 
             System.out.println(nome + " usou um colete e ganhou " + pontosExtra + " pontos extras de "+ConsoleColors.GREEN_BRIGHT+  "vida." + ConsoleColors.RESET);
             System.out.println(ConsoleColors.GREEN_BRIGHT + "Vida atual: " +ConsoleColors.RESET+ vida);
@@ -154,17 +116,6 @@ public class HeroImp implements PersonagemPrincipal {
         }
     }
 
-    public void aumentarVida(ItemImp item, int pontos) {
-        if (!mochila.isEmpty()) {
-            mochila.pop();
-            int pontosCura = item.getPontos();
-            vida = Math.min(vida + pontosCura, 100);
-            System.out.println(nome + " usou um kit de recuperação e agora tem " + vida
-                    + " pontos de vida. É bom que ganhes depois de teres usado um kit");
-        } else {
-            System.out.println(nome
-                    + " não tem kits de recuperação na mochila! Não precisas deles de qualquer maneira, vai-te a eles!!!");
-        }
-    }
+
 
 }

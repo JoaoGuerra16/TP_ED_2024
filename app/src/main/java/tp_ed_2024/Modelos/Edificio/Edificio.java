@@ -1,19 +1,36 @@
 package tp_ed_2024.Modelos.Edificio;
+import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 
+import java.util.Iterator;
 
 public interface Edificio {
 
-    // Adiciona uma divisão ao edifício
-    void adicionarDivisao(Divisao divisao);
+
+    void adicionarDivisao(DivisaoImp divisao);
 
 
-    // Obtém uma divisão por nome
-    Divisao obterDivisaoPorNome(String nome);
+    DivisaoImp obterDivisaoPorNome(String nome);
 
-    // Exibe todas as divisões
-    void exibirDivisoes();
 
     void adicionarLigacao(String origem, String destino);
 
 
+    boolean verificarLigacao(DivisaoImp divisao1, DivisaoImp divisao2);
+
+
+    void exibirDivisoes();
+
+
+    UnorderedArrayList<DivisaoImp> obterDivisoes();
+
+
+    UnorderedArrayList<DivisaoImp> getEntradasSaidas();
+
+
+    void resetPeso(EdificioImp<DivisaoImp> edificio, DivisaoImp divisaoAtual);
+
+
+    Iterator<Integer> findShortestPath(int startVertex, int endVertex);
+
+    String toString();
 }

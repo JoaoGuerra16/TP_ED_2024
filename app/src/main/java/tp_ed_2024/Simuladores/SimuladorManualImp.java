@@ -3,12 +3,14 @@ package tp_ed_2024.Simuladores;
 import tp_ed_2024.Enums.TipoItemEnum;
 import tp_ed_2024.Modelos.Edificio.EdificioImp;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
-import tp_ed_2024.Modelos.Edificio.Divisao;
+import tp_ed_2024.Modelos.Edificio.DivisaoImp;
 import tp_ed_2024.Modelos.Items.Item;
 import tp_ed_2024.Modelos.Personagens.HeroImp;
 import tp_ed_2024.Modelos.Personagens.InimigoImp;
 import tp_ed_2024.Recursos.ConsoleColors;
 import tp_ed_2024.Algoritmos.Paths;
+
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -17,7 +19,7 @@ import java.util.Scanner;
  */
 public class SimuladorManualImp {
 
-    private EdificioImp<Divisao> edificio;
+    private EdificioImp<DivisaoImp> edificio;
     private HeroImp hero;
     private boolean emJogo;
     Scanner scanner = new Scanner(System.in);
@@ -32,7 +34,7 @@ public class SimuladorManualImp {
      * @param edificio the edificio
      * @param hero     the hero
      */
-    public SimuladorManualImp(EdificioImp<Divisao> edificio, HeroImp hero) {
+    public SimuladorManualImp(EdificioImp<DivisaoImp> edificio, HeroImp hero) {
         this.edificio = edificio;
         this.hero = hero;
         this.emJogo = true;
@@ -43,7 +45,7 @@ public class SimuladorManualImp {
      */
     public void iniciarSimulacao() {
         System.out.println(ConsoleColors.BLUE + "Bem-vindo ao Simulador XPTO de missões!" + ConsoleColors.RESET);
-        System.out.println(edificio);
+        mostrarMapa();
         resolverEventosNaDivisao();
         exibirEstadoAtual();
 
@@ -51,9 +53,9 @@ public class SimuladorManualImp {
         while (emJogo) {
 
 
-            Divisao divisaoAtual = encontrarDivisaoDoHeroi();
+            DivisaoImp divisaoAtual = encontrarDivisaoDoHeroi();
 
-            // Chamar o método para exibir os pesos das conexões da divisão atual
+
             printPesosVizinhos(edificio, divisaoAtual);
 
             System.out.println(ConsoleColors.BLUE +"Escolha uma ação:" + ConsoleColors.RESET);
@@ -68,25 +70,25 @@ public class SimuladorManualImp {
             switch (escolha) {
                 case 1:
                     moverHero();
-                    for (Divisao divisao : edificio.obterDivisoes()) {
+                    for (DivisaoImp divisao : edificio.obterDivisoes()) {
                         for (InimigoImp inimigo : divisao.getInimigos()) {
-                            inimigo.resetarMovimentos(); // Reset os movimentos permitidos para a nova ronda
+                            inimigo.resetarMovimentos();
                         }
                     }
-                    System.out.println(edificio);
+                    mostrarMapa();
                     break;
                 case 2:
                     hero.usarMedikit();
-                    for (Divisao divisao : edificio.obterDivisoes()) {
+                    for (DivisaoImp divisao : edificio.obterDivisoes()) {
                         for (InimigoImp inimigo : divisao.getInimigos()) {
-                            inimigo.resetarMovimentos(); // Reset os movimentos permitidos para a nova ronda
+                            inimigo.resetarMovimentos();
 
                         }
 
                     }
                     moverInimigosForaDaSala(divisaoAtual);
                     resolverCombate();
-                    System.out.println(edificio);
+                    mostrarMapa();
                     break;
                 case 3:
                     finalizarSimulacao();
@@ -101,18 +103,18 @@ public class SimuladorManualImp {
         System.out.println("Simulação encerrada.");
     }
 
-    // Dentro do método moverHero
-    private void moverHero() {
-        Divisao novaDivisao = null;
 
-        // Obtenha a divisão atual do herói diretamente da estrutura do edifício
-        Divisao divisaoAtual = encontrarDivisaoDoHeroi();
+    private void moverHero() {
+        DivisaoImp novaDivisao = null;
+
+
+        DivisaoImp divisaoAtual = encontrarDivisaoDoHeroi();
 
         while (novaDivisao == null) {
             System.out.println(ConsoleColors.BLUE + "Digite o nome da divisão para onde deseja mover-se:" + ConsoleColors.RESET);
             String nomeDivisao = scanner.nextLine();
 
-            // Obter a nova divisão pelo nome
+
             novaDivisao = edificio.obterDivisaoPorNome(nomeDivisao);
 
             if (novaDivisao == null) {
@@ -123,11 +125,11 @@ public class SimuladorManualImp {
             }
         }
 
-        // Remover o herói da divisão atual
-        divisaoAtual.removerHeroi(); // Método para remover o herói da divisão atual
 
-        // Mover o herói para a nova divisão
-        novaDivisao.adicionarHeroi(hero); // Método para adicionar o herói à nova divisão
+        divisaoAtual.removerHeroi();
+
+
+        novaDivisao.adicionarHeroi(hero);
         System.out.println("O"+ ConsoleColors.YELLOW_BRIGHT+" Herói "+ConsoleColors.RESET+ "foi movido para a divisão: " + novaDivisao.getNome());
 
 
@@ -137,25 +139,25 @@ public class SimuladorManualImp {
         }
         edificio.resetPeso(edificio, novaDivisao);
 
-        // Resolver eventos na nova divisão
+
         resolverEventosNaDivisao();
         exibirEstadoAtual();
     }
 
-    private void moverInimigosForaDaSala(Divisao salaAtual) {
+    private void moverInimigosForaDaSala(DivisaoImp salaAtual) {
 
 
-        EdificioImp<Divisao> mapa = edificio;
-        UnorderedArrayList<Divisao> todasDivisoes = edificio.obterDivisoes();
+        EdificioImp<DivisaoImp> mapa = edificio;
+        UnorderedArrayList<DivisaoImp> todasDivisoes = edificio.obterDivisoes();
 
-        for (Divisao divisao : todasDivisoes) {
+        for (DivisaoImp divisao : todasDivisoes) {
             if (divisao != salaAtual && !divisao.getInimigos().isEmpty()) {
                 UnorderedArrayList<InimigoImp> inimigosNaDivisao = divisao.getInimigos();
                 for (int i = 0; i < inimigosNaDivisao.size(); i++) {
                     InimigoImp inimigo = inimigosNaDivisao.getIndex(i);
 
                     if (inimigo.getMovimentosRestantes() > 0) {
-                        // Só mova se o inimigo ainda não tiver encontrado o herói e realizado um contra-ataque
+
                         if (!inimigo.isContraAtaqueRealizado()) {
                             moverInimigosAleatoriamente(mapa, inimigo);
                             inimigo.decrementarMovimentosRestantes();
@@ -167,13 +169,13 @@ public class SimuladorManualImp {
             }
         }
     }
-    private void moverInimigosAleatoriamente(EdificioImp<Divisao> mapa, InimigoImp inimigo) {
-        Divisao divisaoAtual = encontrarDivisaoDoInimigo(mapa, inimigo);
-        UnorderedArrayList<Divisao> vizinhos = mapa.getVizinhos(divisaoAtual);
+    private void moverInimigosAleatoriamente(EdificioImp<DivisaoImp> mapa, InimigoImp inimigo) {
+        DivisaoImp divisaoAtual = encontrarDivisaoDoInimigo(mapa, inimigo);
+        UnorderedArrayList<DivisaoImp> vizinhos = mapa.getVizinhos(divisaoAtual);
 
         if (vizinhos.size() > 0) {
             Random random = new Random();
-            Divisao novoDestino = vizinhos.getIndex(random.nextInt(vizinhos.size()));
+            DivisaoImp novoDestino = vizinhos.getIndex(random.nextInt(vizinhos.size()));
 
             divisaoAtual.removerInimigo(inimigo);
             novoDestino.adicionarInimigo(inimigo);
@@ -181,22 +183,22 @@ public class SimuladorManualImp {
 
             System.out.println(ConsoleColors.RED + inimigo.getNome()+ConsoleColors.RESET + " moveu-se para a divisão: " + divisaoAtual.getNome());
 
-            // Verifica se o inimigo entrou na divisão do herói
-            Divisao divisaoDoHeroi = encontrarDivisaoDoHeroi();
+
+            DivisaoImp divisaoDoHeroi = encontrarDivisaoDoHeroi();
             if (novoDestino == divisaoDoHeroi) {
                 System.out.println(ConsoleColors.RED +inimigo.getNome()+ConsoleColors.RESET + " encontrou o herói! Ataque imediato!");
                 inimigo.atacar(hero);
 
-                // Marcar que o contra-ataque foi realizado para não continuar com os movimentos
-                inimigo.setContraAtaqueRealizado(true); // Bloquear movimentos subsequentes
-                return; // Interrompe o movimento após o contra-ataque
+
+                inimigo.setContraAtaqueRealizado(true);
+                return;
             }
 
-            // Se o inimigo ainda pode se mover e decide fazer um segundo movimento
+
             if (inimigo.getMovimentosRestantes() > 1 && random.nextBoolean()) {
-                UnorderedArrayList<Divisao> vizinhosDoNovoDestino = mapa.getVizinhos(divisaoAtual);
+                UnorderedArrayList<DivisaoImp> vizinhosDoNovoDestino = mapa.getVizinhos(divisaoAtual);
                 if (!vizinhosDoNovoDestino.isEmpty()) {
-                    Divisao destinoFinal = vizinhosDoNovoDestino.getIndex(random.nextInt(vizinhosDoNovoDestino.size()));
+                    DivisaoImp destinoFinal = vizinhosDoNovoDestino.getIndex(random.nextInt(vizinhosDoNovoDestino.size()));
 
                     divisaoAtual.removerInimigo(inimigo);
                     destinoFinal.adicionarInimigo(inimigo);
@@ -204,16 +206,16 @@ public class SimuladorManualImp {
 
                     System.out.println(ConsoleColors.RED +inimigo.getNome()+ConsoleColors.RESET + " moveu-se novamente para a divisão: " + divisaoAtual.getNome());
 
-                    // Verifica novamente se o inimigo encontrou o herói após o segundo movimento
+
                     if (destinoFinal == divisaoDoHeroi) {
                         System.out.println(ConsoleColors.RED +inimigo.getNome()+ConsoleColors.RESET + " encontrou o herói novamente! Ataque imediato!");
                         inimigo.atacar(hero);
 
-                        // Marcar que o contra-ataque foi realizado para não continuar com os movimentos
-                        inimigo.setContraAtaqueRealizado(true); // Bloquear movimentos subsequentes
+
+                        inimigo.setContraAtaqueRealizado(true);
                     }
 
-                    inimigo.decrementarMovimentosRestantes(); // Decrementa o contador de movimentações
+                    inimigo.decrementarMovimentosRestantes();
                 }
             }
         } else {
@@ -223,30 +225,30 @@ public class SimuladorManualImp {
 
 
 
-    private Divisao encontrarDivisaoDoInimigo(EdificioImp<Divisao> mapa, InimigoImp inimigo) {
-        for (Divisao divisao : mapa.obterDivisoes()) {
+    private DivisaoImp encontrarDivisaoDoInimigo(EdificioImp<DivisaoImp> mapa, InimigoImp inimigo) {
+        for (DivisaoImp divisao : mapa.obterDivisoes()) {
             if (divisao.getInimigos().contains(inimigo)) {
-                return divisao; // Retorna a divisão onde o inimigo está
+                return divisao;
             }
         }
-        return null; // Caso o inimigo não seja encontrado em nenhuma divisão
+        return null;
     }
 
     private void resolverEventosNaDivisao() {
-        Divisao divisaoAtual = encontrarDivisaoDoHeroi();
+        DivisaoImp divisaoAtual = encontrarDivisaoDoHeroi();
 
-        // Primeiro verifica itens
+
         if (!divisaoAtual.getItens().isEmpty()) {
             System.out.println(ConsoleColors.GREEN_BRIGHT + "Encontraste itens na divisão!"+ ConsoleColors.RESET);
             pegarItemNaDivisao();
         }
 
-        // Depois verifica inimigos
+
         if (!divisaoAtual.getInimigos().isEmpty()) {
             resolverCombate();
         }
 
-        // Finalmente verifica o alvo (apenas se não houver inimigos)
+
         if (divisaoAtual.getInimigos().isEmpty() && divisaoAtual.getAlvo() != null) {
             System.out.println("Encontras-te o alvo na divisão!");
             hero.ativarFlagAlvo();
@@ -255,15 +257,15 @@ public class SimuladorManualImp {
     }
 
     private void resolverCombate() {
-        Divisao divisaoAtual = encontrarDivisaoDoHeroi();
+        DivisaoImp divisaoAtual = encontrarDivisaoDoHeroi();
         UnorderedArrayList<InimigoImp> inimigosNaSala = divisaoAtual.getInimigos();
-        EdificioImp<Divisao> mapa = edificio;
+        EdificioImp<DivisaoImp> mapa = edificio;
 
         System.out.println(ConsoleColors.RED +"Inimigos na sala! Combate iniciado." + ConsoleColors.RESET);
         Scanner scanner = new Scanner(System.in);
 
-        // Reset dos movimentos de todos os inimigos no início do combate
-        for (Divisao divisao : edificio.obterDivisoes()) {
+
+        for (DivisaoImp divisao : edificio.obterDivisoes()) {
             for (InimigoImp inimigo : divisao.getInimigos()) {
                 inimigo.resetarMovimentos();
             }
@@ -278,14 +280,15 @@ public class SimuladorManualImp {
             scanner.nextLine();
 
             if (escolha == 1) {
-                // Fase do jogador: Tó ataca todos os inimigos na sala.
+
                 for (InimigoImp inimigo : inimigosNaSala) {
                     hero.atacar(inimigo);
                 }
 
-                // Remover inimigos eliminados após o ataque do jogador.
+
                 for (int i = 0; i < inimigosNaSala.size(); i++) {
                     InimigoImp inimigo = inimigosNaSala.getIndex(i);
+
                     if (inimigo.getVida() <= 0) {
                         divisaoAtual.removerInimigo(inimigo);
 
@@ -298,18 +301,18 @@ public class SimuladorManualImp {
 
 
 
-                // Se ainda houver inimigos, ocorre a fase de contra-ataque.
+
                 if (!inimigosNaSala.isEmpty()) {
                     System.out.println("Os inimigos restantes contra-atacam!");
 
 
-                    for (Divisao divisao : edificio.obterDivisoes()) {
+                    for (DivisaoImp divisao : edificio.obterDivisoes()) {
                         for (InimigoImp inimigo : divisao.getInimigos()) {
                             inimigo.resetarMovimentos();
                         }
                     }
 
-                    // Inimigos contra-atacam após o uso do medikit
+
                     for (InimigoImp inimigo : inimigosNaSala) {
                         inimigo.atacar(hero);
                     }
@@ -322,17 +325,17 @@ public class SimuladorManualImp {
 
 
             } else if (escolha == 2) {
-                // Usar kit de vida
+
                 hero.usarMedikit();
 
-                // Reset movimentos após usar o medikit
-                for (Divisao divisao : edificio.obterDivisoes()) {
+
+                for (DivisaoImp divisao : edificio.obterDivisoes()) {
                     for (InimigoImp inimigo : divisao.getInimigos()) {
                         inimigo.resetarMovimentos();
                     }
                 }
 
-                // Inimigos contra-atacam após o uso do medikit
+
                 for (InimigoImp inimigo : inimigosNaSala) {
                     inimigo.atacar(hero);
                 }
@@ -342,7 +345,7 @@ public class SimuladorManualImp {
 
             }
 
-            exibirEstadoAtual();
+
 
             verificarFimDeJogo();
         }
@@ -363,9 +366,9 @@ public class SimuladorManualImp {
      *
      * @return the divisao
      */
-    private Divisao encontrarDivisaoDoHeroi() {
-        for (Divisao divisao : edificio.obterDivisoes()) {
-            if (divisao.temHeroi()) { // Método que verifica se a divisão tem o herói
+    private DivisaoImp encontrarDivisaoDoHeroi() {
+        for (DivisaoImp divisao : edificio.obterDivisoes()) {
+            if (divisao.temHeroi()) {
                 return divisao;
             }
         }
@@ -378,9 +381,9 @@ public class SimuladorManualImp {
      *
      * @return the divisao
      */
-    private Divisao encontrarDivisaoDoAlvo(){
-        for (Divisao divisao : edificio.obterDivisoes()) {
-            if (divisao.isFlagAlvo()) { // Método que verifica se a divisão tem o alvo
+    private DivisaoImp encontrarDivisaoDoAlvo(){
+        for (DivisaoImp divisao : edificio.obterDivisoes()) {
+            if (divisao.isFlagAlvo()) {
                 return divisao;
             }
         }
@@ -396,8 +399,8 @@ public class SimuladorManualImp {
 
 
 
-        Divisao divisaoAtual = encontrarDivisaoDoHeroi();
-        Divisao alvoDivisao = encontrarDivisaoDoAlvo();
+        DivisaoImp divisaoAtual = encontrarDivisaoDoHeroi();
+        DivisaoImp alvoDivisao = encontrarDivisaoDoAlvo();
 
 
         System.out.println("================Estado atual===================");
@@ -419,12 +422,12 @@ public class SimuladorManualImp {
      * Pegar item na divisao.
      */
     private void pegarItemNaDivisao() {
-        Divisao divisaoAtual = encontrarDivisaoDoHeroi(); // Obter a divisão atual
+        DivisaoImp divisaoAtual = encontrarDivisaoDoHeroi();
         if (divisaoAtual != null && divisaoAtual.getItens().size() > 0) {
-            Item item = divisaoAtual.getItens().removeLast(); // Retira o item da divisão
+            Item item = divisaoAtual.getItens().removeLast();
 
             if (item.getTipo() == TipoItemEnum.KIT) {
-                // Guardar medikits na mochila
+
                 if (hero.getMochila().size() < 5) {
                     hero.getMochila().push(item);
                     System.out.println(
@@ -434,7 +437,7 @@ public class SimuladorManualImp {
                             "A mochila está cheia! Não consegues carregar mais kits, na próxima traz uma mochila maior!");
                 }
             } else if (item.getTipo() == TipoItemEnum.COLETE) {
-                // Usar coletes imediatamente
+
                 hero.aplicarColete(item);
             }
         } else {
@@ -453,7 +456,7 @@ public class SimuladorManualImp {
     }
 
     private void finalizarSimulacao() {
-        Divisao divisaoAtual = encontrarDivisaoDoHeroi();
+        DivisaoImp divisaoAtual = encontrarDivisaoDoHeroi();
         if(hero.isTemAlvo() && divisaoAtual.isEntradaSaida()){
             System.out.println("Parabéns cumpriste a tua missão! GOAT");
             emJogo = false;
@@ -474,7 +477,7 @@ public class SimuladorManualImp {
      * @param mapa         the mapa
      * @param divisaoAtual the divisao atual
      */
-    private void printPesosVizinhos(EdificioImp<Divisao> mapa, Divisao divisaoAtual) {
+    private void printPesosVizinhos(EdificioImp<DivisaoImp> mapa, DivisaoImp divisaoAtual) {
         if (divisaoAtual == null) {
             System.out.println("A divisão atual não pode ser nula.");
             return;
@@ -482,7 +485,7 @@ public class SimuladorManualImp {
 
         System.out.println("Pesos das conexões da divisão " + divisaoAtual.getNome() + " com os vizinhos:");
 
-        UnorderedArrayList<Divisao> vizinhos = mapa.getVizinhos(divisaoAtual);
+        UnorderedArrayList<DivisaoImp> vizinhos = mapa.getVizinhos(divisaoAtual);
 
         if (vizinhos.isEmpty()) {
             System.out.println("A divisão " + divisaoAtual.getNome() + " não possui vizinhos.");
@@ -490,7 +493,7 @@ public class SimuladorManualImp {
         }
 
         for (int i = 0; i < vizinhos.size(); i++) {
-            Divisao vizinho = vizinhos.getIndex(i);
+            DivisaoImp vizinho = vizinhos.getIndex(i);
             double peso = mapa.getWeight(divisaoAtual, vizinho);
             if (peso <= 0) {
                 System.out.println("  -> Conexão inválida ou peso zero entre " + divisaoAtual.getNome() + " e "
@@ -501,5 +504,62 @@ public class SimuladorManualImp {
         }
     }
 
+
+    public void mostrarMapa() {
+
+
+        System.out.println(ConsoleColors.YELLOW_BOLD +"==============  Mapa  ==============" + ConsoleColors.RESET);
+        Iterator<DivisaoImp> divisoes = edificio.obterDivisoes().iterator();
+
+        while (divisoes.hasNext()) {
+            DivisaoImp divisao = divisoes.next();
+
+            System.out.println(ConsoleColors.GREEN_BOLD + divisao.getNome() + ":" + ConsoleColors.RESET);
+
+            Iterator<DivisaoImp> adjacentes = edificio.getVizinhos(divisao).iterator();
+
+            while (adjacentes.hasNext()) {
+                DivisaoImp divisaoAdjacente = adjacentes.next();
+                System.out.print(ConsoleColors.BLUE+"    - " + divisaoAdjacente.getNome() + ConsoleColors.RESET);
+
+                boolean hasInfo = false;
+
+                if (divisaoAdjacente.temHeroi()) {
+                    System.out.print(ConsoleColors.PURPLE+" (Player aqui)" + ConsoleColors.RESET);
+                    hasInfo = true;
+                }
+
+                if (!divisaoAdjacente.getInimigos().isEmpty()) {
+                    System.out.print(ConsoleColors.RED+" (" + divisaoAdjacente.getInimigos().size()+ " Inimigos)" + ConsoleColors.RESET);
+                    hasInfo = true;
+                }
+
+                if (divisaoAdjacente.getAlvo() != null) {
+                    System.out.print(ConsoleColors.CYAN+" (Alvo aqui)" + ConsoleColors.RESET);
+                    hasInfo = true;
+                }
+
+                if (!divisaoAdjacente.getItens().isEmpty()) {
+                    for(Item item : divisaoAdjacente.getItens()){
+                        if(item.getTipo() == TipoItemEnum.KIT){
+                            System.out.print(ConsoleColors.GREEN+" (KIT)" + ConsoleColors.RESET);
+                        }else   if(item.getTipo() == TipoItemEnum.COLETE){
+                            System.out.print(ConsoleColors.GREEN+" (COLETE)" + ConsoleColors.RESET);
+                        }
+
+                    }
+                    hasInfo = true;
+                }
+
+
+                if (!hasInfo) {
+                    System.out.print(ConsoleColors.YELLOW+" (Vazia)"+ ConsoleColors.RESET);
+                }
+
+                System.out.println();
+            }
+        }
+        System.out.println(ConsoleColors.YELLOW_BOLD+"===================================="+ ConsoleColors.RESET);
+    }
 
 }
