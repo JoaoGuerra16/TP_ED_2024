@@ -14,17 +14,18 @@
     ["Escritorio", "Escada 4"]
   ],
   "inimigos": [
-    {"nome": "Jose", "poder": 3, "divisao": "Heliporto"},
-    {"nome": "Joao", "poder": 3, "divisao": "teste2"},
-    {"nome": "Antonio", "poder": 6, "divisao": "Escritorio"},
-    {"nome": "Pedro", "poder": 3, "divisao": "Escada 4"}
+    {"nome": "Jose", "poder": 110, "divisao": "Heliporto"},
+    {"nome": "Joao", "poder": 130, "divisao": "teste2"},
+    {"nome": "Antonio", "poder": 120, "divisao": "Escritorio"},
+    {"nome": "Pedro", "poder": 130, "divisao": "Escada 4"}
   ],
   "entradas-saidas": ["Escada 5", "Heliporto", "teste", "teste2"],
   "alvo": {"divisao": "Camaratas", "tipo": "quimico"},
   "itens": [
     {"divisao": "Heliporto", "pontos-extra": 20, "tipo": "colete"},
-    {"divisao": "Escada 4", "pontos-recuperados": 15, "tipo": "kit de vida"},
-    {"divisao": "teste", "pontos-recuperados": 15, "tipo": "kit de vida"},
+    {"divisao": "teste2", "pontos-recuperados": 15, "tipo": "kit de vida"},
+    {"divisao": "teste3", "pontos-recuperados": 15, "tipo": "kit de vida"},
+    {"divisao": "Escada 4", "pontos-extra": 20, "tipo": "colete"},
     {"divisao": "Escada 5", "pontos-extra": 25, "tipo": "colete"}
   ]
 }

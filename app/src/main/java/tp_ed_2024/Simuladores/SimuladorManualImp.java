@@ -54,7 +54,7 @@ public class SimuladorManualImp {
 
 
             DivisaoImp divisaoAtual = encontrarDivisaoDoHeroi();
-
+            exibirEstadoAtual();
 
             printPesosVizinhos(edificio, divisaoAtual);
 
@@ -141,7 +141,7 @@ public class SimuladorManualImp {
 
 
         resolverEventosNaDivisao();
-        exibirEstadoAtual();
+
     }
 
     private void moverInimigosForaDaSala(DivisaoImp salaAtual) {
@@ -257,6 +257,7 @@ public class SimuladorManualImp {
     }
 
     private void resolverCombate() {
+
         DivisaoImp divisaoAtual = encontrarDivisaoDoHeroi();
         UnorderedArrayList<InimigoImp> inimigosNaSala = divisaoAtual.getInimigos();
         EdificioImp<DivisaoImp> mapa = edificio;
@@ -297,6 +298,7 @@ public class SimuladorManualImp {
 
                     }
                     edificio.resetPeso(mapa, divisaoAtual);
+
                 }
 
 
@@ -344,7 +346,6 @@ public class SimuladorManualImp {
 
 
             }
-
 
 
             verificarFimDeJogo();

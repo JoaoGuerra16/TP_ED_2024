@@ -14,10 +14,10 @@
     ["Escritorio", "Escada 4"]
   ],
   "inimigos": [
-    {"nome": "Jose", "poder": 30, "divisao": "Heliporto"},
-    {"nome": "Joao", "poder": 30, "divisao": "teste2"},
-    {"nome": "Antonio", "poder": 20, "divisao": "Escritorio"},
-    {"nome": "Pedro", "poder": 30, "divisao": "Escada 4"}
+    {"nome": "Jose", "poder": 110, "divisao": "Heliporto"},
+    {"nome": "Joao", "poder": 130, "divisao": "teste2"},
+    {"nome": "Antonio", "poder": 120, "divisao": "Escritorio"},
+    {"nome": "Pedro", "poder": 130, "divisao": "Escada 4"}
   ],
   "entradas-saidas": ["Escada 5", "Heliporto", "teste", "teste2"],
   "alvo": {"divisao": "Camaratas", "tipo": "quimico"},

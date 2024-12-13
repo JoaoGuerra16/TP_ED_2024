@@ -42,7 +42,7 @@ public class SimuladorAutomaticoImp {
      */
     public void iniciarSimulacao() {
         System.out.println(ConsoleColors.BLUE + "Bem-vindo ao Simulador XPTO de missões!" + ConsoleColors.RESET);
-        System.out.println(edificio);
+        mostrarMapa();
         resolverEventosNaDivisao();
 
 
@@ -57,7 +57,7 @@ public class SimuladorAutomaticoImp {
 
 
     private void moverHero() {
-
+        exibirEstadoAtual();
         if(hero.getVida() < 50){
             hero.usarMedikit();
         }
@@ -502,6 +502,61 @@ public class SimuladorAutomaticoImp {
             System.out.println("Não é uma saída");
         }
     }
+    public void mostrarMapa() {
 
+
+        System.out.println(ConsoleColors.YELLOW_BOLD +"==============  Mapa  ==============" + ConsoleColors.RESET);
+        Iterator<DivisaoImp> divisoes = edificio.obterDivisoes().iterator();
+
+        while (divisoes.hasNext()) {
+            DivisaoImp divisao = divisoes.next();
+
+            System.out.println(ConsoleColors.GREEN_BOLD + divisao.getNome() + ":" + ConsoleColors.RESET);
+
+            Iterator<DivisaoImp> adjacentes = edificio.getVizinhos(divisao).iterator();
+
+            while (adjacentes.hasNext()) {
+                DivisaoImp divisaoAdjacente = adjacentes.next();
+                System.out.print(ConsoleColors.BLUE+"    - " + divisaoAdjacente.getNome() + ConsoleColors.RESET);
+
+                boolean hasInfo = false;
+
+                if (divisaoAdjacente.temHeroi()) {
+                    System.out.print(ConsoleColors.PURPLE+" (Player aqui)" + ConsoleColors.RESET);
+                    hasInfo = true;
+                }
+
+                if (!divisaoAdjacente.getInimigos().isEmpty()) {
+                    System.out.print(ConsoleColors.RED+" (" + divisaoAdjacente.getInimigos().size()+ " Inimigos)" + ConsoleColors.RESET);
+                    hasInfo = true;
+                }
+
+                if (divisaoAdjacente.getAlvo() != null) {
+                    System.out.print(ConsoleColors.CYAN+" (Alvo aqui)" + ConsoleColors.RESET);
+                    hasInfo = true;
+                }
+
+                if (!divisaoAdjacente.getItens().isEmpty()) {
+                    for(Item item : divisaoAdjacente.getItens()){
+                        if(item.getTipo() == TipoItemEnum.KIT){
+                            System.out.print(ConsoleColors.GREEN+" (KIT)" + ConsoleColors.RESET);
+                        }else   if(item.getTipo() == TipoItemEnum.COLETE){
+                            System.out.print(ConsoleColors.GREEN+" (COLETE)" + ConsoleColors.RESET);
+                        }
+
+                    }
+                    hasInfo = true;
+                }
+
+
+                if (!hasInfo) {
+                    System.out.print(ConsoleColors.YELLOW+" (Vazia)"+ ConsoleColors.RESET);
+                }
+
+                System.out.println();
+            }
+        }
+        System.out.println(ConsoleColors.YELLOW_BOLD+"===================================="+ ConsoleColors.RESET);
+    }
 
 }
