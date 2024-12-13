@@ -1,9 +1,13 @@
 package tp_ed_2024.Modelos.Edificio;
 
 import tp_ed_2024.Collections.Graphs.Network;
+import tp_ed_2024.Collections.Listas.AbstractArrayList;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Modelos.Personagens.InimigoImp;
 import tp_ed_2024.Recursos.ConsoleColors;
+
+import java.util.Iterator;
+
 public class EdificioImp<T> extends Network<Divisao> implements Edificio {
 
     public EdificioImp(boolean isBidirectional) {
@@ -67,19 +71,6 @@ public class EdificioImp<T> extends Network<Divisao> implements Edificio {
         }
     }
 
-    public void exibirLigacoes() {
-        for (int i = 0; i < size(); i++) {
-            Divisao divisao = getVertex(i);
-            System.out.println("Divisão: " + divisao.getNome() + " está conectada com:");
-
-            UnorderedArrayList<Divisao> vizinhos = getVizinhos(divisao);
-            for (int j = 0; j < vizinhos.size(); j++) {
-                Divisao vizinho = vizinhos.getIndex(j);
-                double peso = getWeight(divisao, vizinho);
-                System.out.println("  -> " + vizinho.getNome() + " (Peso: " + peso + ")");
-            }
-        }
-    }
 
     public UnorderedArrayList<Divisao> getEntradasSaidas() {
         UnorderedArrayList<Divisao> entradasSaidas = new UnorderedArrayList<>();
@@ -94,38 +85,6 @@ public class EdificioImp<T> extends Network<Divisao> implements Edificio {
         return entradasSaidas;
     }
 
-    public double[][] obterMatrizAdjacente() {
-        int tamanho = size(); // Número de divisões
-        double[][] matrizAdjacente = new double[tamanho][tamanho];
-
-        // Inicializar a matriz com valores padrão (ausência de conexão)
-        for (int i = 0; i < tamanho; i++) {
-            for (int j = 0; j < tamanho; j++) {
-                if (i == j) {
-                    matrizAdjacente[i][j] = 0; // Distância para si mesmo é 0
-                } else {
-                    matrizAdjacente[i][j] = Double.POSITIVE_INFINITY; // Sem conexão
-                }
-            }
-        }
-
-        // Preencher a matriz com os pesos das conexões
-        for (int i = 0; i < tamanho; i++) {
-            Divisao divisaoOrigem = getVertex(i);
-            UnorderedArrayList<Divisao> vizinhos = getVizinhos(divisaoOrigem);
-
-            for (int j = 0; j < vizinhos.size(); j++) {
-                Divisao divisaoDestino = vizinhos.getIndex(j);
-                int indiceDestino = getIndex(divisaoDestino);
-
-                if (indiceDestino != -1) { // Verificar se o índice do destino é válido
-                    matrizAdjacente[i][indiceDestino] = getWeight(divisaoOrigem, divisaoDestino);
-                }
-            }
-        }
-
-        return matrizAdjacente;
-    }
 
     public void resetPeso(EdificioImp<Divisao> edificio, Divisao divisaoAtual) {
         // Obter vizinhos da divisão atual
@@ -203,5 +162,62 @@ public class EdificioImp<T> extends Network<Divisao> implements Edificio {
         }
         return sb.toString();
     }
+
+
+    public Iterator<Integer> findShortestPath(int startVertex, int endVertex, Iterable<Integer> locationsToAvoid) {
+        int numVertices = size();
+        double[] distances = new double[numVertices];
+        boolean[] visited = new boolean[numVertices];
+        int[] previous = new int[numVertices];
+
+        for (int i = 0; i < numVertices; i++) {
+            distances[i] = Double.MAX_VALUE;
+            visited[i] = false;
+            previous[i] = -1;
+        }
+
+        distances[startVertex] = 0;
+
+        for (int i = 0; i < numVertices; i++) {
+            int closestVertex = -1;
+            double shortestDistance = Double.MAX_VALUE;
+
+            for (int j = 0; j < numVertices; j++) {
+                if (!visited[j] && distances[j] < shortestDistance) {
+                    closestVertex = j;
+                    shortestDistance = distances[j];
+                }
+            }
+
+            if (closestVertex == -1) {
+                break;
+            }
+            visited[closestVertex] = true;
+
+            for (int j = 0; j < numVertices; j++) {
+                if (!visited[j] && adjMatrix[closestVertex][j]
+                        && (locationsToAvoid == null || !((AbstractArrayList<Integer>) locationsToAvoid).contains(j))) {
+                    double edgeDistance = weightMatrix[closestVertex][j];
+                    if (distances[closestVertex] + edgeDistance < distances[j]) {
+                        distances[j] = distances[closestVertex] + edgeDistance;
+                        previous[j] = closestVertex;
+                    }
+                }
+            }
+        }
+
+        UnorderedArrayList<Integer> path = new UnorderedArrayList<>();
+        if (previous[endVertex] != -1 || startVertex == endVertex) { // Ensure there is a valid path
+            for (int vertex = endVertex; vertex != -1; vertex = previous[vertex]) {
+                path.addToFront(vertex); // Add the current vertex to the front of the list
+                if (vertex == startVertex)
+                    break; // Stop when reaching the start vertex
+            }
+        }
+
+        return path.iterator();
+    }
+
+
 
 }

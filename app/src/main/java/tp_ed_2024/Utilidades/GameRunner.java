@@ -3,7 +3,7 @@ package tp_ed_2024.Utilidades;
 import tp_ed_2024.Modelos.Edificio.Divisao;
 import tp_ed_2024.Modelos.Edificio.EdificioImp;
 import tp_ed_2024.Modelos.Personagens.HeroImp;
-import tp_ed_2024.Simuladores.SimuladorImp;
+import tp_ed_2024.Simuladores.SimuladorManualImp;
 import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 
 public class GameRunner {
@@ -53,7 +53,7 @@ public class GameRunner {
         divisaoInicial.adicionarHeroi(heroi);  // Certifique-se de que o herói é adicionado à divisão inicial
 
         // Iniciar o simulador
-        SimuladorImp simulador = new SimuladorImp(edificio, heroi);
+        SimuladorManualImp simulador = new SimuladorManualImp(edificio, heroi);
         simulador.iniciarSimulacao();
     }
 }

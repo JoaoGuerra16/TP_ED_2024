@@ -8,14 +8,32 @@ import tp_ed_2024.Collections.Listas.UnorderedArrayList;
 import tp_ed_2024.Collections.Queues.LinkedQueue;
 import tp_ed_2024.Collections.Stacks.LinkedStack;
 
+/**
+ * The type Graph.
+ *
+ * @param <T> the type parameter
+ */
 public class Graph<T> implements GraphADT<T> {
+    /**
+     * The Default capacity.
+     */
     protected final int DEFAULT_CAPACITY = 100;
+    /**
+     * The Num vertices.
+     */
     protected int numVertices; // number of vertices in the graph
+    /**
+     * The Adj matrix.
+     */
     protected boolean[][] adjMatrix; // adjacency matrix
+    /**
+     * The Vertices.
+     */
     protected T[] vertices; // values of vertices
 
+
     /**
-     * Creates an empty graph.
+     * Instantiates a new Graph.
      */
     public Graph() {
         this.numVertices = 0;
@@ -23,11 +41,9 @@ public class Graph<T> implements GraphADT<T> {
         this.vertices = (T[]) (new Object[DEFAULT_CAPACITY]);
     }
 
+
     /**
-     * Adds a vertex to the graph, expanding the capacity of the graph
-     * if necessary. It also associates an object with the vertex.
-     *
-     * @param vertex the vertex to add to the graph
+     * Add vertex.
      */
     public void addVertex() {
         if (numVertices == vertices.length)
@@ -101,6 +117,12 @@ public class Graph<T> implements GraphADT<T> {
         removeEdge(getIndex(vertex1), getIndex(vertex2));
     }
 
+    /**
+     * Remove edge.
+     *
+     * @param index1 the index 1
+     * @param index2 the index 2
+     */
     public void removeEdge(int index1, int index2) {
 
         if (indexIsValid(index1) && indexIsValid(index2)) {
@@ -247,6 +269,9 @@ public class Graph<T> implements GraphADT<T> {
         return numVertices;
     }
 
+    /**
+     * Expand capacity.
+     */
     protected void expandCapacity() {
         T[] largerVertices = (T[]) (new Object[vertices.length * 2]);
         boolean[][] newAdjMatrix = new boolean[vertices.length * 2][vertices.length * 2];
@@ -262,6 +287,7 @@ public class Graph<T> implements GraphADT<T> {
         adjMatrix = newAdjMatrix;
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Adjacency Matrix:\n");
 
@@ -276,6 +302,12 @@ public class Graph<T> implements GraphADT<T> {
         return sb.toString();
     }
 
+    /**
+     * Gets index.
+     *
+     * @param vertex the vertex
+     * @return the index
+     */
     public int getIndex(T vertex) {
         for (int i = 0; i < numVertices; i++) {
             if (vertices[i].equals(vertex)) {
@@ -285,6 +317,12 @@ public class Graph<T> implements GraphADT<T> {
         return -1;
     }
 
+    /**
+     * Index is valid boolean.
+     *
+     * @param index the index
+     * @return the boolean
+     */
     protected boolean indexIsValid(int index) {
         return index >= 0 && index < numVertices;
     }

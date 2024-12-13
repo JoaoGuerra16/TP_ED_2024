@@ -1,26 +1,31 @@
 {
-  "cod-missao": "pata de coelho",
+  "cod-missao": "tartaruga sem carapaça",
   "versao": 1,
-  "edificio": ["Heliporto", "teste", "Camaratas", "teste2", "Escada 5", "Cozinha", "Escritório 3", "Escada 4"],
+  "edificio": ["Heliporto", "teste", "Camaratas", "teste2", "Escada 5", "Cozinha", "Escritorio", "Escada 4"],
   "ligacoes": [
     ["Heliporto", "teste"],
     ["teste", "Camaratas"],
     ["Camaratas", "teste2"],
     ["teste2", "Escada 5"],
     ["Escada 5", "Cozinha"],
-    ["Cozinha", "Escritório 3"],
-    ["Escritório 3", "Escada 4"]
+    ["Cozinha", "Escritorio"],
+    ["Escritorio", "Escada 4"],
+    ["teste2", "Cozinha"],
+    ["Cozinha", "teste2"],
+    ["Escritorio","teste2"],
+    ["teste2", "Escritorio"]
   ],
   "inimigos": [
-    {"nome": "Antonio", "poder": 30, "divisao": "teste"},
-    {"nome": "Joao", "poder": 30, "divisao": "teste2"}
+    {"nome": "Jose", "poder": 4, "divisao": "Heliporto"},
+    {"nome": "Joao", "poder": 4, "divisao": "teste"},
+    {"nome": "Antonio", "poder": 4, "divisao": "teste"},
+    {"nome": "Pedro", "poder": 5, "divisao": "Escada 4"}
   ],
   "entradas-saidas": ["Escada 5", "Heliporto", "teste", "teste2"],
-  "alvo": {"divisao": "Camaratas", "tipo": "quimico"},
+  "alvo": {"divisao": "Escritorio", "tipo": "quimico"},
   "itens": [
-    {"divisao": "Heliporto", "pontos-extra": 15, "tipo": "kit de vida"},
-    {"divisao": "teste", "pontos-extra": 15, "tipo": "kit de vida"},
-    {"divisao": "teste2", "pontos-recuperados": 20, "tipo": "colete"},
-    {"divisao": "Escada 4", "pontos-extra": 25, "tipo": "colete"}
+    {"divisao": "Heliporto", "pontos-extra": 20, "tipo": "colete"},
+    {"divisao": "teste", "pontos-recuperados": 15, "tipo": "kit de vida"},
+    {"divisao": "Escada 5", "pontos-extra": 25, "tipo": "colete"}
   ]
 }
